@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 40 Fitting a linear model with neural networks | A Machine Learning Book</title>
+<meta name="author" content="Alfonso R. Reyes">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.5.3/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.5.3/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.2.9000/tabs.js"></script><script src="libs/bs3compat-0.2.2.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">A Machine Learning Book</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Prerequisites</a></li>
+<li class="book-part">The Basics of Machine Learning</li>
+<li><a class="" href="introduction-to-pca.html"><span class="header-section-number">1</span> Introduction to PCA</a></li>
+<li><a class="" href="comparison-of-two-pca-packages.html"><span class="header-section-number">2</span> Comparison of two PCA packages</a></li>
+<li><a class="" href="detailed-study-of-principal-component-analysis.html"><span class="header-section-number">3</span> Detailed study of Principal Component Analysis</a></li>
+<li><a class="" href="detection-of-diabetes-using-logistic-regression.html"><span class="header-section-number">4</span> Detection of diabetes using Logistic Regression</a></li>
+<li><a class="" href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">5</span> Sensitivity analysis for a neural network</a></li>
+<li><a class="" href="data-visualization-for-ml-models.html"><span class="header-section-number">6</span> Data Visualization for ML models</a></li>
+<li class="book-part">Feature Engineering</li>
+<li><a class="" href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">7</span> Ten methods to assess Variable Importance</a></li>
+<li><a class="" href="employee-attrition-using-feature-importance.html"><span class="header-section-number">8</span> Employee Attrition using Feature Importance</a></li>
+<li><a class="" href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">9</span> Feature Selection to enhance cancer detection</a></li>
+<li><a class="" href="dealing-with-unbalanced-data.html"><span class="header-section-number">10</span> Dealing with unbalanced data</a></li>
+<li><a class="" href="imputting-missing-values-with-random-forest.html"><span class="header-section-number">11</span> Imputting missing values with Random Forest</a></li>
+<li class="book-part">Algorithms Comparison</li>
+<li><a class="" href="introduction-to-algorithms-for-classification.html"><span class="header-section-number">12</span> Introduction to algorithms for Classification</a></li>
+<li><a class="" href="comparing-classification-algorithms.html"><span class="header-section-number">13</span> Comparing Classification algorithms</a></li>
+<li><a class="" href="linear-and-non-linear-algorithms-for-classification.html"><span class="header-section-number">14</span> Linear and Non-Linear Algorithms for Classification</a></li>
+<li><a class="" href="predicting-flu-outcome-comparing-eight-classification-algorithms.html"><span class="header-section-number">15</span> Predicting Flu outcome comparing eight classification algorithms</a></li>
+<li><a class="" href="classification-on-bad-loans.html"><span class="header-section-number">16</span> Classification on bad loans</a></li>
+<li><a class="" href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">17</span> Comparison of six Linear Regression algorithms</a></li>
+<li class="book-part">Classification</li>
+<li><a class="" href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">18</span> A gentle introduction to Support Vector Machines</a></li>
+<li><a class="" href="broad-view-of-svm.html"><span class="header-section-number">19</span> Broad view of SVM</a></li>
+<li><a class="" href="tuning-of-support-vector-machine-prediction.html"><span class="header-section-number">20</span> Tuning of Support Vector Machine prediction</a></li>
+<li><a class="" href="who-buys-social-network-ads.html"><span class="header-section-number">21</span> Who buys Social Network ads</a></li>
+<li><a class="" href="predicting-ozone-levels.html"><span class="header-section-number">22</span> Predicting Ozone levels</a></li>
+<li><a class="" href="building-a-naive-bayes-classifier.html"><span class="header-section-number">23</span> Building a Naive Bayes Classifier</a></li>
+<li><a class="" href="detect-mines-vs-rocks-with-random-forest.html"><span class="header-section-number">24</span> Detect mines vs rocks with Random Forest</a></li>
+<li><a class="" href="predicting-the-type-of-glass.html"><span class="header-section-number">25</span> Predicting the type of glass</a></li>
+<li><a class="" href="naive-bayes-for-sms-spam.html"><span class="header-section-number">26</span> Naive Bayes for SMS spam</a></li>
+<li><a class="" href="vehicles-classiification-with-decision-trees.html"><span class="header-section-number">27</span> Vehicles classiification with Decision Trees</a></li>
+<li><a class="" href="applying-naive-bayes-on-the-titanic-case.html"><span class="header-section-number">28</span> Applying Naive-Bayes on the Titanic case</a></li>
+<li><a class="" href="a-detailed-study-of-bike-sharing-demand.html"><span class="header-section-number">29</span> A detailed study of bike sharing demand</a></li>
+<li class="book-part">Linear Regression</li>
+<li><a class="" href="linear-regression-with-islr.html"><span class="header-section-number">30</span> Linear Regression with ISLR</a></li>
+<li><a class="" href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">31</span> Evaluation of three linear regression models</a></li>
+<li><a class="" href="comparing-regression-models.html"><span class="header-section-number">32</span> Comparing regression models</a></li>
+<li><a class="" href="finding-the-factors-of-happiness.html"><span class="header-section-number">33</span> Finding the factors of happiness</a></li>
+<li><a class="" href="regression-with-a-neural-network.html"><span class="header-section-number">34</span> Regression with a neural network</a></li>
+<li><a class="" href="comparing-multiple-regression-vs-a-neural-network.html"><span class="header-section-number">35</span> Comparing Multiple Regression vs a Neural Network</a></li>
+<li><a class="" href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">36</span> Temperature modeling using nested dataframes</a></li>
+<li class="book-part">Neural Networks</li>
+<li><a class="" href="credit-scoring-with-neuralnet.html"><span class="header-section-number">37</span> Credit Scoring with neuralnet</a></li>
+<li><a class="" href="wine-classification-with-neuralnet.html"><span class="header-section-number">38</span> Wine classification with neuralnet</a></li>
+<li><a class="" href="predicting-the-rating-of-cereals.html"><span class="header-section-number">39</span> Predicting the rating of cereals</a></li>
+<li><a class="active" href="fitting-a-linear-model-with-neural-networks.html"><span class="header-section-number">40</span> Fitting a linear model with neural networks</a></li>
+<li><a class="" href="visualization-of-neural-networks.html"><span class="header-section-number">41</span> Visualization of neural networks</a></li>
+<li><a class="" href="build-a-fully-connected-r-neural-network-from-scratch.html"><span class="header-section-number">42</span> Build a fully connected R neural network from scratch</a></li>
+<li><a class="" href="tuning-hyperparameters-in-a-neural-network.html"><span class="header-section-number">43</span> Tuning Hyperparameters in a Neural Network</a></li>
+<li><a class="" href="deep-learning-tips-for-classification-and-regression.html"><span class="header-section-number">44</span> Deep Learning tips for Classification and Regression</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="what-is-dot-hat-in-a-regression-output.html"><span class="header-section-number">A</span> What is dot hat in a regression output</a></li>
+<li><a class="" href="q-q-normal-to-compare-data-to-distributions.html"><span class="header-section-number">B</span> Q-Q normal to compare data to distributions</a></li>
+<li><a class="" href="qq-and-pp-plots.html"><span class="header-section-number">C</span> QQ and PP Plots</a></li>
+<li><a class="" href="visualizing-residuals.html"><span class="header-section-number">D</span> Visualizing residuals</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/hadley/r-pkgs">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="fitting-a-linear-model-with-neural-networks" class="section level1">
+<h1>
+<span class="header-section-number">40</span> Fitting a linear model with neural networks<a class="anchor" aria-label="anchor" href="#fitting-a-linear-model-with-neural-networks"><i class="fas fa-link"></i></a>
+</h1>
+<ul>
+<li>Datasets: <code>Boston</code>
+</li>
+<li>Algorithms:
+<ul>
+<li>Neural Networks</li>
+</ul>
+</li>
+</ul>
+<div id="introduction-22" class="section level2">
+<h2>
+<span class="header-section-number">40.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-22"><i class="fas fa-link"></i></a>
+</h2>
+<p><a href="https://www.r-bloggers.com/fitting-a-neural-network-in-r-neuralnet-package/" class="uri">https://www.r-bloggers.com/fitting-a-neural-network-in-r-neuralnet-package/</a></p>
+<p><a href="https://datascienceplus.com/fitting-neural-network-in-r/" class="uri">https://datascienceplus.com/fitting-neural-network-in-r/</a></p>
+<p>Neural networks have always been one of the fascinating machine learning models in my opinion, not only because of the fancy backpropagation algorithm but also because of their complexity (think of deep learning with many hidden layers) and structure inspired by the brain.</p>
+<p>Neural networks have not always been popular, partly because they were, and still are in some cases, computationally expensive and partly because they did not seem to yield better results when compared with simpler methods such as support vector machines (SVMs). Nevertheless, Neural Networks have, once again, raised attention and become popular.</p>
+<p>Update: We published another post about Network analysis at DataScience+ Network analysis of Game of Thrones</p>
+<p>In this post, we are going to fit a simple neural network using the <code>neuralnet</code> package and fit a linear model as a comparison.</p>
+</div>
+<div id="the-dataset-1" class="section level2">
+<h2>
+<span class="header-section-number">40.2</span> The dataset<a class="anchor" aria-label="anchor" href="#the-dataset-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>We are going to use the Boston dataset in the MASS package.
+The Boston dataset is a collection of data about housing values in the suburbs of Boston. Our goal is to predict the median value of owner-occupied homes (medv) using all the other continuous variables available.</p>
+<div class="sourceCode" id="cb949"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="va">Boston</span></code></pre></div>
+<div class="sourceCode" id="cb950"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 506</span>
+<span class="co">#&gt; Columns: 14</span>
+<span class="co">#&gt; $ crim    &lt;dbl&gt; 0.00632, 0.02731, 0.02729, 0.03237, 0.06905, 0.02985, 0.08829…</span>
+<span class="co">#&gt; $ zn      &lt;dbl&gt; 18.0, 0.0, 0.0, 0.0, 0.0, 0.0, 12.5, 12.5, 12.5, 12.5, 12.5, …</span>
+<span class="co">#&gt; $ indus   &lt;dbl&gt; 2.31, 7.07, 7.07, 2.18, 2.18, 2.18, 7.87, 7.87, 7.87, 7.87, 7…</span>
+<span class="co">#&gt; $ chas    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
+<span class="co">#&gt; $ nox     &lt;dbl&gt; 0.538, 0.469, 0.469, 0.458, 0.458, 0.458, 0.524, 0.524, 0.524…</span>
+<span class="co">#&gt; $ rm      &lt;dbl&gt; 6.58, 6.42, 7.18, 7.00, 7.15, 6.43, 6.01, 6.17, 5.63, 6.00, 6…</span>
+<span class="co">#&gt; $ age     &lt;dbl&gt; 65.2, 78.9, 61.1, 45.8, 54.2, 58.7, 66.6, 96.1, 100.0, 85.9, …</span>
+<span class="co">#&gt; $ dis     &lt;dbl&gt; 4.09, 4.97, 4.97, 6.06, 6.06, 6.06, 5.56, 5.95, 6.08, 6.59, 6…</span>
+<span class="co">#&gt; $ rad     &lt;int&gt; 1, 2, 2, 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4…</span>
+<span class="co">#&gt; $ tax     &lt;dbl&gt; 296, 242, 242, 222, 222, 222, 311, 311, 311, 311, 311, 311, 3…</span>
+<span class="co">#&gt; $ ptratio &lt;dbl&gt; 15.3, 17.8, 17.8, 18.7, 18.7, 18.7, 15.2, 15.2, 15.2, 15.2, 1…</span>
+<span class="co">#&gt; $ black   &lt;dbl&gt; 397, 397, 393, 395, 397, 394, 396, 397, 387, 387, 393, 397, 3…</span>
+<span class="co">#&gt; $ lstat   &lt;dbl&gt; 4.98, 9.14, 4.03, 2.94, 5.33, 5.21, 12.43, 19.15, 29.93, 17.1…</span>
+<span class="co">#&gt; $ medv    &lt;dbl&gt; 24.0, 21.6, 34.7, 33.4, 36.2, 28.7, 22.9, 27.1, 16.5, 18.9, 1…</span></code></pre></div>
+<p>First we need to check that no data point is missing, otherwise we need to fix the dataset.</p>
+<div class="sourceCode" id="cb951"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/h2o/man/apply.html">apply</a></span><span class="op">(</span><span class="va">data</span>,<span class="fl">2</span>,<span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;    crim      zn   indus    chas     nox      rm     age     dis     rad     tax </span>
+<span class="co">#&gt;       0       0       0       0       0       0       0       0       0       0 </span>
+<span class="co">#&gt; ptratio   black   lstat    medv </span>
+<span class="co">#&gt;       0       0       0       0</span></code></pre></div>
+<p>There is no missing data, good. We proceed by randomly splitting the data into a train and a test set, then we fit a linear regression model and test it on the test set. Note that I am using the gml() function instead of the lm() this will become useful later when cross validating the linear model.</p>
+<div class="sourceCode" id="cb952"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.round.html">round</a></span><span class="op">(</span><span class="fl">0.75</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">train</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="va">index</span>,<span class="op">]</span>
+<span class="va">test</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="op">-</span><span class="va">index</span>,<span class="op">]</span>
+<span class="va">lm.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">medv</span><span class="op">~</span><span class="va">.</span>, data<span class="op">=</span><span class="va">train</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">lm.fit</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; glm(formula = medv ~ ., data = train)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Deviance Residuals: </span>
+<span class="co">#&gt;     Min       1Q   Median       3Q      Max  </span>
+<span class="co">#&gt; -15.211   -2.559   -0.655    1.828   29.711  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept)  31.11170    5.45981    5.70  2.5e-08 ***</span>
+<span class="co">#&gt; crim         -0.11137    0.03326   -3.35  0.00090 ***</span>
+<span class="co">#&gt; zn            0.04263    0.01431    2.98  0.00308 ** </span>
+<span class="co">#&gt; indus         0.00148    0.06745    0.02  0.98247    </span>
+<span class="co">#&gt; chas          1.75684    0.98109    1.79  0.07417 .  </span>
+<span class="co">#&gt; nox         -18.18485    4.47157   -4.07  5.8e-05 ***</span>
+<span class="co">#&gt; rm            4.76034    0.48047    9.91  &lt; 2e-16 ***</span>
+<span class="co">#&gt; age          -0.01344    0.01410   -0.95  0.34119    </span>
+<span class="co">#&gt; dis          -1.55375    0.21893   -7.10  6.7e-12 ***</span>
+<span class="co">#&gt; rad           0.28818    0.07202    4.00  7.6e-05 ***</span>
+<span class="co">#&gt; tax          -0.01374    0.00406   -3.38  0.00079 ***</span>
+<span class="co">#&gt; ptratio      -0.94755    0.14012   -6.76  5.4e-11 ***</span>
+<span class="co">#&gt; black         0.00950    0.00290    3.28  0.00115 ** </span>
+<span class="co">#&gt; lstat        -0.38890    0.05973   -6.51  2.5e-10 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; (Dispersion parameter for gaussian family taken to be 20.2)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     Null deviance: 32463.5  on 379  degrees of freedom</span>
+<span class="co">#&gt; Residual deviance:  7407.1  on 366  degrees of freedom</span>
+<span class="co">#&gt; AIC: 2237</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Number of Fisher Scoring iterations: 2</span>
+<span class="va">pr.lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm.fit</span>,<span class="va">test</span><span class="op">)</span>
+<span class="va">MSE.lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">pr.lm</span> <span class="op">-</span> <span class="va">test</span><span class="op">$</span><span class="va">medv</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span></code></pre></div>
+<p>The sample(x,size) function simply outputs a vector of the specified size of randomly selected samples from the vector x. By default the sampling is without replacement: index is essentially a random vector of indeces.
+Since we are dealing with a regression problem, we are going to use the mean squared error (MSE) as a measure of how much our predictions are far away from the real data.</p>
+</div>
+<div id="preparing-to-fit-the-neural-network" class="section level2">
+<h2>
+<span class="header-section-number">40.3</span> Preparing to fit the neural network<a class="anchor" aria-label="anchor" href="#preparing-to-fit-the-neural-network"><i class="fas fa-link"></i></a>
+</h2>
+<p>Before fitting a neural network, some preparation need to be done. Neural networks are not that easy to train and tune.</p>
+<p>As a first step, we are going to address data pre-processing.
+It is good practice to normalize your data before training a neural network. I cannot emphasize enough how important this step is: depending on your dataset, avoiding normalization may lead to useless results or to a very difficult training process (most of the times the algorithm will not converge before the number of maximum iterations allowed). You can choose different methods to scale the data (z-normalization, min-max scale, etc…). I chose to use the min-max method and scale the data in the interval [0,1]. Usually scaling in the intervals [0,1] or [-1,1] tends to give better results.
+We therefore scale and split the data before moving on:</p>
+<div class="sourceCode" id="cb953"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">maxs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/apply.html">apply</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">2</span>, <span class="va">max</span><span class="op">)</span> 
+<span class="va">mins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/apply.html">apply</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">2</span>, <span class="va">min</span><span class="op">)</span>
+
+<span class="va">scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/h2o/man/scale.html">scale</a></span><span class="op">(</span><span class="va">data</span>, center <span class="op">=</span> <span class="va">mins</span>, scale <span class="op">=</span> <span class="va">maxs</span> <span class="op">-</span> <span class="va">mins</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">train_</span> <span class="op">&lt;-</span> <span class="va">scaled</span><span class="op">[</span><span class="va">index</span>,<span class="op">]</span>
+<span class="va">test_</span> <span class="op">&lt;-</span> <span class="va">scaled</span><span class="op">[</span><span class="op">-</span><span class="va">index</span>,<span class="op">]</span></code></pre></div>
+<p>Note that scale returns a matrix that needs to be coerced into a data.frame.</p>
+</div>
+<div id="parameters" class="section level2">
+<h2>
+<span class="header-section-number">40.4</span> Parameters<a class="anchor" aria-label="anchor" href="#parameters"><i class="fas fa-link"></i></a>
+</h2>
+<p>As far as I know there is no fixed rule as to how many layers and neurons to use although there are several more or less accepted rules of thumb. Usually, if at all necessary, one hidden layer is enough for a vast numbers of applications. As far as the number of neurons is concerned, it should be between the input layer size and the output layer size, usually 2/3 of the input size. At least in my brief experience testing again and again is the best solution since there is no guarantee that any of these rules will fit your model best.
+Since this is a toy example, we are going to use 2 hidden layers with this configuration: 13:5:3:1. The input layer has 13 inputs, the two hidden layers have 5 and 3 neurons and the output layer has, of course, a single output since we are doing regression.
+Let’s fit the net:</p>
+<div class="sourceCode" id="cb954"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bips-hb/neuralnet">neuralnet</a></span><span class="op">)</span>
+<span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">train_</span><span class="op">)</span>
+<span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"medv ~"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">n</span><span class="op">[</span><span class="op">!</span><span class="va">n</span> <span class="op">%in%</span> <span class="st">"medv"</span><span class="op">]</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">nn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/neuralnet/man/neuralnet.html">neuralnet</a></span><span class="op">(</span><span class="va">f</span>,data<span class="op">=</span><span class="va">train_</span>,hidden<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">3</span><span class="op">)</span>,linear.output<span class="op">=</span><span class="cn">T</span><span class="op">)</span></code></pre></div>
+<p><strong>A couple of notes:</strong></p>
+<ul>
+<li><p>For some reason the formula y~. is not accepted in the neuralnet() function. You need to first write the formula and then pass it as an argument in the fitting function.</p></li>
+<li><p>The hidden argument accepts a vector with the number of neurons for each hidden layer, while the argument linear.output is used to specify whether we want to do regression linear.output=TRUE or classification linear.output=FALSE</p></li>
+</ul>
+<p>The <code>neuralnet</code> package provides a nice tool to plot the model:</p>
+<p>This is the graphical representation of the model with the weights on each connection:</p>
+<div class="sourceCode" id="cb955"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">nn</span><span class="op">)</span></code></pre></div>
+<p>The black lines show the connections between each layer and the weights on each connection while the blue lines show the bias term added in each step. The bias can be thought as the intercept of a linear model.
+The net is essentially a black box so we cannot say that much about the fitting, the weights and the model. Suffice to say that the training algorithm has converged and therefore the model is ready to be used.</p>
+</div>
+<div id="predicting-medv-using-the-neural-network" class="section level2">
+<h2>
+<span class="header-section-number">40.5</span> Predicting <code>medv</code> using the neural network<a class="anchor" aria-label="anchor" href="#predicting-medv-using-the-neural-network"><i class="fas fa-link"></i></a>
+</h2>
+<p>Now we can try to predict the values for the test set and calculate the MSE. Remember that the net will output a normalized prediction, so we need to scale it back in order to make a meaningful comparison (or just a simple prediction).</p>
+<div class="sourceCode" id="cb956"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pr.nn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/neuralnet/man/compute.html">compute</a></span><span class="op">(</span><span class="va">nn</span>,<span class="va">test_</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span><span class="op">)</span>
+
+<span class="va">pr.nn_</span> <span class="op">&lt;-</span> <span class="va">pr.nn</span><span class="op">$</span><span class="va">net.result</span><span class="op">*</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">medv</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">medv</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">medv</span><span class="op">)</span>
+<span class="va">test.r</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">test_</span><span class="op">$</span><span class="va">medv</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">medv</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">medv</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">medv</span><span class="op">)</span>
+
+<span class="va">MSE.nn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">test.r</span> <span class="op">-</span> <span class="va">pr.nn_</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">test_</span><span class="op">)</span></code></pre></div>
+<p>we then compare the two MSEs</p>
+<div class="sourceCode" id="cb957"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">MSE.lm</span>,<span class="va">MSE.nn</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] "31.2630222372615 16.4595537665717"</span></code></pre></div>
+<p>Apparently, the net is doing a better work than the linear model at predicting <code>medv</code>. Once again, be careful because this result depends on the train-test split performed above. Below, after the visual plot, we are going to perform a fast cross validation in order to be more confident about the results.</p>
+<p>A first visual approach to the performance of the network and the linear model on the test set is plotted below</p>
+<div class="sourceCode" id="cb958"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">medv</span>,<span class="va">pr.nn_</span>,col<span class="op">=</span><span class="st">'red'</span>,main<span class="op">=</span><span class="st">'Real vs predicted NN'</span>,pch<span class="op">=</span><span class="fl">18</span>,cex<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,lwd<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">'bottomright'</span>,legend<span class="op">=</span><span class="st">'NN'</span>,pch<span class="op">=</span><span class="fl">18</span>,col<span class="op">=</span><span class="st">'red'</span>, bty<span class="op">=</span><span class="st">'n'</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">medv</span>,<span class="va">pr.lm</span>,col<span class="op">=</span><span class="st">'blue'</span>,main<span class="op">=</span><span class="st">'Real vs predicted lm'</span>,pch<span class="op">=</span><span class="fl">18</span>, cex<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,lwd<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">'bottomright'</span>,legend<span class="op">=</span><span class="st">'LM'</span>,pch<span class="op">=</span><span class="fl">18</span>,col<span class="op">=</span><span class="st">'blue'</span>, bty<span class="op">=</span><span class="st">'n'</span>, cex<span class="op">=</span><span class="fl">.95</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="601-nn-regression_902-fitting_neural_network_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>By visually inspecting the plot we can see that the predictions made by the neural network are (in general) more concetrated around the line (a perfect alignment with the line would indicate a MSE of 0 and thus an ideal perfect prediction) than those made by the linear model.</p>
+<div class="sourceCode" id="cb959"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">medv</span>,<span class="va">pr.nn_</span>,col<span class="op">=</span><span class="st">'red'</span>,main<span class="op">=</span><span class="st">'Real vs predicted NN'</span>,pch<span class="op">=</span><span class="fl">18</span>,cex<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">medv</span>,<span class="va">pr.lm</span>,col<span class="op">=</span><span class="st">'blue'</span>,pch<span class="op">=</span><span class="fl">18</span>,cex<span class="op">=</span><span class="fl">0.7</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,lwd<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">'bottomright'</span>,legend<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'NN'</span>,<span class="st">'LM'</span><span class="op">)</span>,pch<span class="op">=</span><span class="fl">18</span>,col<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'red'</span>,<span class="st">'blue'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="601-nn-regression_902-fitting_neural_network_files/figure-html/unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+<div id="a-fast-cross-validation" class="section level2">
+<h2>
+<span class="header-section-number">40.6</span> A (fast) cross validation<a class="anchor" aria-label="anchor" href="#a-fast-cross-validation"><i class="fas fa-link"></i></a>
+</h2>
+<p>Cross validation is another very important step of building predictive models. While there are different kind of cross validation methods, the basic idea is repeating the following process a number of time:</p>
+<p><strong>train-test split</strong></p>
+<ul>
+<li>Do the train-test split</li>
+<li>Fit the model to the train set</li>
+<li>Test the model on the test set</li>
+<li>Calculate the prediction error</li>
+<li>Repeat the process K times</li>
+</ul>
+<p>Then by calculating the average error we can get a grasp of how the model is doing.</p>
+<p>We are going to implement a fast cross validation using a for loop for the neural network and the cv.glm() function in the boot package for the linear model.
+As far as I know, there is no built-in function in R to perform cross-validation on this kind of neural network, if you do know such a function, please let me know in the comments. Here is the 10 fold cross-validated MSE for the linear model:</p>
+<div class="sourceCode" id="cb960"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">boot</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span>
+<span class="va">lm.fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">medv</span><span class="op">~</span><span class="va">.</span>,data<span class="op">=</span><span class="va">data</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/boot/man/cv.glm.html">cv.glm</a></span><span class="op">(</span><span class="va">data</span>,<span class="va">lm.fit</span>,K<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">$</span><span class="va">delta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
+<span class="co">#&gt; [1] 23.2</span></code></pre></div>
+<p>Now the net. Note that I am splitting the data in this way: 90% train set and 10% test set in a random way for 10 times. I am also initializing a progress bar using the plyr library because I want to keep an eye on the status of the process since the fitting of the neural network may take a while.</p>
+<div class="sourceCode" id="cb961"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb961-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">450</span>)</a>
+<a class="sourceLine" id="cb961-2" data-line-number="2">cv.error &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb961-3" data-line-number="3">k &lt;-<span class="st"> </span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb961-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb961-5" data-line-number="5"><span class="kw">library</span>(plyr) </a>
+<a class="sourceLine" id="cb961-6" data-line-number="6">pbar &lt;-<span class="st"> </span><span class="kw">create_progress_bar</span>(<span class="st">'text'</span>)</a>
+<a class="sourceLine" id="cb961-7" data-line-number="7">pbar<span class="op">$</span><span class="kw">init</span>(k)</a>
+<a class="sourceLine" id="cb961-8" data-line-number="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb961-9" data-line-number="9">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-10" data-line-number="10"><span class="st">  </span><span class="er">|</span><span class="st">                                                                      </span><span class="er">|</span><span class="st">   </span><span class="dv">0</span>%</a>
+<a class="sourceLine" id="cb961-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb961-12" data-line-number="12"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>k){</a>
+<a class="sourceLine" id="cb961-13" data-line-number="13">    index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(data),<span class="kw">round</span>(<span class="fl">0.9</span><span class="op">*</span><span class="kw">nrow</span>(data)))</a>
+<a class="sourceLine" id="cb961-14" data-line-number="14">    train.cv &lt;-<span class="st"> </span>scaled[index,]</a>
+<a class="sourceLine" id="cb961-15" data-line-number="15">    test.cv &lt;-<span class="st"> </span>scaled[<span class="op">-</span>index,]</a>
+<a class="sourceLine" id="cb961-16" data-line-number="16">    </a>
+<a class="sourceLine" id="cb961-17" data-line-number="17">    nn &lt;-<span class="st"> </span><span class="kw">neuralnet</span>(f,<span class="dt">data=</span>train.cv,<span class="dt">hidden=</span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">2</span>),<span class="dt">linear.output=</span>T)</a>
+<a class="sourceLine" id="cb961-18" data-line-number="18">    </a>
+<a class="sourceLine" id="cb961-19" data-line-number="19">    pr.nn &lt;-<span class="st"> </span><span class="kw">compute</span>(nn,test.cv[,<span class="dv">1</span><span class="op">:</span><span class="dv">13</span>])</a>
+<a class="sourceLine" id="cb961-20" data-line-number="20">    pr.nn &lt;-<span class="st"> </span>pr.nn<span class="op">$</span>net.result<span class="op">*</span>(<span class="kw">max</span>(data<span class="op">$</span>medv)<span class="op">-</span><span class="kw">min</span>(data<span class="op">$</span>medv))<span class="op">+</span><span class="kw">min</span>(data<span class="op">$</span>medv)</a>
+<a class="sourceLine" id="cb961-21" data-line-number="21">    </a>
+<a class="sourceLine" id="cb961-22" data-line-number="22">    test.cv.r &lt;-<span class="st"> </span>(test.cv<span class="op">$</span>medv)<span class="op">*</span>(<span class="kw">max</span>(data<span class="op">$</span>medv)<span class="op">-</span><span class="kw">min</span>(data<span class="op">$</span>medv))<span class="op">+</span><span class="kw">min</span>(data<span class="op">$</span>medv)</a>
+<a class="sourceLine" id="cb961-23" data-line-number="23">    </a>
+<a class="sourceLine" id="cb961-24" data-line-number="24">    cv.error[i] &lt;-<span class="st"> </span><span class="kw">sum</span>((test.cv.r <span class="op">-</span><span class="st"> </span>pr.nn)<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="kw">nrow</span>(test.cv)</a>
+<a class="sourceLine" id="cb961-25" data-line-number="25">    </a>
+<a class="sourceLine" id="cb961-26" data-line-number="26">    pbar<span class="op">$</span><span class="kw">step</span>()</a>
+<a class="sourceLine" id="cb961-27" data-line-number="27">}</a>
+<a class="sourceLine" id="cb961-28" data-line-number="28"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb961-29" data-line-number="29">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-30" data-line-number="30"><span class="st">  </span><span class="er">|=======</span><span class="st">                                                               </span><span class="er">|</span><span class="st">  </span><span class="dv">10</span>%</a>
+<a class="sourceLine" id="cb961-31" data-line-number="31">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-32" data-line-number="32"><span class="st">  </span><span class="er">|==============</span><span class="st">                                                        </span><span class="er">|</span><span class="st">  </span><span class="dv">20</span>%</a>
+<a class="sourceLine" id="cb961-33" data-line-number="33">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-34" data-line-number="34"><span class="st">  </span><span class="er">|=====================</span><span class="st">                                                 </span><span class="er">|</span><span class="st">  </span><span class="dv">30</span>%</a>
+<a class="sourceLine" id="cb961-35" data-line-number="35">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-36" data-line-number="36"><span class="st">  </span><span class="er">|============================</span><span class="st">                                          </span><span class="er">|</span><span class="st">  </span><span class="dv">40</span>%</a>
+<a class="sourceLine" id="cb961-37" data-line-number="37">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-38" data-line-number="38"><span class="st">  </span><span class="er">|===================================</span><span class="st">                                   </span><span class="er">|</span><span class="st">  </span><span class="dv">50</span>%</a>
+<a class="sourceLine" id="cb961-39" data-line-number="39">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-40" data-line-number="40"><span class="st">  </span><span class="er">|==========================================</span><span class="st">                            </span><span class="er">|</span><span class="st">  </span><span class="dv">60</span>%</a>
+<a class="sourceLine" id="cb961-41" data-line-number="41">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-42" data-line-number="42"><span class="st">  </span><span class="er">|=================================================</span><span class="st">                     </span><span class="er">|</span><span class="st">  </span><span class="dv">70</span>%</a>
+<a class="sourceLine" id="cb961-43" data-line-number="43">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-44" data-line-number="44"><span class="st">  </span><span class="er">|========================================================</span><span class="st">              </span><span class="er">|</span><span class="st">  </span><span class="dv">80</span>%</a>
+<a class="sourceLine" id="cb961-45" data-line-number="45">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-46" data-line-number="46"><span class="st">  </span><span class="er">|===============================================================</span><span class="st">       </span><span class="er">|</span><span class="st">  </span><span class="dv">90</span>%</a>
+<a class="sourceLine" id="cb961-47" data-line-number="47">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb961-48" data-line-number="48"><span class="st">  </span><span class="er">|======================================================================|</span><span class="st"> </span><span class="dv">100</span>%</a></code></pre></div>
+<p>After a while, the process is done, we calculate the average MSE and plot the results as a boxplot</p>
+<div class="sourceCode" id="cb962"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">cv.error</span><span class="op">)</span>
+<span class="co">#&gt; [1] 7.64</span></code></pre></div>
+<div class="sourceCode" id="cb963"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cv.error</span>
+<span class="co">#&gt;  [1] 13.33  7.10  6.58  5.70  6.84  5.77 10.75  5.38  9.45  5.50</span></code></pre></div>
+<p>The code for the box plot:
+The code above outputs the following boxplot:</p>
+<div class="sourceCode" id="cb964"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">cv.error</span>,xlab<span class="op">=</span><span class="st">'MSE CV'</span>,col<span class="op">=</span><span class="st">'cyan'</span>,
+        border<span class="op">=</span><span class="st">'blue'</span>,names<span class="op">=</span><span class="st">'CV error (MSE)'</span>,
+        main<span class="op">=</span><span class="st">'CV error (MSE) for NN'</span>,horizontal<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="601-nn-regression_902-fitting_neural_network_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>As you can see, the average MSE for the neural network (10.33) is lower than the one of the linear model although there seems to be a certain degree of variation in the <code>MSE</code>s of the cross validation. This may depend on the splitting of the data or the random initialization of the weights in the net. By running the simulation different times with different seeds you can get a more precise point estimate for the average MSE.</p>
+</div>
+<div id="a-final-note-on-model-interpretability" class="section level2">
+<h2>
+<span class="header-section-number">40.7</span> A final note on model interpretability<a class="anchor" aria-label="anchor" href="#a-final-note-on-model-interpretability"><i class="fas fa-link"></i></a>
+</h2>
+<p>Neural networks resemble black boxes a lot: explaining their outcome is much more difficult than explaining the outcome of simpler model such as a linear model. Therefore, depending on the kind of application you need, you might want to take into account this factor too. Furthermore, as you have seen above, extra care is needed to fit a neural network and small changes can lead to different results.</p>
+<p>A gist with the full code for this post can be found here.</p>
+<p>Thank you for reading this post, leave a comment below if you have any question.</p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="predicting-the-rating-of-cereals.html"><span class="header-section-number">39</span> Predicting the rating of cereals</a></div>
+<div class="next"><a href="visualization-of-neural-networks.html"><span class="header-section-number">41</span> Visualization of neural networks</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#fitting-a-linear-model-with-neural-networks"><span class="header-section-number">40</span> Fitting a linear model with neural networks</a></li>
+<li><a class="nav-link" href="#introduction-22"><span class="header-section-number">40.1</span> Introduction</a></li>
+<li><a class="nav-link" href="#the-dataset-1"><span class="header-section-number">40.2</span> The dataset</a></li>
+<li><a class="nav-link" href="#preparing-to-fit-the-neural-network"><span class="header-section-number">40.3</span> Preparing to fit the neural network</a></li>
+<li><a class="nav-link" href="#parameters"><span class="header-section-number">40.4</span> Parameters</a></li>
+<li><a class="nav-link" href="#predicting-medv-using-the-neural-network"><span class="header-section-number">40.5</span> Predicting medv using the neural network</a></li>
+<li><a class="nav-link" href="#a-fast-cross-validation"><span class="header-section-number">40.6</span> A (fast) cross validation</a></li>
+<li><a class="nav-link" href="#a-final-note-on-model-interpretability"><span class="header-section-number">40.7</span> A final note on model interpretability</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/601-nn-regression_902-fitting_neural_network.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/601-nn-regression_902-fitting_neural_network.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>A Machine Learning Book</strong>" was written by Alfonso R. Reyes. It was last built on 2020-11-18.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>

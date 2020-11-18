@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 32 Comparing regression models | A Machine Learning Book</title>
+<meta name="author" content="Alfonso R. Reyes">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.5.3/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.5.3/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.2.9000/tabs.js"></script><script src="libs/bs3compat-0.2.2.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">A Machine Learning Book</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Prerequisites</a></li>
+<li class="book-part">The Basics of Machine Learning</li>
+<li><a class="" href="introduction-to-pca.html"><span class="header-section-number">1</span> Introduction to PCA</a></li>
+<li><a class="" href="comparison-of-two-pca-packages.html"><span class="header-section-number">2</span> Comparison of two PCA packages</a></li>
+<li><a class="" href="detailed-study-of-principal-component-analysis.html"><span class="header-section-number">3</span> Detailed study of Principal Component Analysis</a></li>
+<li><a class="" href="detection-of-diabetes-using-logistic-regression.html"><span class="header-section-number">4</span> Detection of diabetes using Logistic Regression</a></li>
+<li><a class="" href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">5</span> Sensitivity analysis for a neural network</a></li>
+<li><a class="" href="data-visualization-for-ml-models.html"><span class="header-section-number">6</span> Data Visualization for ML models</a></li>
+<li class="book-part">Feature Engineering</li>
+<li><a class="" href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">7</span> Ten methods to assess Variable Importance</a></li>
+<li><a class="" href="employee-attrition-using-feature-importance.html"><span class="header-section-number">8</span> Employee Attrition using Feature Importance</a></li>
+<li><a class="" href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">9</span> Feature Selection to enhance cancer detection</a></li>
+<li><a class="" href="dealing-with-unbalanced-data.html"><span class="header-section-number">10</span> Dealing with unbalanced data</a></li>
+<li><a class="" href="imputting-missing-values-with-random-forest.html"><span class="header-section-number">11</span> Imputting missing values with Random Forest</a></li>
+<li class="book-part">Algorithms Comparison</li>
+<li><a class="" href="introduction-to-algorithms-for-classification.html"><span class="header-section-number">12</span> Introduction to algorithms for Classification</a></li>
+<li><a class="" href="comparing-classification-algorithms.html"><span class="header-section-number">13</span> Comparing Classification algorithms</a></li>
+<li><a class="" href="linear-and-non-linear-algorithms-for-classification.html"><span class="header-section-number">14</span> Linear and Non-Linear Algorithms for Classification</a></li>
+<li><a class="" href="predicting-flu-outcome-comparing-eight-classification-algorithms.html"><span class="header-section-number">15</span> Predicting Flu outcome comparing eight classification algorithms</a></li>
+<li><a class="" href="classification-on-bad-loans.html"><span class="header-section-number">16</span> Classification on bad loans</a></li>
+<li><a class="" href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">17</span> Comparison of six Linear Regression algorithms</a></li>
+<li class="book-part">Classification</li>
+<li><a class="" href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">18</span> A gentle introduction to Support Vector Machines</a></li>
+<li><a class="" href="broad-view-of-svm.html"><span class="header-section-number">19</span> Broad view of SVM</a></li>
+<li><a class="" href="tuning-of-support-vector-machine-prediction.html"><span class="header-section-number">20</span> Tuning of Support Vector Machine prediction</a></li>
+<li><a class="" href="who-buys-social-network-ads.html"><span class="header-section-number">21</span> Who buys Social Network ads</a></li>
+<li><a class="" href="predicting-ozone-levels.html"><span class="header-section-number">22</span> Predicting Ozone levels</a></li>
+<li><a class="" href="building-a-naive-bayes-classifier.html"><span class="header-section-number">23</span> Building a Naive Bayes Classifier</a></li>
+<li><a class="" href="detect-mines-vs-rocks-with-random-forest.html"><span class="header-section-number">24</span> Detect mines vs rocks with Random Forest</a></li>
+<li><a class="" href="predicting-the-type-of-glass.html"><span class="header-section-number">25</span> Predicting the type of glass</a></li>
+<li><a class="" href="naive-bayes-for-sms-spam.html"><span class="header-section-number">26</span> Naive Bayes for SMS spam</a></li>
+<li><a class="" href="vehicles-classiification-with-decision-trees.html"><span class="header-section-number">27</span> Vehicles classiification with Decision Trees</a></li>
+<li><a class="" href="applying-naive-bayes-on-the-titanic-case.html"><span class="header-section-number">28</span> Applying Naive-Bayes on the Titanic case</a></li>
+<li><a class="" href="a-detailed-study-of-bike-sharing-demand.html"><span class="header-section-number">29</span> A detailed study of bike sharing demand</a></li>
+<li class="book-part">Linear Regression</li>
+<li><a class="" href="linear-regression-with-islr.html"><span class="header-section-number">30</span> Linear Regression with ISLR</a></li>
+<li><a class="" href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">31</span> Evaluation of three linear regression models</a></li>
+<li><a class="active" href="comparing-regression-models.html"><span class="header-section-number">32</span> Comparing regression models</a></li>
+<li><a class="" href="finding-the-factors-of-happiness.html"><span class="header-section-number">33</span> Finding the factors of happiness</a></li>
+<li><a class="" href="regression-with-a-neural-network.html"><span class="header-section-number">34</span> Regression with a neural network</a></li>
+<li><a class="" href="comparing-multiple-regression-vs-a-neural-network.html"><span class="header-section-number">35</span> Comparing Multiple Regression vs a Neural Network</a></li>
+<li><a class="" href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">36</span> Temperature modeling using nested dataframes</a></li>
+<li class="book-part">Neural Networks</li>
+<li><a class="" href="credit-scoring-with-neuralnet.html"><span class="header-section-number">37</span> Credit Scoring with neuralnet</a></li>
+<li><a class="" href="wine-classification-with-neuralnet.html"><span class="header-section-number">38</span> Wine classification with neuralnet</a></li>
+<li><a class="" href="predicting-the-rating-of-cereals.html"><span class="header-section-number">39</span> Predicting the rating of cereals</a></li>
+<li><a class="" href="fitting-a-linear-model-with-neural-networks.html"><span class="header-section-number">40</span> Fitting a linear model with neural networks</a></li>
+<li><a class="" href="visualization-of-neural-networks.html"><span class="header-section-number">41</span> Visualization of neural networks</a></li>
+<li><a class="" href="build-a-fully-connected-r-neural-network-from-scratch.html"><span class="header-section-number">42</span> Build a fully connected R neural network from scratch</a></li>
+<li><a class="" href="tuning-hyperparameters-in-a-neural-network.html"><span class="header-section-number">43</span> Tuning Hyperparameters in a Neural Network</a></li>
+<li><a class="" href="deep-learning-tips-for-classification-and-regression.html"><span class="header-section-number">44</span> Deep Learning tips for Classification and Regression</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="what-is-dot-hat-in-a-regression-output.html"><span class="header-section-number">A</span> What is dot hat in a regression output</a></li>
+<li><a class="" href="q-q-normal-to-compare-data-to-distributions.html"><span class="header-section-number">B</span> Q-Q normal to compare data to distributions</a></li>
+<li><a class="" href="qq-and-pp-plots.html"><span class="header-section-number">C</span> QQ and PP Plots</a></li>
+<li><a class="" href="visualizing-residuals.html"><span class="header-section-number">D</span> Visualizing residuals</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/hadley/r-pkgs">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="comparing-regression-models" class="section level1">
+<h1>
+<span class="header-section-number">32</span> Comparing regression models<a class="anchor" aria-label="anchor" href="#comparing-regression-models"><i class="fas fa-link"></i></a>
+</h1>
+<ul>
+<li>Dataset: <code>Rates.csv</code>
+</li>
+<li>Algorithms: <em>SLR, MLR, NN</em>
+</li>
+</ul>
+<div id="introduction-16" class="section level2">
+<h2>
+<span class="header-section-number">32.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-16"><i class="fas fa-link"></i></a>
+</h2>
+<blockquote>
+<p>line 29 does not plot</p>
+</blockquote>
+<p><strong>Source:</strong> <a href="https://www.matthewrenze.com/workshops/practical-machine-learning-with-r/lab-3b-regression.html" class="uri">https://www.matthewrenze.com/workshops/practical-machine-learning-with-r/lab-3b-regression.html</a></p>
+<div class="sourceCode" id="cb806"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://readr.tidyverse.org">readr</a></span><span class="op">)</span>
+
+<span class="va">policies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">data_raw_dir</span>, <span class="st">"Rates.csv"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Parsed with column specification:</span>
+<span class="co">#&gt; cols(</span>
+<span class="co">#&gt;   Gender = col_character(),</span>
+<span class="co">#&gt;   State = col_character(),</span>
+<span class="co">#&gt;   State.Rate = col_double(),</span>
+<span class="co">#&gt;   Height = col_double(),</span>
+<span class="co">#&gt;   Weight = col_double(),</span>
+<span class="co">#&gt;   BMI = col_double(),</span>
+<span class="co">#&gt;   Age = col_double(),</span>
+<span class="co">#&gt;   Rate = col_double()</span>
+<span class="co">#&gt; )</span>
+<span class="va">policies</span>
+<span class="co">#&gt; # A tibble: 1,942 x 8</span>
+<span class="co">#&gt;   Gender State State.Rate Height Weight   BMI   Age   Rate</span>
+<span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Male   MA        0.100     184   67.8  20.0    77 0.332 </span>
+<span class="co">#&gt; 2 Male   VA        0.142     163   89.4  33.6    82 0.869 </span>
+<span class="co">#&gt; 3 Male   NY        0.0908    170   81.2  28.1    31 0.01  </span>
+<span class="co">#&gt; 4 Male   TN        0.120     175   99.7  32.6    39 0.0215</span>
+<span class="co">#&gt; 5 Male   FL        0.110     184   72.1  21.3    68 0.150 </span>
+<span class="co">#&gt; 6 Male   WA        0.163     166   98.4  35.7    64 0.211 </span>
+<span class="co">#&gt; # … with 1,936 more rows</span></code></pre></div>
+<div class="sourceCode" id="cb807"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">policies</span><span class="op">)</span>
+<span class="co">#&gt;     Gender             State             State.Rate        Height   </span>
+<span class="co">#&gt;  Length:1942        Length:1942        Min.   :0.001   Min.   :150  </span>
+<span class="co">#&gt;  Class :character   Class :character   1st Qu.:0.110   1st Qu.:162  </span>
+<span class="co">#&gt;  Mode  :character   Mode  :character   Median :0.128   Median :170  </span>
+<span class="co">#&gt;                                        Mean   :0.138   Mean   :170  </span>
+<span class="co">#&gt;                                        3rd Qu.:0.144   3rd Qu.:176  </span>
+<span class="co">#&gt;                                        Max.   :0.318   Max.   :190  </span>
+<span class="co">#&gt;      Weight           BMI            Age            Rate      </span>
+<span class="co">#&gt;  Min.   : 44.1   Min.   :16.0   Min.   :18.0   Min.   :0.001  </span>
+<span class="co">#&gt;  1st Qu.: 68.6   1st Qu.:23.7   1st Qu.:34.0   1st Qu.:0.015  </span>
+<span class="co">#&gt;  Median : 81.3   Median :28.1   Median :51.0   Median :0.046  </span>
+<span class="co">#&gt;  Mean   : 81.2   Mean   :28.3   Mean   :50.8   Mean   :0.138  </span>
+<span class="co">#&gt;  3rd Qu.: 93.8   3rd Qu.:32.5   3rd Qu.:68.0   3rd Qu.:0.173  </span>
+<span class="co">#&gt;  Max.   :116.5   Max.   :46.8   Max.   :84.0   Max.   :0.999</span></code></pre></div>
+<div class="sourceCode" id="cb808"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RColorBrewer</span><span class="op">)</span>
+<span class="va">palette</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">9</span>, <span class="st">"Reds"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb809"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># plot(</span>
+<span class="co">#   x = policies,</span>
+<span class="co">#   col = palette[cut(x = policies$Rate, breaks = 9)]</span>
+<span class="co">#   )</span></code></pre></div>
+<div class="sourceCode" id="cb810"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kwstat/corrgram">corrgram</a></span><span class="op">)</span>
+<span class="co">#&gt; Registered S3 method overwritten by 'seriation':</span>
+<span class="co">#&gt;   method         from </span>
+<span class="co">#&gt;   reorder.hclust gclus</span>
+
+<span class="fu"><a href="https://rdrr.io/pkg/corrgram/man/corrgram.html">corrgram</a></span><span class="op">(</span><span class="va">policies</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-regression_141.2-3b-rates_dataset_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb811"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.cor.html">cor</a></span><span class="op">(</span><span class="va">policies</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span><span class="op">)</span>
+<span class="co">#&gt;            State.Rate  Height  Weight     BMI     Age    Rate</span>
+<span class="co">#&gt; State.Rate    1.00000 -0.0165 0.00923  0.0192  0.1123  0.2269</span>
+<span class="co">#&gt; Height       -0.01652  1.0000 0.23809 -0.3170 -0.1648 -0.1286</span>
+<span class="co">#&gt; Weight        0.00923  0.2381 1.00000  0.8396  0.0117  0.0609</span>
+<span class="co">#&gt; BMI           0.01924 -0.3170 0.83963  1.0000  0.1023  0.1405</span>
+<span class="co">#&gt; Age           0.11235 -0.1648 0.01168  0.1023  1.0000  0.7801</span>
+<span class="co">#&gt; Rate          0.22685 -0.1286 0.06094  0.1405  0.7801  1.0000</span></code></pre></div>
+<div class="sourceCode" id="cb812"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.cor.html">cor</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Age</span>, 
+  y <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Rate</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.78</span></code></pre></div>
+<div class="sourceCode" id="cb813"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Age</span>, 
+  y <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Rate</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-regression_141.2-3b-rates_dataset_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+<div id="split-the-data-into-test-and-training-sets" class="section level2">
+<h2>
+<span class="header-section-number">32.2</span> Split the Data into Test and Training Sets<a class="anchor" aria-label="anchor" href="#split-the-data-into-test-and-training-sets"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb814"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb815"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/topepo/caret/">caret</a></span><span class="op">)</span>
+<span class="co">#&gt; Loading required package: lattice</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'lattice'</span>
+<span class="co">#&gt; The following object is masked from 'package:corrgram':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     panel.fill</span>
+<span class="co">#&gt; Loading required package: ggplot2</span>
+
+<span class="va">indexes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/createDataPartition.html">createDataPartition</a></span><span class="op">(</span>
+  y <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Rate</span>,
+  p <span class="op">=</span> <span class="fl">0.80</span>,
+  list <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="va">train</span> <span class="op">&lt;-</span> <span class="va">policies</span><span class="op">[</span><span class="va">indexes</span>, <span class="op">]</span>
+<span class="co">#&gt; Warning: The `i` argument of ``[`()` can't be a matrix as of tibble 3.0.0.</span>
+<span class="co">#&gt; Convert to a vector.</span>
+<span class="co">#&gt; This warning is displayed once every 8 hours.</span>
+<span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span>
+<span class="va">test</span> <span class="op">&lt;-</span> <span class="va">policies</span><span class="op">[</span><span class="op">-</span><span class="va">indexes</span>, <span class="op">]</span></code></pre></div>
+<div class="sourceCode" id="cb816"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">train</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 1555</span>
+<span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 387</span></code></pre></div>
+</div>
+<div id="predict-with-simple-linear-regression-1" class="section level2">
+<h2>
+<span class="header-section-number">32.3</span> Predict with Simple Linear Regression<a class="anchor" aria-label="anchor" href="#predict-with-simple-linear-regression-1"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb817"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">simpleModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>
+  formula <span class="op">=</span> <span class="va">Rate</span> <span class="op">~</span> <span class="va">Age</span>,
+  data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb818"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Age</span>, 
+  y <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Rate</span><span class="op">)</span>
+  
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">train</span><span class="op">$</span><span class="va">Age</span>,
+  y <span class="op">=</span> <span class="va">simpleModel</span><span class="op">$</span><span class="va">fitted</span>, 
+  col <span class="op">=</span> <span class="st">"red"</span>,
+  lwd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-regression_141.2-3b-rates_dataset_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb819"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">simpleModel</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = Rate ~ Age, data = train)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;     Min      1Q  Median      3Q     Max </span>
+<span class="co">#&gt; -0.1799 -0.0881 -0.0208  0.0617  0.6300 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept) -0.265244   0.008780   -30.2   &lt;2e-16 ***</span>
+<span class="co">#&gt; Age          0.007928   0.000161    49.3   &lt;2e-16 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 0.123 on 1553 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.61,   Adjusted R-squared:  0.609 </span>
+<span class="co">#&gt; F-statistic: 2.43e+03 on 1 and 1553 DF,  p-value: &lt;2e-16</span></code></pre></div>
+<div class="sourceCode" id="cb820"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">simplePredictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>
+  object <span class="op">=</span> <span class="va">simpleModel</span>,
+  newdata <span class="op">=</span> <span class="va">test</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb821"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Age</span>, 
+  y <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Rate</span><span class="op">)</span>
+
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">test</span><span class="op">$</span><span class="va">Age</span>,
+  y <span class="op">=</span> <span class="va">simplePredictions</span>,
+  col <span class="op">=</span> <span class="st">"blue"</span>,
+  pch <span class="op">=</span> <span class="fl">4</span>,
+  lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-regression_141.2-3b-rates_dataset_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb822"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">simpleRMSE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Rate</span> <span class="op">-</span> <span class="va">simplePredictions</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="va">simpleRMSE</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.119</span></code></pre></div>
+</div>
+<div id="predict-with-multiple-linear-regression" class="section level2">
+<h2>
+<span class="header-section-number">32.4</span> Predict with Multiple Linear Regression<a class="anchor" aria-label="anchor" href="#predict-with-multiple-linear-regression"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb823"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">multipleModel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>
+  formula <span class="op">=</span> <span class="va">Rate</span> <span class="op">~</span> <span class="va">Age</span> <span class="op">+</span> <span class="va">Gender</span> <span class="op">+</span> <span class="va">State.Rate</span> <span class="op">+</span> <span class="va">BMI</span>,
+  data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb824"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">multipleModel</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = Rate ~ Age + Gender + State.Rate + BMI, data = train)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;     Min      1Q  Median      3Q     Max </span>
+<span class="co">#&gt; -0.2255 -0.0865 -0.0292  0.0590  0.6053 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept) -0.428141   0.018742  -22.84  &lt; 2e-16 ***</span>
+<span class="co">#&gt; Age          0.007703   0.000156   49.28  &lt; 2e-16 ***</span>
+<span class="co">#&gt; GenderMale   0.030350   0.006001    5.06  4.8e-07 ***</span>
+<span class="co">#&gt; State.Rate   0.613139   0.068330    8.97  &lt; 2e-16 ***</span>
+<span class="co">#&gt; BMI          0.002634   0.000518    5.09  4.1e-07 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 0.118 on 1550 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.64,   Adjusted R-squared:  0.639 </span>
+<span class="co">#&gt; F-statistic:  688 on 4 and 1550 DF,  p-value: &lt;2e-16</span></code></pre></div>
+<div class="sourceCode" id="cb825"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">multiplePredictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>
+  object <span class="op">=</span> <span class="va">multipleModel</span>,
+  newdata <span class="op">=</span> <span class="va">test</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb826"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Age</span>, 
+  y <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Rate</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">test</span><span class="op">$</span><span class="va">Age</span>,
+  y <span class="op">=</span> <span class="va">multiplePredictions</span>,
+  col <span class="op">=</span> <span class="st">"blue"</span>,
+  pch <span class="op">=</span> <span class="fl">4</span>,
+  lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-regression_141.2-3b-rates_dataset_files/figure-html/unnamed-chunk-21-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb827"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">multipleRMSE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Rate</span> <span class="op">-</span> <span class="va">multiplePredictions</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="va">multipleRMSE</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.114</span></code></pre></div>
+</div>
+<div id="predict-with-neural-network-regression-1" class="section level2">
+<h2>
+<span class="header-section-number">32.5</span> Predict with Neural Network Regression<a class="anchor" aria-label="anchor" href="#predict-with-neural-network-regression-1"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb828"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">normalize</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">0.5</span>
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb829"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">denormalize</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span>
+  <span class="op">(</span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb830"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">scaledPolicies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+  Gender <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Gender</span>,
+  State.Rate <span class="op">=</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">policies</span><span class="op">$</span><span class="va">State.Rate</span><span class="op">)</span>,
+  BMI <span class="op">=</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">policies</span><span class="op">$</span><span class="va">BMI</span><span class="op">)</span>,
+  Age <span class="op">=</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">policies</span><span class="op">$</span><span class="va">Age</span><span class="op">)</span>,
+  Rate <span class="op">=</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">policies</span><span class="op">$</span><span class="va">Rate</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb831"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">scaledTrain</span> <span class="op">&lt;-</span> <span class="va">scaledPolicies</span><span class="op">[</span><span class="va">indexes</span>, <span class="op">]</span>
+<span class="va">scaledTest</span> <span class="op">&lt;-</span> <span class="va">scaledPolicies</span><span class="op">[</span><span class="op">-</span><span class="va">indexes</span>, <span class="op">]</span></code></pre></div>
+<div class="sourceCode" id="cb832"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">nnet</a></span><span class="op">)</span>
+
+<span class="va">neuralRegressor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/nnet/man/nnet.html">nnet</a></span><span class="op">(</span>
+  formula <span class="op">=</span> <span class="va">Rate</span> <span class="op">~</span> <span class="va">.</span>,
+  data <span class="op">=</span> <span class="va">scaledTrain</span>,
+  linout <span class="op">=</span> <span class="cn">TRUE</span>,
+  size <span class="op">=</span> <span class="fl">5</span>,
+  decay <span class="op">=</span> <span class="fl">0.0001</span>,
+  maxit <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
+<span class="co">#&gt; # weights:  31</span>
+<span class="co">#&gt; initial  value 548.090539 </span>
+<span class="co">#&gt; iter  10 value 10.610284</span>
+<span class="co">#&gt; iter  20 value 3.927378</span>
+<span class="co">#&gt; iter  30 value 3.735266</span>
+<span class="co">#&gt; iter  40 value 3.513899</span>
+<span class="co">#&gt; iter  50 value 3.073390</span>
+<span class="co">#&gt; iter  60 value 2.547202</span>
+<span class="co">#&gt; iter  70 value 2.296126</span>
+<span class="co">#&gt; iter  80 value 2.166120</span>
+<span class="co">#&gt; iter  90 value 2.106996</span>
+<span class="co">#&gt; iter 100 value 2.092654</span>
+<span class="co">#&gt; iter 110 value 2.058596</span>
+<span class="co">#&gt; iter 120 value 2.039404</span>
+<span class="co">#&gt; iter 130 value 2.023721</span>
+<span class="co">#&gt; iter 140 value 2.018777</span>
+<span class="co">#&gt; iter 150 value 2.006895</span>
+<span class="co">#&gt; iter 160 value 1.999130</span>
+<span class="co">#&gt; iter 170 value 1.993921</span>
+<span class="co">#&gt; iter 180 value 1.990505</span>
+<span class="co">#&gt; iter 190 value 1.989212</span>
+<span class="co">#&gt; iter 200 value 1.988818</span>
+<span class="co">#&gt; iter 210 value 1.988007</span>
+<span class="co">#&gt; iter 220 value 1.987710</span>
+<span class="co">#&gt; iter 230 value 1.987671</span>
+<span class="co">#&gt; iter 240 value 1.987599</span>
+<span class="co">#&gt; iter 250 value 1.987575</span>
+<span class="co">#&gt; iter 260 value 1.987553</span>
+<span class="co">#&gt; iter 270 value 1.987537</span>
+<span class="co">#&gt; iter 280 value 1.987528</span>
+<span class="co">#&gt; final  value 1.987522 </span>
+<span class="co">#&gt; converged</span></code></pre></div>
+<div class="sourceCode" id="cb833"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">scaledPredictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>
+  object <span class="op">=</span> <span class="va">neuralRegressor</span>, 
+  newdata <span class="op">=</span> <span class="va">scaledTest</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb834"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">neuralPredictions</span> <span class="op">&lt;-</span> <span class="fu">denormalize</span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">scaledPredictions</span>, 
+  y <span class="op">=</span> <span class="va">policies</span><span class="op">$</span><span class="va">Rate</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb835"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">train</span><span class="op">$</span><span class="va">Age</span>, 
+  y <span class="op">=</span> <span class="va">train</span><span class="op">$</span><span class="va">Rate</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="va">test</span><span class="op">$</span><span class="va">Age</span>,
+  y <span class="op">=</span> <span class="va">neuralPredictions</span>,
+  col <span class="op">=</span> <span class="st">"blue"</span>,
+  pch <span class="op">=</span> <span class="fl">4</span>,
+  lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-regression_141.2-3b-rates_dataset_files/figure-html/unnamed-chunk-30-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb836"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">NeuralNetTools</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/plotnet.html">plotnet</a></span><span class="op">(</span><span class="va">neuralRegressor</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-regression_141.2-3b-rates_dataset_files/figure-html/unnamed-chunk-31-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb837"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">neuralRMSE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">Rate</span> <span class="op">-</span> <span class="va">neuralPredictions</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="va">neuralRMSE</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.0368</span></code></pre></div>
+</div>
+<div id="evaluate-the-regression-models" class="section level2">
+<h2>
+<span class="header-section-number">32.6</span> Evaluate the Regression Models<a class="anchor" aria-label="anchor" href="#evaluate-the-regression-models"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb838"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="va">simpleRMSE</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.119</span>
+<span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="va">multipleRMSE</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.114</span>
+<span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="va">neuralRMSE</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.0368</span></code></pre></div>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">31</span> Evaluation of three linear regression models</a></div>
+<div class="next"><a href="finding-the-factors-of-happiness.html"><span class="header-section-number">33</span> Finding the factors of happiness</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#comparing-regression-models"><span class="header-section-number">32</span> Comparing regression models</a></li>
+<li><a class="nav-link" href="#introduction-16"><span class="header-section-number">32.1</span> Introduction</a></li>
+<li><a class="nav-link" href="#split-the-data-into-test-and-training-sets"><span class="header-section-number">32.2</span> Split the Data into Test and Training Sets</a></li>
+<li><a class="nav-link" href="#predict-with-simple-linear-regression-1"><span class="header-section-number">32.3</span> Predict with Simple Linear Regression</a></li>
+<li><a class="nav-link" href="#predict-with-multiple-linear-regression"><span class="header-section-number">32.4</span> Predict with Multiple Linear Regression</a></li>
+<li><a class="nav-link" href="#predict-with-neural-network-regression-1"><span class="header-section-number">32.5</span> Predict with Neural Network Regression</a></li>
+<li><a class="nav-link" href="#evaluate-the-regression-models"><span class="header-section-number">32.6</span> Evaluate the Regression Models</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/402-regression_141.2-3b-rates_dataset.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/402-regression_141.2-3b-rates_dataset.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>A Machine Learning Book</strong>" was written by Alfonso R. Reyes. It was last built on 2020-11-18.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>

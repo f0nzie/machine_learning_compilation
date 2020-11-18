@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 18 A gentle introduction to Support Vector Machines | A Machine Learning Book</title>
+<meta name="author" content="Alfonso R. Reyes">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.5.3/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.5.3/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.2.9000/tabs.js"></script><script src="libs/bs3compat-0.2.2.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">A Machine Learning Book</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Prerequisites</a></li>
+<li class="book-part">The Basics of Machine Learning</li>
+<li><a class="" href="introduction-to-pca.html"><span class="header-section-number">1</span> Introduction to PCA</a></li>
+<li><a class="" href="comparison-of-two-pca-packages.html"><span class="header-section-number">2</span> Comparison of two PCA packages</a></li>
+<li><a class="" href="detailed-study-of-principal-component-analysis.html"><span class="header-section-number">3</span> Detailed study of Principal Component Analysis</a></li>
+<li><a class="" href="detection-of-diabetes-using-logistic-regression.html"><span class="header-section-number">4</span> Detection of diabetes using Logistic Regression</a></li>
+<li><a class="" href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">5</span> Sensitivity analysis for a neural network</a></li>
+<li><a class="" href="data-visualization-for-ml-models.html"><span class="header-section-number">6</span> Data Visualization for ML models</a></li>
+<li class="book-part">Feature Engineering</li>
+<li><a class="" href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">7</span> Ten methods to assess Variable Importance</a></li>
+<li><a class="" href="employee-attrition-using-feature-importance.html"><span class="header-section-number">8</span> Employee Attrition using Feature Importance</a></li>
+<li><a class="" href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">9</span> Feature Selection to enhance cancer detection</a></li>
+<li><a class="" href="dealing-with-unbalanced-data.html"><span class="header-section-number">10</span> Dealing with unbalanced data</a></li>
+<li><a class="" href="imputting-missing-values-with-random-forest.html"><span class="header-section-number">11</span> Imputting missing values with Random Forest</a></li>
+<li class="book-part">Algorithms Comparison</li>
+<li><a class="" href="introduction-to-algorithms-for-classification.html"><span class="header-section-number">12</span> Introduction to algorithms for Classification</a></li>
+<li><a class="" href="comparing-classification-algorithms.html"><span class="header-section-number">13</span> Comparing Classification algorithms</a></li>
+<li><a class="" href="linear-and-non-linear-algorithms-for-classification.html"><span class="header-section-number">14</span> Linear and Non-Linear Algorithms for Classification</a></li>
+<li><a class="" href="predicting-flu-outcome-comparing-eight-classification-algorithms.html"><span class="header-section-number">15</span> Predicting Flu outcome comparing eight classification algorithms</a></li>
+<li><a class="" href="classification-on-bad-loans.html"><span class="header-section-number">16</span> Classification on bad loans</a></li>
+<li><a class="" href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">17</span> Comparison of six Linear Regression algorithms</a></li>
+<li class="book-part">Classification</li>
+<li><a class="active" href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">18</span> A gentle introduction to Support Vector Machines</a></li>
+<li><a class="" href="broad-view-of-svm.html"><span class="header-section-number">19</span> Broad view of SVM</a></li>
+<li><a class="" href="tuning-of-support-vector-machine-prediction.html"><span class="header-section-number">20</span> Tuning of Support Vector Machine prediction</a></li>
+<li><a class="" href="who-buys-social-network-ads.html"><span class="header-section-number">21</span> Who buys Social Network ads</a></li>
+<li><a class="" href="predicting-ozone-levels.html"><span class="header-section-number">22</span> Predicting Ozone levels</a></li>
+<li><a class="" href="building-a-naive-bayes-classifier.html"><span class="header-section-number">23</span> Building a Naive Bayes Classifier</a></li>
+<li><a class="" href="detect-mines-vs-rocks-with-random-forest.html"><span class="header-section-number">24</span> Detect mines vs rocks with Random Forest</a></li>
+<li><a class="" href="predicting-the-type-of-glass.html"><span class="header-section-number">25</span> Predicting the type of glass</a></li>
+<li><a class="" href="naive-bayes-for-sms-spam.html"><span class="header-section-number">26</span> Naive Bayes for SMS spam</a></li>
+<li><a class="" href="vehicles-classiification-with-decision-trees.html"><span class="header-section-number">27</span> Vehicles classiification with Decision Trees</a></li>
+<li><a class="" href="applying-naive-bayes-on-the-titanic-case.html"><span class="header-section-number">28</span> Applying Naive-Bayes on the Titanic case</a></li>
+<li><a class="" href="a-detailed-study-of-bike-sharing-demand.html"><span class="header-section-number">29</span> A detailed study of bike sharing demand</a></li>
+<li class="book-part">Linear Regression</li>
+<li><a class="" href="linear-regression-with-islr.html"><span class="header-section-number">30</span> Linear Regression with ISLR</a></li>
+<li><a class="" href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">31</span> Evaluation of three linear regression models</a></li>
+<li><a class="" href="comparing-regression-models.html"><span class="header-section-number">32</span> Comparing regression models</a></li>
+<li><a class="" href="finding-the-factors-of-happiness.html"><span class="header-section-number">33</span> Finding the factors of happiness</a></li>
+<li><a class="" href="regression-with-a-neural-network.html"><span class="header-section-number">34</span> Regression with a neural network</a></li>
+<li><a class="" href="comparing-multiple-regression-vs-a-neural-network.html"><span class="header-section-number">35</span> Comparing Multiple Regression vs a Neural Network</a></li>
+<li><a class="" href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">36</span> Temperature modeling using nested dataframes</a></li>
+<li class="book-part">Neural Networks</li>
+<li><a class="" href="credit-scoring-with-neuralnet.html"><span class="header-section-number">37</span> Credit Scoring with neuralnet</a></li>
+<li><a class="" href="wine-classification-with-neuralnet.html"><span class="header-section-number">38</span> Wine classification with neuralnet</a></li>
+<li><a class="" href="predicting-the-rating-of-cereals.html"><span class="header-section-number">39</span> Predicting the rating of cereals</a></li>
+<li><a class="" href="fitting-a-linear-model-with-neural-networks.html"><span class="header-section-number">40</span> Fitting a linear model with neural networks</a></li>
+<li><a class="" href="visualization-of-neural-networks.html"><span class="header-section-number">41</span> Visualization of neural networks</a></li>
+<li><a class="" href="build-a-fully-connected-r-neural-network-from-scratch.html"><span class="header-section-number">42</span> Build a fully connected R neural network from scratch</a></li>
+<li><a class="" href="tuning-hyperparameters-in-a-neural-network.html"><span class="header-section-number">43</span> Tuning Hyperparameters in a Neural Network</a></li>
+<li><a class="" href="deep-learning-tips-for-classification-and-regression.html"><span class="header-section-number">44</span> Deep Learning tips for Classification and Regression</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="what-is-dot-hat-in-a-regression-output.html"><span class="header-section-number">A</span> What is dot hat in a regression output</a></li>
+<li><a class="" href="q-q-normal-to-compare-data-to-distributions.html"><span class="header-section-number">B</span> Q-Q normal to compare data to distributions</a></li>
+<li><a class="" href="qq-and-pp-plots.html"><span class="header-section-number">C</span> QQ and PP Plots</a></li>
+<li><a class="" href="visualizing-residuals.html"><span class="header-section-number">D</span> Visualizing residuals</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/hadley/r-pkgs">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="a-gentle-introduction-to-support-vector-machines" class="section level1">
+<h1>
+<span class="header-section-number">18</span> A gentle introduction to Support Vector Machines<a class="anchor" aria-label="anchor" href="#a-gentle-introduction-to-support-vector-machines"><i class="fas fa-link"></i></a>
+</h1>
+<div id="introduction-11" class="section level2">
+<h2>
+<span class="header-section-number">18.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-11"><i class="fas fa-link"></i></a>
+</h2>
+<p>Source: <a href="https://eight2late.wordpress.com/2017/02/07/a-gentle-introduction-to-support-vector-machines-using-r/" class="uri">https://eight2late.wordpress.com/2017/02/07/a-gentle-introduction-to-support-vector-machines-using-r/</a></p>
+<p>Most machine learning algorithms involve minimising an error measure of some kind (this measure is often called an objective function or loss function). For example, the error measure in linear regression problems is the famous mean squared error – i.e. the averaged sum of the squared differences between the predicted and actual values. Like the mean squared error, most objective functions depend on all points in the training dataset. In this post, I describe the support vector machine (SVM) approach which focuses instead on finding the optimal separation boundary between datapoints that have different classifications. I’ll elaborate on what this means in the next section.</p>
+<p>Here’s the plan in brief. I’ll begin with the rationale behind SVMs using a simple case of a binary (two class) dataset with a simple separation boundary (I’ll clarify what “simple” means in a minute). Following that, I’ll describe how this can be generalised to datasets with more complex boundaries. Finally, I’ll work through a couple of examples in R, illustrating the principles behind SVMs. In line with the general philosophy of my “Gentle Introduction to Data Science Using R” series, the focus is on developing an intuitive understanding of the algorithm along with a practical demonstration of its use through a toy example.</p>
+</div>
+<div id="the-rationale" class="section level2">
+<h2>
+<span class="header-section-number">18.2</span> The rationale<a class="anchor" aria-label="anchor" href="#the-rationale"><i class="fas fa-link"></i></a>
+</h2>
+<p>The basic idea behind SVMs is best illustrated by considering a simple case: a set of data points that belong to one of two classes, red and blue, as illustrated in figure 1 below. To make things simpler still, I have assumed that the boundary separating the two classes is a straight line, represented by the solid green line in the diagram. In the technical literature, such datasets are called linearly separable.</p>
+<div class="inline-figure"><img src="../assets/svm-fig-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>In the linearly separable case, there is usually a fair amount of freedom in the way a separating line can be drawn. Figure 2 illustrates this point: the two broken green lines are also valid separation boundaries. Indeed, because there is a non-zero distance between the two closest points between categories, there are an infinite number of possible separation lines. This, quite naturally, raises the question as to whether it is possible to choose a separation boundary that is optimal.</p>
+<div class="sourceCode" id="cb525"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="va">assets_dir</span><span class="op">)</span>
+<span class="co">#&gt; [1] "../assets"</span></code></pre></div>
+<div class="sourceCode" id="cb526"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="va">assets_dir</span><span class="op">)</span>
+<span class="co">#&gt;  [1] "linear_regression.jpg"   "logistic_regression.jpg"</span>
+<span class="co">#&gt;  [3] "neural_networks.jpg"     "nn_1h_layer.png"        </span>
+<span class="co">#&gt;  [5] "nn_no_hidden_layer.png"  "nn_polynomial.png"      </span>
+<span class="co">#&gt;  [7] "packages.bib"            "softmax_regression.jpg" </span>
+<span class="co">#&gt;  [9] "svm-fig-1.png"           "svm-fig-2.png"          </span>
+<span class="co">#&gt; [11] "svm-fig-3.png"           "svm-fig-4.png"          </span>
+<span class="co">#&gt; [13] "svm-fig-5.png"</span></code></pre></div>
+<div class="inline-figure"><img src="../assets/svm-fig-2.png" width="70%" style="display: block; margin: auto;"></div>
+<p>The short answer is, yes there is. One way to do this is to select a boundary line that maximises the margin, i.e. the distance between the separation boundary and the points that are closest to it. Such an optimal boundary is illustrated by the black brace in Figure 3. The really cool thing about this criterion is that the location of the separation boundary depends only on the points that are closest to it. This means, unlike other classification methods, the classifier does not depend on any other points in dataset. The directed lines between the boundary and the closest points on either side are called support vectors (these are the solid black lines in figure 3). A direct implication of this is that the fewer the support vectors, the better the generalizability of the boundary.</p>
+<div class="figure" style="text-align: center">
+<span id="fig:unnamed-chunk-5"></span>
+<img src="../assets/svm-fig-3.png" alt="Figure 3" width="70%"><p class="caption">
+Figure 18.1: Figure 3
+</p>
+</div>
+<p>Although the above sounds great, it is of limited practical value because real data sets are seldom (if ever) linearly separable.</p>
+<p>So, what can we do when dealing with real (i.e. non linearly separable) data sets?</p>
+<p>A simple approach to tackle small deviations from linear separability is to allow a small number of points (those that are close to the boundary) to be misclassified. The number of possible misclassifications is governed by a free parameter C, which is called the cost. The cost is essentially the penalty associated with making an error: the higher the value of C, the less likely it is that the algorithm will misclassify a point.</p>
+<p>This approach – which is called soft margin classification – is illustrated in Figure 4. Note the points on the wrong side of the separation boundary. We will demonstrate soft margin SVMs in the next section. (Note: At the risk of belabouring the obvious, the purely linearly separable case discussed in the previous para is simply is a special case of the soft margin classifier.)</p>
+<div class="inline-figure"><img src="../assets/svm-fig-4.png" width="70%" style="display: block; margin: auto;"></div>
+<p>Real life situations are much more complex and cannot be dealt with using soft margin classifiers. For example, as shown in Figure 5, one could have widely separated clusters of points that belong to the same classes. Such situations, which require the use of multiple (and nonlinear) boundaries, can sometimes be dealt with using a clever approach called the kernel trick.</p>
+<div class="inline-figure"><img src="../assets/svm-fig-5.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+<div id="the-kernel-trick" class="section level2">
+<h2>
+<span class="header-section-number">18.3</span> The kernel trick<a class="anchor" aria-label="anchor" href="#the-kernel-trick"><i class="fas fa-link"></i></a>
+</h2>
+<p>Recall that in the linearly separable (or soft margin) case, the SVM algorithm works by finding a separation boundary that maximises the margin, which is the distance between the boundary and the points closest to it. The distance here is the usual straight line distance between the boundary and the closest point(s). This is called the Euclidean distance in honour of the great geometer of antiquity. The point to note is that this process results in a separation boundary that is a straight line, which as Figure 5 illustrates, does not always work. In fact in most cases it won’t.</p>
+<p>So what can we do? To answer this question, we have to take a bit of a detour…</p>
+<p>What if we were able to generalize the notion of distance in a way that generates nonlinear separation boundaries? It turns out that this is possible. To see how, one has to first understand how the notion of distance can be generalized.</p>
+<p>The key properties that any measure of distance must satisfy are:</p>
+<pre><code>Non-negativity – a distance cannot be negative, a point that needs no further explanation I reckon 🙂
+Symmetry – that is, the distance between point A and point B is the same as the distance between point B and point A.
+Identity– the distance between a point and itself is zero.
+Triangle inequality – that is the sum of distances between point A and B and points B and C must be less than or equal to the distance between A and C (equality holds only if all three points lie along the same line).</code></pre>
+<p>Any mathematical object that displays the above properties is akin to a distance. Such generalized distances are called metrics and the mathematical space in which they live is called a metric space. Metrics are defined using special mathematical functions designed to satisfy the above conditions. These functions are known as kernels.</p>
+<p>The essence of the kernel trick lies in mapping the classification problem to a metric space in which the problem is rendered separable via a separation boundary that is simple in the new space, but complex – as it has to be – in the original one. Generally, the transformed space has a higher dimensionality, with each of the dimensions being (possibly complex) combinations of the original problem variables. However, this is not necessarily a problem because in practice one doesn’t actually mess around with transformations, one just tries different kernels (the transformation being implicit in the kernel) and sees which one does the job. The check is simple: we simply test the predictions resulting from using different kernels against a held out subset of the data (as one would for any machine learning algorithm).</p>
+<p>It turns out that a particular function – called the radial basis function kernel (RBF kernel) – is very effective in many cases. The RBF kernel is essentially a Gaussian (or Normal) function with the Euclidean distance between pairs of points as the variable (see equation 1 below). The basic rationale behind the RBF kernel is that it creates separation boundaries that it tends to classify points close together (in the Euclidean sense) in the original space in the same way. This is reflected in the fact that the kernel decays (i.e. drops off to zero) as the Euclidean distance between points increases.</p>
+<p>The rate at which a kernel decays is governed by the parameter <span class="math inline">\(\gamma\)</span> – the higher the value of <span class="math inline">\(\gamma\)</span>, the more rapid the decay. This serves to illustrate that the RBF kernel is extremely flexible….but the flexibility comes at a price – the danger of overfitting for large values of <span class="math inline">\(\gamma\)</span> . One should choose appropriate values of C and <span class="math inline">\(\gamma\)</span> so as to ensure that the resulting kernel represents the best possible balance between flexibility and accuracy. We’ll discuss how this is done in practice later in this article.</p>
+<p>Finally, though it is probably obvious, it is worth mentioning that the separation boundaries for arbitrary kernels are also defined through support vectors as in Figure 3. To reiterate a point made earlier, this means that a solution that has fewer support vectors is likely to be more robust than one with many. Why? Because the data points defining support vectors are ones that are most sensitive to noise- therefore the fewer, the better.</p>
+<p>There are many other types of kernels, each with their own pros and cons. However, I’ll leave these for adventurous readers to explore by themselves. Finally, for a much more detailed….and dare I say, better… explanation of the kernel trick, I highly recommend this article by Eric Kim.</p>
+</div>
+<div id="support-vector-machines-in-r" class="section level2">
+<h2>
+<span class="header-section-number">18.4</span> Support vector machines in R<a class="anchor" aria-label="anchor" href="#support-vector-machines-in-r"><i class="fas fa-link"></i></a>
+</h2>
+<p>In this demo we’ll use the svm interface that is implemented in the <code>e1071</code> R package. This interface provides R programmers access to the comprehensive <code>libsvm</code> library written by Chang and Lin. I’ll use two toy datasets: the famous iris dataset available with the base R package and the sonar dataset from the mlbench package. I won’t describe details of the datasets as they are discussed at length in the documentation that I have linked to. However, it is worth mentioning the reasons why I chose these datasets:</p>
+<p>As mentioned earlier, no real life dataset is linearly separable, but the iris dataset is almost so. Consequently, it is a good illustration of using linear SVMs. Although one almost never uses these in practice, I have illustrated their use primarily for pedagogical reasons.
+The sonar dataset is a good illustration of the benefits of using RBF kernels in cases where the dataset is hard to visualise (60 variables in this case!). In general, one would almost always use RBF (or other nonlinear) kernels in practice.</p>
+<p>With that said, let’s get right to it. I assume you have R and RStudio installed. For instructions on how to do this, have a look at the first article in this series. The processing preliminaries – loading libraries, data and creating training and test datasets are much the same as in my previous articles so I won’t dwell on these here. For completeness, however, I’ll list all the code so you can run it directly in R or R studio (a complete listing of the code can be found here):</p>
+</div>
+<div id="svm-on-the-iris-dataset" class="section level2">
+<h2>
+<span class="header-section-number">18.5</span> SVM on the <code>iris</code> dataset<a class="anchor" aria-label="anchor" href="#svm-on-the-iris-dataset"><i class="fas fa-link"></i></a>
+</h2>
+<div id="training-and-test-datasets" class="section level3">
+<h3>
+<span class="header-section-number">18.5.1</span> Training and test datasets<a class="anchor" aria-label="anchor" href="#training-and-test-datasets"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb528"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#load required library</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">e1071</span><span class="op">)</span>
+
+<span class="co">#load built-in iris dataset</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
+
+<span class="co">#set seed to ensure reproducible results</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
+
+<span class="co">#split into training and test sets</span>
+<span class="va">iris</span><span class="op">[</span>, <span class="st">"train"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>
+
+<span class="co">#separate training and test sets</span>
+<span class="va">trainset</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="va">iris</span><span class="op">$</span><span class="va">train</span> <span class="op">==</span> <span class="fl">1</span>,<span class="op">]</span>
+<span class="va">testset</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">[</span><span class="va">iris</span><span class="op">$</span><span class="va">train</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>
+
+<span class="co">#get column index of train flag</span>
+<span class="va">trainColNum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"train"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">trainset</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">#remove train flag column from train and test sets</span>
+<span class="va">trainset</span> <span class="op">&lt;-</span> <span class="va">trainset</span><span class="op">[</span>,<span class="op">-</span><span class="va">trainColNum</span><span class="op">]</span>
+<span class="va">testset</span> <span class="op">&lt;-</span> <span class="va">testset</span><span class="op">[</span>,<span class="op">-</span><span class="va">trainColNum</span><span class="op">]</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">trainset</span><span class="op">)</span>
+<span class="co">#&gt; [1] 115   5</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">testset</span><span class="op">)</span>
+<span class="co">#&gt; [1] 35  5</span></code></pre></div>
+</div>
+<div id="building-the-svm-model" class="section level3">
+<h3>
+<span class="header-section-number">18.5.2</span> Building the SVM model<a class="anchor" aria-label="anchor" href="#building-the-svm-model"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb529"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#get column index of predicted variable in dataset</span>
+<span class="va">typeColNum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">#build model – linear kernel and C-classification (soft margin) with default cost (C=1)</span>
+<span class="va">svm_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/e1071/man/svm.html">svm</a></span><span class="op">(</span><span class="va">Species</span><span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">trainset</span>, 
+                 method <span class="op">=</span> <span class="st">"C-classification"</span>, 
+                 kernel <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span>
+<span class="va">svm_model</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; svm(formula = Species ~ ., data = trainset, method = "C-classification", </span>
+<span class="co">#&gt;     kernel = "linear")</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Parameters:</span>
+<span class="co">#&gt;    SVM-Type:  C-classification </span>
+<span class="co">#&gt;  SVM-Kernel:  linear </span>
+<span class="co">#&gt;        cost:  1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Number of Support Vectors:  24</span></code></pre></div>
+<p>The output from the SVM model show that there are 24 support vectors. If desired, these can be examined using the SV variable in the model – i.e via svm_model$SV.</p>
+</div>
+<div id="support-vectors" class="section level3">
+<h3>
+<span class="header-section-number">18.5.3</span> Support Vectors<a class="anchor" aria-label="anchor" href="#support-vectors"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb530"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># support vectors</span>
+<span class="va">svm_model</span><span class="op">$</span><span class="va">SV</span>
+<span class="co">#&gt;     Sepal.Length Sepal.Width Petal.Length Petal.Width</span>
+<span class="co">#&gt; 19       -0.2564      1.7668       -1.323      -1.305</span>
+<span class="co">#&gt; 42       -1.7006     -1.7045       -1.559      -1.305</span>
+<span class="co">#&gt; 45       -0.9785      1.7668       -1.205      -1.171</span>
+<span class="co">#&gt; 53        1.1878      0.1469        0.568       0.309</span>
+<span class="co">#&gt; 55        0.7064     -0.5474        0.390       0.309</span>
+<span class="co">#&gt; 57        0.4657      0.6097        0.450       0.443</span>
+<span class="co">#&gt; 58       -1.2192     -1.4730       -0.378      -0.364</span>
+<span class="co">#&gt; 69        0.3453     -1.9359        0.331       0.309</span>
+<span class="co">#&gt; 71       -0.0157      0.3783        0.509       0.712</span>
+<span class="co">#&gt; 73        0.4657     -1.2416        0.568       0.309</span>
+<span class="co">#&gt; 78        0.9471     -0.0845        0.627       0.578</span>
+<span class="co">#&gt; 84        0.1046     -0.7788        0.686       0.443</span>
+<span class="co">#&gt; 85       -0.6174     -0.0845        0.331       0.309</span>
+<span class="co">#&gt; 86        0.1046      0.8412        0.331       0.443</span>
+<span class="co">#&gt; 99       -0.9785     -1.2416       -0.555      -0.229</span>
+<span class="co">#&gt; 107      -1.2192     -1.2416        0.331       0.578</span>
+<span class="co">#&gt; 111       0.7064      0.3783        0.686       0.981</span>
+<span class="co">#&gt; 117       0.7064     -0.0845        0.922       0.712</span>
+<span class="co">#&gt; 124       0.4657     -0.7788        0.568       0.712</span>
+<span class="co">#&gt; 130       1.5488     -0.0845        1.099       0.443</span>
+<span class="co">#&gt; 138       0.5860      0.1469        0.922       0.712</span>
+<span class="co">#&gt; 139       0.1046     -0.0845        0.509       0.712</span>
+<span class="co">#&gt; 147       0.4657     -1.2416        0.627       0.847</span>
+<span class="co">#&gt; 150      -0.0157     -0.0845        0.686       0.712</span></code></pre></div>
+<p>The test prediction accuracy indicates that the linear performs quite well on this dataset, confirming that it is indeed near linearly separable. To check performance by class, one can create a confusion matrix as described in my post on random forests. I’ll leave this as an exercise for you. Another point is that we have used a soft-margin classification scheme with a cost C=1. You can experiment with this by explicitly changing the value of C. Again, I’ll leave this for you an exercise.</p>
+</div>
+<div id="predictions-on-training-model" class="section level3">
+<h3>
+<span class="header-section-number">18.5.4</span> Predictions on training model<a class="anchor" aria-label="anchor" href="#predictions-on-training-model"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb531"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># training set predictions</span>
+<span class="va">pred_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">svm_model</span>, <span class="va">trainset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">pred_train</span> <span class="op">==</span> <span class="va">trainset</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.983</span>
+<span class="co"># [1] 0.9826087</span></code></pre></div>
+</div>
+<div id="predictions-on-test-model" class="section level3">
+<h3>
+<span class="header-section-number">18.5.5</span> Predictions on test model<a class="anchor" aria-label="anchor" href="#predictions-on-test-model"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb532"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># test set predictions</span>
+<span class="va">pred_test</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">svm_model</span>, <span class="va">testset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">pred_test</span> <span class="op">==</span> <span class="va">testset</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.914</span>
+<span class="co"># [1] 0.9142857</span></code></pre></div>
+</div>
+<div id="confusion-matrix-and-accuracy" class="section level3">
+<h3>
+<span class="header-section-number">18.5.6</span> Confusion matrix and Accuracy<a class="anchor" aria-label="anchor" href="#confusion-matrix-and-accuracy"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb533"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># confusion matrix</span>
+<span class="va">cm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">pred_test</span>, <span class="va">testset</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span>
+<span class="va">cm</span>
+<span class="co">#&gt;             </span>
+<span class="co">#&gt; pred_test    setosa versicolor virginica</span>
+<span class="co">#&gt;   setosa         18          0         0</span>
+<span class="co">#&gt;   versicolor      0          5         3</span>
+<span class="co">#&gt;   virginica       0          0         9</span></code></pre></div>
+<div class="sourceCode" id="cb534"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># accuracy</span>
+<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">cm</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">cm</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.914</span></code></pre></div>
+</div>
+</div>
+<div id="svm-with-radial-basis-function-kernel.-linear" class="section level2">
+<h2>
+<span class="header-section-number">18.6</span> SVM with Radial Basis Function kernel. Linear<a class="anchor" aria-label="anchor" href="#svm-with-radial-basis-function-kernel.-linear"><i class="fas fa-link"></i></a>
+</h2>
+<div id="training-and-test-sets" class="section level3">
+<h3>
+<span class="header-section-number">18.6.1</span> Training and test sets<a class="anchor" aria-label="anchor" href="#training-and-test-sets"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb535"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#load required library (assuming e1071 is already loaded)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mlbench</span><span class="op">)</span>
+
+<span class="co">#load Sonar dataset</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Sonar</span><span class="op">)</span>
+<span class="co">#set seed to ensure reproducible results</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
+<span class="co">#split into training and test sets</span>
+<span class="va">Sonar</span><span class="op">[</span>, <span class="st">"train"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Sonar</span><span class="op">)</span><span class="op">)</span><span class="op">&lt;</span><span class="fl">0.8</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>
+
+<span class="co">#separate training and test sets</span>
+<span class="va">trainset</span> <span class="op">&lt;-</span> <span class="va">Sonar</span><span class="op">[</span><span class="va">Sonar</span><span class="op">$</span><span class="va">train</span><span class="op">==</span><span class="fl">1</span>,<span class="op">]</span>
+<span class="va">testset</span> <span class="op">&lt;-</span> <span class="va">Sonar</span><span class="op">[</span><span class="va">Sonar</span><span class="op">$</span><span class="va">train</span><span class="op">==</span><span class="fl">0</span>,<span class="op">]</span>
+
+<span class="co">#get column index of train flag</span>
+<span class="va">trainColNum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"train"</span>,<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">trainset</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#remove train flag column from train and test sets</span>
+<span class="va">trainset</span> <span class="op">&lt;-</span> <span class="va">trainset</span><span class="op">[</span>,<span class="op">-</span><span class="va">trainColNum</span><span class="op">]</span>
+<span class="va">testset</span> <span class="op">&lt;-</span> <span class="va">testset</span><span class="op">[</span>,<span class="op">-</span><span class="va">trainColNum</span><span class="op">]</span>
+
+<span class="co">#get column index of predicted variable in dataset</span>
+<span class="va">typeColNum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"Class"</span>,<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">Sonar</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="predictions-on-the-training-model" class="section level3">
+<h3>
+<span class="header-section-number">18.6.2</span> Predictions on the <code>training</code> model<a class="anchor" aria-label="anchor" href="#predictions-on-the-training-model"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb536"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#build model – linear kernel and C-classification with default cost (C=1)</span>
+<span class="va">svm_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/e1071/man/svm.html">svm</a></span><span class="op">(</span><span class="va">Class</span><span class="op">~</span> <span class="va">.</span>, data<span class="op">=</span><span class="va">trainset</span>, 
+                 method<span class="op">=</span><span class="st">"C-classification"</span>, 
+                 kernel<span class="op">=</span><span class="st">"linear"</span><span class="op">)</span>
+
+<span class="co">#training set predictions</span>
+<span class="va">pred_train</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">svm_model</span>,<span class="va">trainset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">pred_train</span><span class="op">==</span><span class="va">trainset</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.97</span></code></pre></div>
+</div>
+<div id="predictions-on-the-test-model" class="section level3">
+<h3>
+<span class="header-section-number">18.6.3</span> Predictions on the <code>test</code> model<a class="anchor" aria-label="anchor" href="#predictions-on-the-test-model"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb537"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#test set predictions</span>
+<span class="va">pred_test</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">svm_model</span>,<span class="va">testset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">pred_test</span><span class="op">==</span><span class="va">testset</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.605</span></code></pre></div>
+<p>I’ll leave you to examine the contents of the model. The important point to note here is that the performance of the model with the test set is quite dismal compared to the previous case. This simply indicates that the linear kernel is not appropriate here. Let’s take a look at what happens if we use the RBF kernel with default values for the parameters:</p>
+</div>
+</div>
+<div id="svm-with-radial-basis-function-kernel.-non-linear" class="section level2">
+<h2>
+<span class="header-section-number">18.7</span> SVM with Radial Basis Function kernel. Non-linear<a class="anchor" aria-label="anchor" href="#svm-with-radial-basis-function-kernel.-non-linear"><i class="fas fa-link"></i></a>
+</h2>
+<div id="predictions-on-training-model-1" class="section level3">
+<h3>
+<span class="header-section-number">18.7.1</span> Predictions on training model<a class="anchor" aria-label="anchor" href="#predictions-on-training-model-1"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb538"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#build model: radial kernel, default params</span>
+<span class="va">svm_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/e1071/man/svm.html">svm</a></span><span class="op">(</span><span class="va">Class</span><span class="op">~</span> <span class="va">.</span>, data<span class="op">=</span><span class="va">trainset</span>, 
+                 method<span class="op">=</span><span class="st">"C-classification"</span>, 
+                 kernel<span class="op">=</span><span class="st">"radial"</span><span class="op">)</span>
+<span class="co"># print params</span>
+<span class="va">svm_model</span><span class="op">$</span><span class="va">cost</span>
+<span class="co">#&gt; [1] 1</span>
+<span class="va">svm_model</span><span class="op">$</span><span class="va">gamma</span>
+<span class="co">#&gt; [1] 0.0167</span>
+
+<span class="co">#training set predictions</span>
+<span class="va">pred_train</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">svm_model</span>,<span class="va">trainset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">pred_train</span><span class="op">==</span><span class="va">trainset</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.988</span></code></pre></div>
+</div>
+<div id="predictions-on-test-model-1" class="section level3">
+<h3>
+<span class="header-section-number">18.7.2</span> Predictions on test model<a class="anchor" aria-label="anchor" href="#predictions-on-test-model-1"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb539"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#test set predictions</span>
+<span class="va">pred_test</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">svm_model</span>,<span class="va">testset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">pred_test</span><span class="op">==</span><span class="va">testset</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.767</span></code></pre></div>
+<p>That’s a pretty decent improvement from the linear kernel. Let’s see if we can do better by doing some parameter tuning. To do this we first invoke tune.svm and use the parameters it gives us in the call to svm:</p>
+</div>
+<div id="tuning-of-parameters" class="section level3">
+<h3>
+<span class="header-section-number">18.7.3</span> Tuning of parameters<a class="anchor" aria-label="anchor" href="#tuning-of-parameters"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb540"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># find optimal parameters in a specified range</span>
+<span class="va">tune_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/e1071/man/tune.wrapper.html">tune.svm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">trainset</span><span class="op">[</span>,<span class="op">-</span><span class="va">typeColNum</span><span class="op">]</span>, 
+                     y <span class="op">=</span> <span class="va">trainset</span><span class="op">[</span>, <span class="va">typeColNum</span><span class="op">]</span>, 
+                     gamma <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="op">(</span><span class="op">-</span><span class="fl">3</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>, 
+                     cost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="fl">1</span>, <span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">1000</span><span class="op">)</span>, 
+                     kernel <span class="op">=</span> <span class="st">"radial"</span><span class="op">)</span>
+
+<span class="co">#print best values of cost and gamma</span>
+<span class="va">tune_out</span><span class="op">$</span><span class="va">best.parameters</span><span class="op">$</span><span class="va">cost</span>
+<span class="co">#&gt; [1] 10</span>
+<span class="va">tune_out</span><span class="op">$</span><span class="va">best.parameters</span><span class="op">$</span><span class="va">gamma</span>
+<span class="co">#&gt; [1] 0.01</span>
+
+<span class="co">#build model</span>
+<span class="va">svm_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/e1071/man/svm.html">svm</a></span><span class="op">(</span><span class="va">Class</span><span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">trainset</span>, 
+                 method <span class="op">=</span> <span class="st">"C-classification"</span>, 
+                 kernel <span class="op">=</span> <span class="st">"radial"</span>, 
+                 cost <span class="op">=</span> <span class="va">tune_out</span><span class="op">$</span><span class="va">best.parameters</span><span class="op">$</span><span class="va">cost</span>, 
+                 gamma <span class="op">=</span> <span class="va">tune_out</span><span class="op">$</span><span class="va">best.parameters</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="prediction-on-training-model-with-new-parameters" class="section level3">
+<h3>
+<span class="header-section-number">18.7.4</span> Prediction on training model with new parameters<a class="anchor" aria-label="anchor" href="#prediction-on-training-model-with-new-parameters"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb541"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># training set predictions</span>
+<span class="va">pred_train</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">svm_model</span>,<span class="va">trainset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">pred_train</span><span class="op">==</span><span class="va">trainset</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span>
+<span class="co">#&gt; [1] 1</span></code></pre></div>
+</div>
+<div id="prediction-on-test-model-with-new-parameters" class="section level3">
+<h3>
+<span class="header-section-number">18.7.5</span> Prediction on test model with new parameters<a class="anchor" aria-label="anchor" href="#prediction-on-test-model-with-new-parameters"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb542"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># test set predictions</span>
+<span class="va">pred_test</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">svm_model</span>,<span class="va">testset</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">pred_test</span><span class="op">==</span><span class="va">testset</span><span class="op">$</span><span class="va">Class</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.814</span></code></pre></div>
+<p>Which is fairly decent improvement on the un-optimised case.</p>
+</div>
+</div>
+<div id="wrapping-up" class="section level2">
+<h2>
+<span class="header-section-number">18.8</span> Wrapping up<a class="anchor" aria-label="anchor" href="#wrapping-up"><i class="fas fa-link"></i></a>
+</h2>
+<p>This bring us to the end of this introductory exploration of SVMs in R. To recap, the distinguishing feature of SVMs in contrast to most other techniques is that they attempt to construct optimal separation boundaries between different categories.</p>
+<p>SVMs are quite versatile and have been applied to a wide variety of domains ranging from chemistry to pattern recognition. They are best used in binary classification scenarios. This brings up a question as to where SVMs are to be preferred to other binary classification techniques such as logistic regression. The honest response is, “it depends” – but here are some points to keep in mind when choosing between the two. A general point to keep in mind is that SVM algorithms tend to be expensive both in terms of memory and computation, issues that can start to hurt as the size of the dataset increases.</p>
+<p>Given all the above caveats and considerations, the best way to figure out whether an SVM approach will work for your problem may be to do what most machine learning practitioners do: try it out!</p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">17</span> Comparison of six Linear Regression algorithms</a></div>
+<div class="next"><a href="broad-view-of-svm.html"><span class="header-section-number">19</span> Broad view of SVM</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#a-gentle-introduction-to-support-vector-machines"><span class="header-section-number">18</span> A gentle introduction to Support Vector Machines</a></li>
+<li><a class="nav-link" href="#introduction-11"><span class="header-section-number">18.1</span> Introduction</a></li>
+<li><a class="nav-link" href="#the-rationale"><span class="header-section-number">18.2</span> The rationale</a></li>
+<li><a class="nav-link" href="#the-kernel-trick"><span class="header-section-number">18.3</span> The kernel trick</a></li>
+<li><a class="nav-link" href="#support-vector-machines-in-r"><span class="header-section-number">18.4</span> Support vector machines in R</a></li>
+<li>
+<a class="nav-link" href="#svm-on-the-iris-dataset"><span class="header-section-number">18.5</span> SVM on the iris dataset</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#training-and-test-datasets"><span class="header-section-number">18.5.1</span> Training and test datasets</a></li>
+<li><a class="nav-link" href="#building-the-svm-model"><span class="header-section-number">18.5.2</span> Building the SVM model</a></li>
+<li><a class="nav-link" href="#support-vectors"><span class="header-section-number">18.5.3</span> Support Vectors</a></li>
+<li><a class="nav-link" href="#predictions-on-training-model"><span class="header-section-number">18.5.4</span> Predictions on training model</a></li>
+<li><a class="nav-link" href="#predictions-on-test-model"><span class="header-section-number">18.5.5</span> Predictions on test model</a></li>
+<li><a class="nav-link" href="#confusion-matrix-and-accuracy"><span class="header-section-number">18.5.6</span> Confusion matrix and Accuracy</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#svm-with-radial-basis-function-kernel.-linear"><span class="header-section-number">18.6</span> SVM with Radial Basis Function kernel. Linear</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#training-and-test-sets"><span class="header-section-number">18.6.1</span> Training and test sets</a></li>
+<li><a class="nav-link" href="#predictions-on-the-training-model"><span class="header-section-number">18.6.2</span> Predictions on the training model</a></li>
+<li><a class="nav-link" href="#predictions-on-the-test-model"><span class="header-section-number">18.6.3</span> Predictions on the test model</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#svm-with-radial-basis-function-kernel.-non-linear"><span class="header-section-number">18.7</span> SVM with Radial Basis Function kernel. Non-linear</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#predictions-on-training-model-1"><span class="header-section-number">18.7.1</span> Predictions on training model</a></li>
+<li><a class="nav-link" href="#predictions-on-test-model-1"><span class="header-section-number">18.7.2</span> Predictions on test model</a></li>
+<li><a class="nav-link" href="#tuning-of-parameters"><span class="header-section-number">18.7.3</span> Tuning of parameters</a></li>
+<li><a class="nav-link" href="#prediction-on-training-model-with-new-parameters"><span class="header-section-number">18.7.4</span> Prediction on training model with new parameters</a></li>
+<li><a class="nav-link" href="#prediction-on-test-model-with-new-parameters"><span class="header-section-number">18.7.5</span> Prediction on test model with new parameters</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#wrapping-up"><span class="header-section-number">18.8</span> Wrapping up</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/300-classification_109a-gentle_intro_to_SVM.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/300-classification_109a-gentle_intro_to_SVM.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>A Machine Learning Book</strong>" was written by Alfonso R. Reyes. It was last built on 2020-11-18.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>

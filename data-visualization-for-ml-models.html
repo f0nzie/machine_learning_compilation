@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 6 Data Visualization for ML models | A Machine Learning Book</title>
+<meta name="author" content="Alfonso R. Reyes">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.5.3/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.5.3/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.2.9000/tabs.js"></script><script src="libs/bs3compat-0.2.2.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">A Machine Learning Book</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Prerequisites</a></li>
+<li class="book-part">The Basics of Machine Learning</li>
+<li><a class="" href="introduction-to-pca.html"><span class="header-section-number">1</span> Introduction to PCA</a></li>
+<li><a class="" href="comparison-of-two-pca-packages.html"><span class="header-section-number">2</span> Comparison of two PCA packages</a></li>
+<li><a class="" href="detailed-study-of-principal-component-analysis.html"><span class="header-section-number">3</span> Detailed study of Principal Component Analysis</a></li>
+<li><a class="" href="detection-of-diabetes-using-logistic-regression.html"><span class="header-section-number">4</span> Detection of diabetes using Logistic Regression</a></li>
+<li><a class="" href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">5</span> Sensitivity analysis for a neural network</a></li>
+<li><a class="active" href="data-visualization-for-ml-models.html"><span class="header-section-number">6</span> Data Visualization for ML models</a></li>
+<li class="book-part">Feature Engineering</li>
+<li><a class="" href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">7</span> Ten methods to assess Variable Importance</a></li>
+<li><a class="" href="employee-attrition-using-feature-importance.html"><span class="header-section-number">8</span> Employee Attrition using Feature Importance</a></li>
+<li><a class="" href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">9</span> Feature Selection to enhance cancer detection</a></li>
+<li><a class="" href="dealing-with-unbalanced-data.html"><span class="header-section-number">10</span> Dealing with unbalanced data</a></li>
+<li><a class="" href="imputting-missing-values-with-random-forest.html"><span class="header-section-number">11</span> Imputting missing values with Random Forest</a></li>
+<li class="book-part">Algorithms Comparison</li>
+<li><a class="" href="introduction-to-algorithms-for-classification.html"><span class="header-section-number">12</span> Introduction to algorithms for Classification</a></li>
+<li><a class="" href="comparing-classification-algorithms.html"><span class="header-section-number">13</span> Comparing Classification algorithms</a></li>
+<li><a class="" href="linear-and-non-linear-algorithms-for-classification.html"><span class="header-section-number">14</span> Linear and Non-Linear Algorithms for Classification</a></li>
+<li><a class="" href="predicting-flu-outcome-comparing-eight-classification-algorithms.html"><span class="header-section-number">15</span> Predicting Flu outcome comparing eight classification algorithms</a></li>
+<li><a class="" href="classification-on-bad-loans.html"><span class="header-section-number">16</span> Classification on bad loans</a></li>
+<li><a class="" href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">17</span> Comparison of six Linear Regression algorithms</a></li>
+<li class="book-part">Classification</li>
+<li><a class="" href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">18</span> A gentle introduction to Support Vector Machines</a></li>
+<li><a class="" href="broad-view-of-svm.html"><span class="header-section-number">19</span> Broad view of SVM</a></li>
+<li><a class="" href="tuning-of-support-vector-machine-prediction.html"><span class="header-section-number">20</span> Tuning of Support Vector Machine prediction</a></li>
+<li><a class="" href="who-buys-social-network-ads.html"><span class="header-section-number">21</span> Who buys Social Network ads</a></li>
+<li><a class="" href="predicting-ozone-levels.html"><span class="header-section-number">22</span> Predicting Ozone levels</a></li>
+<li><a class="" href="building-a-naive-bayes-classifier.html"><span class="header-section-number">23</span> Building a Naive Bayes Classifier</a></li>
+<li><a class="" href="detect-mines-vs-rocks-with-random-forest.html"><span class="header-section-number">24</span> Detect mines vs rocks with Random Forest</a></li>
+<li><a class="" href="predicting-the-type-of-glass.html"><span class="header-section-number">25</span> Predicting the type of glass</a></li>
+<li><a class="" href="naive-bayes-for-sms-spam.html"><span class="header-section-number">26</span> Naive Bayes for SMS spam</a></li>
+<li><a class="" href="vehicles-classiification-with-decision-trees.html"><span class="header-section-number">27</span> Vehicles classiification with Decision Trees</a></li>
+<li><a class="" href="applying-naive-bayes-on-the-titanic-case.html"><span class="header-section-number">28</span> Applying Naive-Bayes on the Titanic case</a></li>
+<li><a class="" href="a-detailed-study-of-bike-sharing-demand.html"><span class="header-section-number">29</span> A detailed study of bike sharing demand</a></li>
+<li class="book-part">Linear Regression</li>
+<li><a class="" href="linear-regression-with-islr.html"><span class="header-section-number">30</span> Linear Regression with ISLR</a></li>
+<li><a class="" href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">31</span> Evaluation of three linear regression models</a></li>
+<li><a class="" href="comparing-regression-models.html"><span class="header-section-number">32</span> Comparing regression models</a></li>
+<li><a class="" href="finding-the-factors-of-happiness.html"><span class="header-section-number">33</span> Finding the factors of happiness</a></li>
+<li><a class="" href="regression-with-a-neural-network.html"><span class="header-section-number">34</span> Regression with a neural network</a></li>
+<li><a class="" href="comparing-multiple-regression-vs-a-neural-network.html"><span class="header-section-number">35</span> Comparing Multiple Regression vs a Neural Network</a></li>
+<li><a class="" href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">36</span> Temperature modeling using nested dataframes</a></li>
+<li class="book-part">Neural Networks</li>
+<li><a class="" href="credit-scoring-with-neuralnet.html"><span class="header-section-number">37</span> Credit Scoring with neuralnet</a></li>
+<li><a class="" href="wine-classification-with-neuralnet.html"><span class="header-section-number">38</span> Wine classification with neuralnet</a></li>
+<li><a class="" href="predicting-the-rating-of-cereals.html"><span class="header-section-number">39</span> Predicting the rating of cereals</a></li>
+<li><a class="" href="fitting-a-linear-model-with-neural-networks.html"><span class="header-section-number">40</span> Fitting a linear model with neural networks</a></li>
+<li><a class="" href="visualization-of-neural-networks.html"><span class="header-section-number">41</span> Visualization of neural networks</a></li>
+<li><a class="" href="build-a-fully-connected-r-neural-network-from-scratch.html"><span class="header-section-number">42</span> Build a fully connected R neural network from scratch</a></li>
+<li><a class="" href="tuning-hyperparameters-in-a-neural-network.html"><span class="header-section-number">43</span> Tuning Hyperparameters in a Neural Network</a></li>
+<li><a class="" href="deep-learning-tips-for-classification-and-regression.html"><span class="header-section-number">44</span> Deep Learning tips for Classification and Regression</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="what-is-dot-hat-in-a-regression-output.html"><span class="header-section-number">A</span> What is dot hat in a regression output</a></li>
+<li><a class="" href="q-q-normal-to-compare-data-to-distributions.html"><span class="header-section-number">B</span> Q-Q normal to compare data to distributions</a></li>
+<li><a class="" href="qq-and-pp-plots.html"><span class="header-section-number">C</span> QQ and PP Plots</a></li>
+<li><a class="" href="visualizing-residuals.html"><span class="header-section-number">D</span> Visualizing residuals</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/hadley/r-pkgs">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="data-visualization-for-ml-models" class="section level1">
+<h1>
+<span class="header-section-number">6</span> Data Visualization for ML models<a class="anchor" aria-label="anchor" href="#data-visualization-for-ml-models"><i class="fas fa-link"></i></a>
+</h1>
+<div id="introduction-2" class="section level2">
+<h2>
+<span class="header-section-number">6.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-2"><i class="fas fa-link"></i></a>
+</h2>
+<p>Source: <a href="https://socviz.co/modeling.html" class="uri">https://socviz.co/modeling.html</a></p>
+<p>Data visualization is about more than generating figures that display the raw numbers from a table of data. Right from the beginning, it involves summarizing or transforming parts of the data, and then plotting the results. Statistical models are a central part of that process. In this Chapter, we will begin by looking briefly at how <code>ggplot</code> can use various modeling techniques directly within geoms. Then we will see how to use the <code>broom</code> and <code>margins</code> libraries to tidily extract and plot estimates from models that we fit ourselves.<br></p>
+<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># load libraries</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'dplyr'</span>
+<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter, lag</span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://kjhealy.github.io/socviz/">socviz</a></span><span class="op">)</span>       <span class="co"># devtools::install_github("kjhealy/socviz")</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jennybc/gapminder">gapminder</a></span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># plot two lines</span>
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">gapminder</span>,
+            mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">gdpPercap</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">lifeExp</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"tomato"</span>, fill<span class="op">=</span><span class="st">"tomato"</span>, method <span class="op">=</span> <span class="fu">MASS</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/MASS/man/rlm.html">rlm</a></span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"steelblue"</span>, fill<span class="op">=</span><span class="st">"steelblue"</span>, method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span>
+<span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span>
+<span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># plot spline</span>
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"tomato"</span>, method <span class="op">=</span> <span class="st">"lm"</span>, size <span class="op">=</span> <span class="fl">1.2</span>, 
+                formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="fu">splines</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/splines/bs.html">bs</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_quantile.html">geom_quantile</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"tomato"</span>, size <span class="op">=</span> <span class="fl">1.2</span>, method <span class="op">=</span> <span class="st">"rqss"</span>,
+                  lambda <span class="op">=</span> <span class="fl">1</span>, quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.20</span>, <span class="fl">0.5</span>, <span class="fl">0.85</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Smoothing formula not specified. Using: y ~ qss(x, lambda = 1)</span>
+<span class="co">#&gt; Warning in rq.fit.sfn(x, y, tau = tau, rhs = rhs, control = control, ...): tiny diagonals replaced with Inf when calling blkfct</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>Histograms, density plots, boxplots, and other geoms compute either single numbers or new variables before plotting them. As we saw in Section 4.4, these calculations are done by <code>stat_</code> functions, each of which works hand-in-hand with its default <code>geom_</code> function, and vice versa. Moreover, from the smoothing lines we drew from almost the very first plots we made, we have seen that <code>stat_</code> functions can do a fair amount of calculation and even model estimation on the fly. The <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code> function can take a range of method arguments to fit LOESS, OLS, and robust regression lines, amongst others.</p>
+<p>Both the <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/geom_quantile.html">geom_quantile()</a></code> functions can also be instructed to use different formulas to produce their fits. In the top panel of Figure 6.1, we access the <code>MASS</code> library’s <code>rlm</code> function to fit a robust regression line. In the second panel, the <code>bs</code> function is invoked directly from the <code>splines</code> library in the same way, to fit a polynominal curve to the data. This is the same approach to directly accessing functions without loading a whole library that we have already used several times when using functions from the <code>scales</code> library. The <code><a href="https://ggplot2.tidyverse.org/reference/geom_quantile.html">geom_quantile()</a></code> function, meanwhile, is like a specialized version of <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code> that can fit quantile regression lines using a variety of methods. The <code>quantiles</code> argument takes a vector specifying the quantiles at which to fit the lines.</p>
+</div>
+<div id="show-several-fits-at-once-with-a-legend" class="section level2">
+<h2>
+<span class="header-section-number">6.2</span> Show several fits at once, with a legend<a class="anchor" aria-label="anchor" href="#show-several-fits-at-once-with-a-legend"><i class="fas fa-link"></i></a>
+</h2>
+<p>As we just saw in the first panel of Figure 6.1, where we plotted both an OLS and a robust regression line, we can look at several fits at once on the same plot by layering on new smoothers with <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code>. As long as we set the color and fill aesthetics to different values for each fit, we can easily distinguish them visually. However, <code>ggplot</code> will not draw a legend that guides us about which fit is which. This is because the smoothers are not logically connected to one another. They exist as separate layers. What if we are comparing several different fits and want a legend describing them?</p>
+<p>As it turns out, <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code> can do this via the slightly unusual route of mapping the color and fill aesthetics to a string describing the model we are fitting, and then using <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual()</a></code> to create the legend. First we use <code>brewer.pal()</code> from the <code>RColorBrewer</code> library to extract three qualitatively different colors from a larger palette. The colors are represented as hex values. As before use the <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">::</a></code> convention to use the function without loading the whole library:<br></p>
+<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model_colors</span> <span class="op">&lt;-</span> <span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">3</span>, <span class="st">"Set1"</span><span class="op">)</span>
+<span class="va">model_colors</span>
+<span class="co">#&gt; [1] "#E41A1C" "#377EB8" "#4DAF4A"</span></code></pre></div>
+<p>Then we create a plot with three different smoothers, mapping the color and fill within the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> function as the name of the smoother:<br></p>
+<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">gapminder</span>,
+            mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">gdpPercap</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">lifeExp</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">p0</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"OLS"</span>, fill <span class="op">=</span> <span class="st">"OLS"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="fu">splines</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/splines/bs.html">bs</a></span><span class="op">(</span><span class="va">x</span>, df <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,
+                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Cubic Spline"</span>, fill <span class="op">=</span> <span class="st">"Cubic Spline"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>,
+                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"LOESS"</span>, fill <span class="op">=</span> <span class="st">"LOESS"</span><span class="op">)</span><span class="op">)</span>
+
+
+<span class="va">p1</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Models"</span>, values <span class="op">=</span> <span class="va">model_colors</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Models"</span>, values <span class="op">=</span> <span class="va">model_colors</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span>
+<span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span>
+<span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>In a way we have cheated a little here to make the plot work. Until now, we have always mapped aesthetics to the names of variables, not to strings like “OLS” or “Cubic Splines”. In Chapter 3, when we discussed mapping versus setting aesthetics, we saw what happened when we tried to change the color of the points in a scatterplot by setting them to “purple” inside the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>function. The result was that the points turned red instead, as <code>ggplot</code> in effect created a new variable and labeled it with the word “purple”. We learned there that the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> function was for mapping variables to aesthetics.</p>
+<p>Here we take advantage of that behavior, creating a new single-value variable for the name of each of our models. Ggplot will properly construct the relevant guide if we call <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual()</a></code>. Remember that we have to call two scale functions because we have two mappings. The result is a single plot containing not just our three smoothers, but also an appropriate legend to guide the reader.</p>
+<p>These model-fitting features make <code>ggplot</code> very useful for exploratory work, and make it straightforward to generate and compare model-based trends and other summaries as part of the process of descriptive data visualization. The various <code>stat_</code> functions are a flexible way to add summary estimates of various kinds to plots. But we will also want more than this, including presenting results from models we fit ourselves.</p>
+</div>
+<div id="look-inside-model-objects" class="section level2">
+<h2>
+<span class="header-section-number">6.3</span> Look inside model objects<a class="anchor" aria-label="anchor" href="#look-inside-model-objects"><i class="fas fa-link"></i></a>
+</h2>
+<p>Covering the details of fitting statistical models in R is beyond the scope of this book. For a comprehensive, modern introduction to that topic you should work your way through (Gelman &amp; Hill, 2018). (Harrell, 2016) is also very good on the many practical connections between modeling and graphing data. Similarly, (Gelman, 2004) provides a detailed discussion of the use of graphics as a tool in model-checking and validation. Here we will discuss some ways to take the models that you fit and extract information that is easy to work with in <code>ggplot</code>. Our goal, as always, is to get from however the object is stored to a tidy table of numbers that we can plot. Most classes of statistical model in R will contain the information we need, or will have a special set of functions, or methods, designed to extract it.</p>
+<p>We can start by learning a little more about how the output of models is stored in R. Remember, we are always working with objects, and objects have an internal structure consisting of named pieces. Sometimes these are single numbers, sometimes vectors, and sometimes lists of things like vectors, matrices, or formulas.</p>
+<p>We have been working extensively with tibbles and data frames. These store tables of data with named columns, perhaps consisting of different classes of variable, such as integers, characters, dates, or factors. Model objects are a little more complicated again.<br></p>
+<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gapminder</span>
+<span class="co">#&gt; # A tibble: 1,704 x 6</span>
+<span class="co">#&gt;   country     continent  year lifeExp      pop gdpPercap</span>
+<span class="co">#&gt;   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Afghanistan Asia       1952    28.8  8425333      779.</span>
+<span class="co">#&gt; 2 Afghanistan Asia       1957    30.3  9240934      821.</span>
+<span class="co">#&gt; 3 Afghanistan Asia       1962    32.0 10267083      853.</span>
+<span class="co">#&gt; 4 Afghanistan Asia       1967    34.0 11537966      836.</span>
+<span class="co">#&gt; 5 Afghanistan Asia       1972    36.1 13079460      740.</span>
+<span class="co">#&gt; 6 Afghanistan Asia       1977    38.4 14880372      786.</span>
+<span class="co">#&gt; # … with 1,698 more rows</span></code></pre></div>
+<p>Remember, we can use the <code><a href="https://rdrr.io/r/utils/str.html">str()</a></code> function to learn more about the internal structure of any object. For example, we can get some information on what class (or classes) of object <code>gapminder</code> is, how large it is, and what components it has. The output from <code><a href="https://rdrr.io/r/utils/str.html">str(gapminder)</a></code> is somewhat dense:<br></p>
+<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">gapminder</span><span class="op">)</span>
+<span class="co">#&gt; tibble [1,704 × 6] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;  $ country  : Factor w/ 142 levels "Afghanistan",..: 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;  $ continent: Factor w/ 5 levels "Africa","Americas",..: 3 3 3 3 3 3 3 3 3 3 ...</span>
+<span class="co">#&gt;  $ year     : int [1:1704] 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...</span>
+<span class="co">#&gt;  $ lifeExp  : num [1:1704] 28.8 30.3 32 34 36.1 ...</span>
+<span class="co">#&gt;  $ pop      : int [1:1704] 8425333 9240934 10267083 11537966 13079460 14880372 12881816 13867957 16317921 22227415 ...</span>
+<span class="co">#&gt;  $ gdpPercap: num [1:1704] 779 821 853 836 740 ...</span></code></pre></div>
+<p>There is a lot of information here about the object as a whole and each variable in it. In the same way, statistical models in R have an internal structure. But because models are more complex entities than data tables, their structure is correspondingly more complicated. There are more pieces of information, and more kinds of information, that we might want to use. All of this information is generally stored in or is computable from parts of a model object.</p>
+<p>We can create a linear model, an ordinary OLS regression, using the <code>gapminder</code> data. This dataset has a country-year structure that makes an OLS specification like this the wrong one to use. But never mind that for now. We use the <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> function to run the model, and store it in an object called <code>out</code>:</p>
+<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">lifeExp</span> <span class="op">~</span> <span class="va">gdpPercap</span> <span class="op">+</span> <span class="va">pop</span> <span class="op">+</span> <span class="va">continent</span>,
+          data <span class="op">=</span> <span class="va">gapminder</span><span class="op">)</span></code></pre></div>
+<p>The first argument is the formula for the <code>model.</code> <code>lifeExp</code> is the dependent variable and the tilde <code><a href="https://rdrr.io/r/base/tilde.html">~</a></code> operator is used to designate the left- and right-hand sides of a model (including in cases, as we saw with <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap()</a></code> where the model just has a right-hand side.)</p>
+<p>Let’s look at the results by asking R to print a summary of the model.<br></p>
+<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = lifeExp ~ gdpPercap + pop + continent, data = gapminder)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;    Min     1Q Median     3Q    Max </span>
+<span class="co">#&gt; -49.16  -4.49   0.30   5.11  25.17 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                   Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept)       4.78e+01   3.40e-01  140.82   &lt;2e-16 ***</span>
+<span class="co">#&gt; gdpPercap         4.50e-04   2.35e-05   19.16   &lt;2e-16 ***</span>
+<span class="co">#&gt; pop               6.57e-09   1.98e-09    3.33    9e-04 ***</span>
+<span class="co">#&gt; continentAmericas 1.35e+01   6.00e-01   22.46   &lt;2e-16 ***</span>
+<span class="co">#&gt; continentAsia     8.19e+00   5.71e-01   14.34   &lt;2e-16 ***</span>
+<span class="co">#&gt; continentEurope   1.75e+01   6.25e-01   27.97   &lt;2e-16 ***</span>
+<span class="co">#&gt; continentOceania  1.81e+01   1.78e+00   10.15   &lt;2e-16 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 8.37 on 1697 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.582,  Adjusted R-squared:  0.581 </span>
+<span class="co">#&gt; F-statistic:  394 on 6 and 1697 DF,  p-value: &lt;2e-16</span></code></pre></div>
+<p>When we use the <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function on out, we are not getting a simple feed of what’s in the model object. Instead, like any function, <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> takes its input, performs some actions, and produces output. In this case, what is printed to the console is partly information that is stored inside the model object, and partly information that the <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function has calculated and formated for display on the screen. Behind the scenes, <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> gets help from other functions. Objects of different classes have default methods associated with them, so that when the generic <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function is applied to a linear model object, the function knows to pass the work on to a more specialized function that does a bunch of calculations and formatting appropriate to a linear model object. We use the same generic <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function on data frames, as in <code><a href="https://rdrr.io/r/base/summary.html">summary(gapminder)</a></code>, but in that case a different default method is applied.</p>
+<p>Schematic view of a linear model object.Figure 6.3: Schematic view of a linear model object.</p>
+<p>The output from <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> gives a precis of the model, but we can’t really do any further analysis with it directly. For example, what if we want to plot something from the model? The information necessary to make plots is inside the out object, but it is not obvious how to use it.</p>
+<p>If we take a look at the structure of the model object with <code><a href="https://rdrr.io/r/utils/str.html">str(out)</a></code> we will find that there is a lot of information in there. Like most complex objects in R, out is organized as a list of components or elements. Several of these elements are themselves lists. Figure 6.3 gives you a schematic view of the contents of a linear model object. In this list of items, elements are single values, some are data frames, and some are additional lists of simpler items. Again, remember our earlier discussion where we said objects could be thought of as being organized like a filing system: cabinets contain drawers, and drawer may contain which may contain pages of information, whole documents, or groups of folders with more documents inside. As an alternative analogy, and sticking with the image of a list, you can think of a master to-do list for a project, where the top-level headings lead to contain additional lists of tasks of different kinds.</p>
+<p>The <code>out</code> object created by <code>lm</code> contains several different named elements. Some, like the residual degrees of freedom in the model, are just a single number. Try <code>out$df.residual</code> at the console. Others are much larger entities, such as the data frame used to fit the model, which is retained by default. Try <code>out$model</code>, but be prepared for a lot of stuff to be printed at the console. Other elements have been computed by R and then stored, such as the coefficients of the model and other quantities. You can try <code>out$coefficients</code>, <code>out$residuals</code>, and <code>out$fitted.values</code>, for instance. Others are lists themselves (like <code>qr</code>). So you can see that the <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function is selecting and printing only a small amount of core information, in comparison to what is stored in the model object.</p>
+<p>Just like the tables of data we saw earlier in Section A.1.3, the output of <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> is presented in a way that is compact and efficient in terms of getting information across, but also untidy when considered from the point of view of further manipulation. There is a table of coefficients, but the variable names are in the rows. The column names are awkward, and some information (e.g. at the bottom of the output) has been calculated and printed out, but is not stored in the model object.</p>
+</div>
+<div id="get-model-based-graphics-right" class="section level2">
+<h2>
+<span class="header-section-number">6.4</span> Get model-based graphics right<a class="anchor" aria-label="anchor" href="#get-model-based-graphics-right"><i class="fas fa-link"></i></a>
+</h2>
+<p>Figures based on statistical models face all the ordinary challenges of effective data visualization, and then some. This is because model results usually carry a considerable extra burden of interpretation and necessary background knowledge. The more complex the model, the trickier it becomes to convey this information effectively, and the easier it becomes to lead one’s audience or oneself into error. Within the social sciences, our ability to clearly and honestly present model-based graphics has greatly improved over the past ten or fifteen years. Over the same period, it has become clearer that some kinds of models are quite tricky to understand, even ones that had previously been seen as straightforward elements of the modeling toolkit (Ai &amp; Norton, 2003; Brambor, Clark, &amp; Golder, 2006).</p>
+<p>Plotting model estimates is closely connected to properly estimating models in the first place. This means there is no substitute for learning the statistics. You should not use graphical methods as a substitute for understanding the model used to produce them. While this book cannot teach you that material, we can make a few general points about what good model-based graphics look like, and work through some examples of how <code>ggplot</code> and some additional libraries can make it easier to get good results.</p>
+<div id="present-your-findings-in-substantive-terms" class="section level3">
+<h3>
+<span class="header-section-number">6.4.1</span> Present your findings in substantive terms<a class="anchor" aria-label="anchor" href="#present-your-findings-in-substantive-terms"><i class="fas fa-link"></i></a>
+</h3>
+<p>Useful model-based plots show results in ways that are substantively meaningful and directly interpretable with respect to the questions the analysis is trying to answer. This means showing results in a context where other variables in the analysis are held at sensible values, such as their means or medians. With continuous variables, it can often be useful to generate predicted values that cover some substantively meaningful move across the distribution, such as from the <strong>25th to the 75th percentile</strong>, rather than a single-unit increment in the variable of interest. For unordered categorical variables, predicted values might be presented with respect to the modal category in the data, or for a particular category of theoretical interest. Presenting substantively interpretable findings often also means using (and sometimes converting to) a scale that readers can easily understand. If your model reports results in log-odds, for example, converting the estimates to predicted probabilities will make it easier to interpret. All of this advice is quite general. Each of these points applies equally well to the presentation of summary results in a table rather than a graph. There is nothing distinctively graphical about putting the focus on the substantive meaning of your findings.</p>
+</div>
+<div id="show-your-degree-of-confidence" class="section level3">
+<h3>
+<span class="header-section-number">6.4.2</span> Show your degree of confidence<a class="anchor" aria-label="anchor" href="#show-your-degree-of-confidence"><i class="fas fa-link"></i></a>
+</h3>
+<p>Much the same applies to presenting the degree of uncertainty or confidence you have in your results. Model estimates come with various measures of precision, confidence, credence, or significance. Presenting and interpreting these measures is notoriously prone to misinterpretation, or over-interpretation, as researchers and audiences both demand more from things like confidence intervals and p-values than these statistics can deliver. At a minimum, having decided on an appropriate measure of model fit or the right assessment of confidence, you should show their range when you present your results. A family of related <code>ggplot</code> geoms allow you to show a range or interval defined by position on the x-axis and then a <code>ymin</code> and <code>ymax</code> range on the y-axis. These geoms include <code><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbar()</a></code>, which we will see in action shortly. A related geom, <code><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon()</a></code> uses the same arguments to draw filled areas, and is useful for plotting ranges of y-axis values along some continuously varying x-axis.</p>
+</div>
+<div id="show-your-data-when-you-can" class="section level3">
+<h3>
+<span class="header-section-number">6.4.3</span> Show your data when you can<a class="anchor" aria-label="anchor" href="#show-your-data-when-you-can"><i class="fas fa-link"></i></a>
+</h3>
+<p>Plotting the results from a multivariate model generally means one of two things. First, we can show what is in effect a table of coefficients with associated measures of confidence, perhaps organizing the coefficients into meaningful groups, or by the size of the predicted association, or both. Second, we can show the predicted values of some variables (rather than just a model’s coefficients) across some range of interest. The latter approach lets us show the original data points if we wish. The way <code>ggplot</code> builds graphics layer by layer allows us to easily combine model estimates (e.g. a regression line and an associated range) and the underlying data. In effect these are manually-constructed versions of the automatically-generated plots that we have been producing with <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code> since the beginning of this book.</p>
+</div>
+</div>
+<div id="generate-predictions-to-graph" class="section level2">
+<h2>
+<span class="header-section-number">6.5</span> Generate predictions to graph<a class="anchor" aria-label="anchor" href="#generate-predictions-to-graph"><i class="fas fa-link"></i></a>
+</h2>
+<p>Having fitted a model, then, we might want to get a picture of the estimates it produces over the range of some particular variable, holding other covariates constant at some sensible values. The <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function is a generic way of using model objects to produce this kind of prediction. In R, “generic” functions take their inputs and pass them along to more specific functions behind the scenes, ones that are suited to working with the particular kind of model object we have. The details of getting predicted values from a <strong>OLS</strong> model, for instance, will be somewhat different from getting predictions out of a logistic regression. But in each case we can use the same <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function, taking care to check the documentation to see what form the results are returned in for the kind of model we are working with. Many of the most commonly-used functions in R are generic in this way. The <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function, for example, works on objects of many different classes, from vectors to data frames and statistical models, producing appropriate output in each case by way of a class-specific function in the background.</p>
+<p>For <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> to calculate the new values for us, it needs some new data to fit the model to. We will generate a new data frame whose columns have the same names as the variables in the model’s original data, but where the rows have new values. A very useful function called <code><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid()</a></code> will help us do this. We will give it a list of variables, specifying the range of values we want each variable to take. Then <code><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid()</a></code> will generate the will multiply out the full range of values for all combinations of the values we give it, thus creating a new data frame with the new data we need.</p>
+<p>In the following bit of code, we use <code><a href="https://rdrr.io/r/base/Extremes.html">min()</a></code> and <code><a href="https://rdrr.io/r/base/Extremes.html">max()</a></code> to get the minimum and maximum values for per capita GDP, and then create a vector with one hundred evenly-spaced elements between the minimum and the maximum. We hold population constant at its median, and we let continent take all of its five available values.<br></p>
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">min_gdp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">gapminder</span><span class="op">$</span><span class="va">gdpPercap</span><span class="op">)</span>
+<span class="va">max_gdp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">gapminder</span><span class="op">$</span><span class="va">gdpPercap</span><span class="op">)</span>
+<span class="va">med_pop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">gapminder</span><span class="op">$</span><span class="va">pop</span><span class="op">)</span>
+
+<span class="va">pred_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span>gdpPercap <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">min_gdp</span>,
+                                        to <span class="op">=</span> <span class="va">max_gdp</span>,
+                                        length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span>,
+                       pop <span class="op">=</span> <span class="va">med_pop</span>,
+                       continent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Africa"</span>, <span class="st">"Americas"</span>,
+                                     <span class="st">"Asia"</span>, <span class="st">"Europe"</span>, <span class="st">"Oceania"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">pred_df</span><span class="op">)</span>
+<span class="co">#&gt; [1] 500   3</span></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pred_df</span><span class="op">)</span>
+<span class="co">#&gt;   gdpPercap     pop continent</span>
+<span class="co">#&gt; 1       241 7023596    Africa</span>
+<span class="co">#&gt; 2      1385 7023596    Africa</span>
+<span class="co">#&gt; 3      2530 7023596    Africa</span>
+<span class="co">#&gt; 4      3674 7023596    Africa</span>
+<span class="co">#&gt; 5      4818 7023596    Africa</span>
+<span class="co">#&gt; 6      5962 7023596    Africa</span></code></pre></div>
+<p>Now we can use <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>. If we give the function our new data and model, without any further argument, it will calculate the fitted values for every row in the data frame. If we specify <code>interval = 'predict'</code> as an argument, it will calculate 95% prediction intervals in addition to the point estimate.</p>
+<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pred_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">out</span>,
+                    newdata <span class="op">=</span> <span class="va">pred_df</span>,
+                    interval <span class="op">=</span> <span class="st">"predict"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pred_out</span><span class="op">)</span>
+<span class="co">#&gt;    fit  lwr  upr</span>
+<span class="co">#&gt; 1 48.0 31.5 64.4</span>
+<span class="co">#&gt; 2 48.5 32.1 64.9</span>
+<span class="co">#&gt; 3 49.0 32.6 65.4</span>
+<span class="co">#&gt; 4 49.5 33.1 65.9</span>
+<span class="co">#&gt; 5 50.0 33.6 66.4</span>
+<span class="co">#&gt; 6 50.5 34.1 67.0</span></code></pre></div>
+<p>Because we know that, by construction, the cases in <code>pred_df</code> and <code>pred_out</code> correspond row for row, we can bind the two data frames together by column. This method of joining or merging tables is definitely not recommended when you are dealing with data.<br></p>
+<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pred_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">pred_df</span>, <span class="va">pred_out</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pred_df</span><span class="op">)</span>
+<span class="co">#&gt;   gdpPercap     pop continent  fit  lwr  upr</span>
+<span class="co">#&gt; 1       241 7023596    Africa 48.0 31.5 64.4</span>
+<span class="co">#&gt; 2      1385 7023596    Africa 48.5 32.1 64.9</span>
+<span class="co">#&gt; 3      2530 7023596    Africa 49.0 32.6 65.4</span>
+<span class="co">#&gt; 4      3674 7023596    Africa 49.5 33.1 65.9</span>
+<span class="co">#&gt; 5      4818 7023596    Africa 50.0 33.6 66.4</span>
+<span class="co">#&gt; 6      5962 7023596    Africa 50.5 34.1 67.0</span></code></pre></div>
+<p>The end result is a tidy data frame, containing the predicted values from the model for the range of values we specified. Now we can plot the results. Because we produced a full range of predicted values, we can decide whether or not to use all of them. Here we further subset the predictions to just those for Europe and Africa.<br></p>
+<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">pred_df</span>, <span class="va">continent</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Europe"</span>, <span class="st">"Africa"</span><span class="op">)</span><span class="op">)</span>,
+            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">gdpPercap</span>,
+                y <span class="op">=</span> <span class="va">fit</span>, ymin <span class="op">=</span> <span class="va">lwr</span>, ymax <span class="op">=</span> <span class="va">upr</span>,
+                color <span class="op">=</span> <span class="va">continent</span>,
+                fill <span class="op">=</span> <span class="va">continent</span>,
+                group <span class="op">=</span> <span class="va">continent</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">gapminder</span>,
+                             <span class="va">continent</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Europe"</span>, <span class="st">"Africa"</span><span class="op">)</span><span class="op">)</span>,
+               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">gdpPercap</span>, y <span class="op">=</span> <span class="va">lifeExp</span>,
+                   color <span class="op">=</span> <span class="va">continent</span><span class="op">)</span>,
+               alpha <span class="op">=</span> <span class="fl">0.5</span>,
+               inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.2</span>, color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_log10</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_dollar.html">dollar</a></span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>We use a new geom here to draw the area covered by the prediction intervals: <code><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon()</a></code>. It takes an x argument like a line, but a ymin and ymax argument as specified in the <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> aesthetic mapping. This defines the lower and upper limits of the prediction interval.</p>
+<p>In practice, you may not use <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> directly all that often. Instead, you might write code using additional libraries that encapsulate the process of producing predictions and plots from models. These are especially useful when your model is a little more complex and the interpretation of coefficients becomes trickier. This happens, for instance, when you have a binary outcome variable and need to convert the results of a logistic regression into predicted probabilities, or when you have interaction terms amongst your predictions. We will discuss some of these helper libraries in the next few sections. However, bear in mind that <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and its ability to work safely with different classes of model underpins many of those libraries. So it’s useful to see it in action first hand in order to understand what it is doing.</p>
+</div>
+<div id="tidy-model-objects-with-broom" class="section level2">
+<h2>
+<span class="header-section-number">6.6</span> Tidy model objects with <code>broom</code><a class="anchor" aria-label="anchor" href="#tidy-model-objects-with-broom"><i class="fas fa-link"></i></a>
+</h2>
+<p>The <code>predict</code> method is very useful, but there are a lot of other things we might want to do with our model output. We will use David Robinson’s <code>broom</code> package to help us out. It is a library of functions that help us get from the model results that R generates to numbers that we can plot. It will take model objects and turn pieces of them into data frames that you can use easily with <code>ggplot.</code></p>
+<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/tidyverse/broom">broom</a></span><span class="op">)</span></code></pre></div>
+<p>Broom takes ggplot’s approach to tidy data and extends it to the model objects that R produces. Its methods can tidily extract three kinds of information. First, we can see component-level information about aspects of the model itself, such as coefficients and t-statistics. Second, we can obtain observation-level information about the model’s connection to the underlying data. This includes the fitted values and residuals for each observation in the data. And finally we can get model-level information that summarizes the fit as a whole, such as an F-statistic, the model deviance, or the r-squared. There is a <code>broom</code> function for each of these tasks.</p>
+<div id="get-component-level-statistics-with-tidy" class="section level3">
+<h3>
+<span class="header-section-number">6.6.1</span> Get component-level statistics with <code>tidy()</code><a class="anchor" aria-label="anchor" href="#get-component-level-statistics-with-tidy"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code> function takes a model object and returns a data frame of component-level information. We can work with this to make plots in a familiar way, and much more easily than fishing inside the model object to extract the various terms. Here is an example, using the default results as just returned. For a more convenient display of the results, we will pipe the object we create with <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code> through a function that rounds the numeric columns of the data frame to two decimal places. This doesn’t change anything about the object itself, of course.<br></p>
+<div class="sourceCode" id="cb158"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
+<span class="va">out_comp</span> <span class="op">%&gt;%</span> <span class="fu"><a href="http://kjhealy.github.io/socviz/reference/round_df.html">round_df</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 7 x 5</span>
+<span class="co">#&gt;   term              estimate std.error statistic p.value</span>
+<span class="co">#&gt;   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 (Intercept)          47.8      0.34     141.         0</span>
+<span class="co">#&gt; 2 gdpPercap             0        0         19.2        0</span>
+<span class="co">#&gt; 3 pop                   0        0          3.33       0</span>
+<span class="co">#&gt; 4 continentAmericas    13.5      0.6       22.5        0</span>
+<span class="co">#&gt; 5 continentAsia         8.19     0.570     14.3        0</span>
+<span class="co">#&gt; 6 continentEurope      17.5      0.62      28.0        0</span>
+<span class="co">#&gt; # … with 1 more row</span></code></pre></div>
+<p>We are now able to treat this dataframe just like all the other data that we have seen so far.<br></p>
+<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">out_comp</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">term</span>,
+                                    y <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-19-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>We can extend and clean up this plot in a variety of ways. For example, we can tell <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code> to calculate confidence intervals for the estimates, using R’s <code><a href="https://rdrr.io/r/stats/confint.html">confint()</a></code> function.</p>
+<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy</a></span><span class="op">(</span><span class="va">out</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">out_conf</span> <span class="op">%&gt;%</span> <span class="fu"><a href="http://kjhealy.github.io/socviz/reference/round_df.html">round_df</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 7 x 7</span>
+<span class="co">#&gt;   term              estimate std.error statistic p.value conf.low conf.high</span>
+<span class="co">#&gt;   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 (Intercept)          47.8      0.34     141.         0    47.2      48.5 </span>
+<span class="co">#&gt; 2 gdpPercap             0        0         19.2        0     0         0   </span>
+<span class="co">#&gt; 3 pop                   0        0          3.33       0     0         0   </span>
+<span class="co">#&gt; 4 continentAmericas    13.5      0.6       22.5        0    12.3      14.6 </span>
+<span class="co">#&gt; 5 continentAsia         8.19     0.570     14.3        0     7.07      9.31</span>
+<span class="co">#&gt; 6 continentEurope      17.5      0.62      28.0        0    16.2      18.7 </span>
+<span class="co">#&gt; # … with 1 more row</span></code></pre></div>
+<p>The convenience “not in” operator <code><a href="http://kjhealy.github.io/socviz/reference/nin.html">%nin%</a></code> is available via the <code>socviz</code> library. It does the opposite of <code><a href="https://rdrr.io/r/base/match.html">%in%</a></code> and selects only the items in a first vector of characters that are not in the second. We’ll use it to drop the intercept term from the table. We also want to something about the labels. When fitting a model with categorical variables, R will create coefficient names based on the variable name and the category name, like continentAmericas. Normally we like to clean these up before plotting. Most commonly, we just want to strip away the variable name at the beginning of the coefficient label. For this we can use <code><a href="http://kjhealy.github.io/socviz/reference/prefix_strip.html">prefix_strip()</a></code>, a convenience function in the <code>socviz</code> library. We tell it which prefixes to drop, using it to create a new column variable in <code>out_conf</code> that corresponds to the terms column, but that has nicer labels.<br></p>
+<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">out_conf</span>, <span class="va">term</span> <span class="op">%nin%</span> <span class="st">"(Intercept)"</span><span class="op">)</span>
+<span class="va">out_conf</span><span class="op">$</span><span class="va">nicelabs</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://kjhealy.github.io/socviz/reference/prefix_strip.html">prefix_strip</a></span><span class="op">(</span><span class="va">out_conf</span><span class="op">$</span><span class="va">term</span>, <span class="st">"continent"</span><span class="op">)</span></code></pre></div>
+<p>Now we can use <code><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange()</a></code>to make a figure that displays some information about our confidence in the variable estimates, as opposed to just the coefficients. As with the boxplots earlier, we use <code><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder()</a></code> to sort the names of the model’s terms by the estimate variable, thus arranging our plot of effects from largest to smallest in magnitude.</p>
+<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">out_conf</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">nicelabs</span>, <span class="va">estimate</span><span class="op">)</span>,
+                                    y <span class="op">=</span> <span class="va">estimate</span>, ymin <span class="op">=</span> <span class="va">conf.low</span>, ymax <span class="op">=</span> <span class="va">conf.high</span><span class="op">)</span><span class="op">)</span>
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">""</span>, y<span class="op">=</span><span class="st">"OLS Estimate"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-22-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>Dotplots of this kind can be very compact. The vertical axis can often be compressed quite a bit, with no loss in comprehension. In fact, they are often easier to read with much less room between the rows than given by a default square shape.</p>
+</div>
+<div id="get-observation-level-statistics-with-augment" class="section level3">
+<h3>
+<span class="header-section-number">6.6.2</span> Get observation-level statistics with <code>augment()</code><a class="anchor" aria-label="anchor" href="#get-observation-level-statistics-with-augment"><i class="fas fa-link"></i></a>
+</h3>
+<p>The values returned by <code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code> are all statistics calculated at the level of the original observations. As such, they can be added on to the data frame that the model is based on. Working from a call to <code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code> will return a data frame with all the original observations used in the estimation of the model, together with columns like the following:</p>
+<ul>
+<li>
+<strong>.fitted</strong> — The fitted values of the model.</li>
+<li>
+<strong>.se.fit</strong> — The standard errors of the fitted values.</li>
+<li>
+<strong>.resid</strong> — The residuals.</li>
+<li>
+<strong>.hat</strong> — The diagonal of the hat matrix.</li>
+<li>
+<strong>.sigma</strong> — An estimate of residual standard deviation when the corresponding observation is dropped from the model.</li>
+<li>
+<strong>.cooksd</strong> — Cook’s distance, a common regression diagnostic; and</li>
+<li>
+<strong>.std.resid</strong> — The standardized residuals.</li>
+</ul>
+<p>Each of these variables is named with a leading <code>dot</code>, for example <code>.hat</code> rather than hat, and so on. This is to guard against accidentally confusing it with (or accidentally overwriting) an existing variable in your data with this name. The columns of values return will differ slightly depending on the class of model being fitted.<br></p>
+<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_aug</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/augment.html">augment</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">out_aug</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="http://kjhealy.github.io/socviz/reference/round_df.html">round_df</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 6 x 11</span>
+<span class="co">#&gt;   lifeExp gdpPercap    pop continent .fitted .se.fit .resid  .hat .sigma .cooksd</span>
+<span class="co">#&gt;     &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt;       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1    28.8      779. 8.43e6 Asia         56.4    0.47  -27.6     0   8.34    0.01</span>
+<span class="co">#&gt; 2    30.3      821. 9.24e6 Asia         56.4    0.47  -26.1     0   8.34    0   </span>
+<span class="co">#&gt; 3    32        853. 1.03e7 Asia         56.5    0.47  -24.5     0   8.35    0   </span>
+<span class="co">#&gt; 4    34.0      836. 1.15e7 Asia         56.5    0.47  -22.4     0   8.35    0   </span>
+<span class="co">#&gt; 5    36.1      740. 1.31e7 Asia         56.4    0.47  -20.3     0   8.35    0   </span>
+<span class="co">#&gt; 6    38.4      786. 1.49e7 Asia         56.5    0.47  -18.0     0   8.36    0   </span>
+<span class="co">#&gt; # … with 1 more variable: .std.resid &lt;dbl&gt;</span></code></pre></div>
+<p>By default, <code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code> will extract the available data from the model object. This will usually include the variables used in the model itself, but not any additional ones contained in the original data frame. Sometimes it is useful to have these. We can add them by specifying the <code>data</code> argument:<br></p>
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_aug</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/augment.html">augment</a></span><span class="op">(</span><span class="va">out</span>, data <span class="op">=</span> <span class="va">gapminder</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">out_aug</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="http://kjhealy.github.io/socviz/reference/round_df.html">round_df</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 6 x 13</span>
+<span class="co">#&gt;   country continent  year lifeExp    pop gdpPercap .fitted .se.fit .resid  .hat</span>
+<span class="co">#&gt;   &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Afghan… Asia       1952    28.8 8.43e6      779.    56.4    0.47  -27.6     0</span>
+<span class="co">#&gt; 2 Afghan… Asia       1957    30.3 9.24e6      821.    56.4    0.47  -26.1     0</span>
+<span class="co">#&gt; 3 Afghan… Asia       1962    32   1.03e7      853.    56.5    0.47  -24.5     0</span>
+<span class="co">#&gt; 4 Afghan… Asia       1967    34.0 1.15e7      836.    56.5    0.47  -22.4     0</span>
+<span class="co">#&gt; 5 Afghan… Asia       1972    36.1 1.31e7      740.    56.4    0.47  -20.3     0</span>
+<span class="co">#&gt; 6 Afghan… Asia       1977    38.4 1.49e7      786.    56.5    0.47  -18.0     0</span>
+<span class="co">#&gt; # … with 3 more variables: .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;</span></code></pre></div>
+<p>If some rows containing missing data were dropped to fit the model, then these will not be carried over to the augmented dataframe.</p>
+<p>The new columns created by <code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code> can be used to create some standard regression plots. For example, we can plot the residuals versus the fitted values. Figure 6.7 suggests, unsurprisingly, that our country-year data has rather more structure than is captured by our <code>OLS</code> model.<br></p>
+<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">out_aug</span>,
+            mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.fitted</span>, y <span class="op">=</span> <span class="va">.resid</span><span class="op">)</span><span class="op">)</span>
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/fig-67-1.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+<div id="get-model-level-statistics-with-glance" class="section level3">
+<h3>
+<span class="header-section-number">6.6.3</span> Get model-level statistics with <code>glance()</code><a class="anchor" aria-label="anchor" href="#get-model-level-statistics-with-glance"><i class="fas fa-link"></i></a>
+</h3>
+<p>This function organizes the information typically presented at the bottom of a model’s <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> output. By itself, it usually just returns a table with a single row in it. But as we shall see in a moment, the real power of broom’s approach is the way that it can scale up to cases where we are grouping or subsampling our data.</p>
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/generics/man/glance.html">glance</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="http://kjhealy.github.io/socviz/reference/round_df.html">round_df</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 1 x 11</span>
+<span class="co">#&gt;   r.squared adj.r.squared sigma statistic p.value    df logLik    AIC    BIC</span>
+<span class="co">#&gt;       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span>
+<span class="co">#&gt; 1     0.580         0.580  8.37      394.       0     7 -6034. 12084. 12127.</span>
+<span class="co">#&gt; # … with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;dbl&gt;</span></code></pre></div>
+<p>Broom is able to <code>tidy</code> (and <code>augment</code>, and <code>glance</code> at) a wide range of model types. Not all functions are available for all classes of model. Consult broom’s documentation for more details on what is available. For example, here is a plot created from the tidied output of an event-history analysis. First we generate a Cox proportional hazards model of some <code>survival</code> data.</p>
+<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival">survival</a></span><span class="op">)</span>
+
+<span class="va">out_cph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">lung</span><span class="op">)</span>
+<span class="va">out_surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html">survfit</a></span><span class="op">(</span><span class="va">out_cph</span><span class="op">)</span></code></pre></div>
+<p>The details of the fit are not important here, but in the first step the <code><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv()</a></code> function creates the response or outcome variable for the proportional hazards model that is then fitted by the <code><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph()</a></code>function. Then the <code><a href="https://rdrr.io/pkg/survival/man/survfit.html">survfit()</a></code> function creates the survival curve from the model, much like we used <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> to generate predicted values earlier. Try <code><a href="https://rdrr.io/r/base/summary.html">summary(out_cph)</a></code> to see the model, and <code><a href="https://rdrr.io/r/base/summary.html">summary(out_surv)</a></code> to see the table of predicted values that will form the basis for our plot. Next we tidy <code>out_surv</code> to get a data frame, and plot it.</p>
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Figure 6.8: A Kaplan-Meier plot.</span>
+<span class="va">out_tidy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy</a></span><span class="op">(</span><span class="va">out_surv</span><span class="op">)</span>
+
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">out_tidy</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">estimate</span><span class="op">)</span><span class="op">)</span>
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">conf.low</span>, ymax <span class="op">=</span> <span class="va">conf.high</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+</div>
+<div id="grouped-analysis-and-list-columns" class="section level2">
+<h2>
+<span class="header-section-number">6.7</span> Grouped analysis and list-columns<a class="anchor" aria-label="anchor" href="#grouped-analysis-and-list-columns"><i class="fas fa-link"></i></a>
+</h2>
+<p>Broom makes it possible to quickly fit models to different subsets of your data and get consistent and usable tables of results out the other end. For example, let’s say we wanted to look at the gapminder data by examining the relationship between life expectancy and GDP by continent, for each year in the data.</p>
+<p>The <code>gapminder</code> data is at bottom organized by country-years. That is the unit of observation in the rows. If we wanted, we could take a slice of the data manually, such as “all countries observed in Asia, in 1962” or “all in Africa, 2002”. Here is “Europe, 1977”:<br></p>
+<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">eu77</span> <span class="op">&lt;-</span> <span class="va">gapminder</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">continent</span> <span class="op">==</span> <span class="st">"Europe"</span>, <span class="va">year</span> <span class="op">==</span> <span class="fl">1977</span><span class="op">)</span></code></pre></div>
+<p>We could then see what the relationship between life expectancy and GDP looked like for that continent-year group:</p>
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">lifeExp</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">gdpPercap</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">eu77</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = lifeExp ~ log(gdpPercap), data = eu77)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;    Min     1Q Median     3Q    Max </span>
+<span class="co">#&gt; -7.496 -1.031  0.093  1.176  3.712 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept)      29.489      7.161    4.12  0.00031 ***</span>
+<span class="co">#&gt; log(gdpPercap)    4.488      0.756    5.94  2.2e-06 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 2.11 on 28 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.557,  Adjusted R-squared:  0.541 </span>
+<span class="co">#&gt; F-statistic: 35.2 on 1 and 28 DF,  p-value: 2.17e-06</span></code></pre></div>
+<p>With <code>dplyr</code> and <code>broom</code> we can do this for every continent-year slice of the data in a compact and tidy way. We start with our table of data, and then (<code>%&gt;%)</code> group the countries by continent and year using the <code><a href="http://gdfe.co/srvyr/reference/group_by.html">group_by()</a></code> function. We introduced this grouping operation in Chapter 4. Our data is reorganized first by continent, and within continent by year. Here we will take one further step and nest the data that make up each group:<br></p>
+<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_le</span> <span class="op">&lt;-</span> <span class="va">gapminder</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">continent</span>, <span class="va">year</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">nest</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">out_le</span>
+<span class="co">#&gt; # A tibble: 60 x 3</span>
+<span class="co">#&gt; # Groups:   continent, year [60]</span>
+<span class="co">#&gt;   continent  year data             </span>
+<span class="co">#&gt;   &lt;fct&gt;     &lt;int&gt; &lt;list&gt;           </span>
+<span class="co">#&gt; 1 Asia       1952 &lt;tibble [33 × 4]&gt;</span>
+<span class="co">#&gt; 2 Asia       1957 &lt;tibble [33 × 4]&gt;</span>
+<span class="co">#&gt; 3 Asia       1962 &lt;tibble [33 × 4]&gt;</span>
+<span class="co">#&gt; 4 Asia       1967 &lt;tibble [33 × 4]&gt;</span>
+<span class="co">#&gt; 5 Asia       1972 &lt;tibble [33 × 4]&gt;</span>
+<span class="co">#&gt; 6 Asia       1977 &lt;tibble [33 × 4]&gt;</span>
+<span class="co">#&gt; # … with 54 more rows</span></code></pre></div>
+<p>Think of what <code><a href="https://tidyr.tidyverse.org/reference/nest.html">nest()</a></code> does as a more intensive version what <code><a href="http://gdfe.co/srvyr/reference/group_by.html">group_by()</a></code> does. The resulting object is has the tabular form we expect (it is a tibble) but it looks a little unusual. The first two columns are the familiar continent and year. But we now also have a new column, data, that contains a small table of data corresponding to each continent-year group. This is a list-column, something we have not seen before. It turns out to be very useful for bundling together complex objects (structured, in this case, as a list of tibbles, each being a 33x4 table of data) within the rows of our data (which remains tabular). Our “Europe 1977” fit is in there. We can look at it, if we like, by filtering the data and then unnesting the list column.</p>
+<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_le</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">continent</span> <span class="op">==</span> <span class="st">"Europe"</span> <span class="op">&amp;</span> <span class="va">year</span> <span class="op">==</span> <span class="fl">1977</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">unnest</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Warning: `cols` is now required.</span>
+<span class="co">#&gt; Please use `cols = c(data)`</span>
+<span class="co">#&gt; # A tibble: 30 x 6</span>
+<span class="co">#&gt; # Groups:   continent, year [5]</span>
+<span class="co">#&gt;   continent  year country                lifeExp     pop gdpPercap</span>
+<span class="co">#&gt;   &lt;fct&gt;     &lt;int&gt; &lt;fct&gt;                    &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Europe     1977 Albania                   68.9 2509048     3533.</span>
+<span class="co">#&gt; 2 Europe     1977 Austria                   72.2 7568430    19749.</span>
+<span class="co">#&gt; 3 Europe     1977 Belgium                   72.8 9821800    19118.</span>
+<span class="co">#&gt; 4 Europe     1977 Bosnia and Herzegovina    69.9 4086000     3528.</span>
+<span class="co">#&gt; 5 Europe     1977 Bulgaria                  70.8 8797022     7612.</span>
+<span class="co">#&gt; 6 Europe     1977 Croatia                   70.6 4318673    11305.</span>
+<span class="co">#&gt; # … with 24 more rows</span></code></pre></div>
+<p>List-columns are useful because we can act on them in a compact and tidy way. In particular, we can pass functions along to each row of the list-column and make something happen. For example, a moment ago we ran a regression of life expectancy and logged GDP for European countries in 1977. We can do that for every continent-year combination in the data. We first create a convenience function called <code>fit_ols()</code> that takes a single argument, <code>df</code> (for data frame) and that fits the linear model we are interested in. Then we map that function to each of our list-column rows in turn. Recall from Chapter 4 that mutate creates new variables or columns on the fly within a pipeline.</p>
+<p>The <code>map</code> action is an important idea in functional programming. If you have written code in other, more imperative languages you can think of it as a compact alternative to writing <code>for … next</code> loops. You can of course write loops like this in R. Computationally they are often not any less efficient than their functional alternatives. But mapping functions to arrays is more easily integrated into a sequence of data transformations.</p>
+<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit_ols</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">lifeExp</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">gdpPercap</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="va">out_le</span> <span class="op">&lt;-</span> <span class="va">gapminder</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">continent</span>, <span class="va">year</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">nest</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">fit_ols</span><span class="op">)</span><span class="op">)</span> 
+
+<span class="va">out_le</span>
+<span class="co">#&gt; # A tibble: 60 x 4</span>
+<span class="co">#&gt; # Groups:   continent, year [60]</span>
+<span class="co">#&gt;   continent  year data              model </span>
+<span class="co">#&gt;   &lt;fct&gt;     &lt;int&gt; &lt;list&gt;            &lt;list&gt;</span>
+<span class="co">#&gt; 1 Asia       1952 &lt;tibble [33 × 4]&gt; &lt;lm&gt;  </span>
+<span class="co">#&gt; 2 Asia       1957 &lt;tibble [33 × 4]&gt; &lt;lm&gt;  </span>
+<span class="co">#&gt; 3 Asia       1962 &lt;tibble [33 × 4]&gt; &lt;lm&gt;  </span>
+<span class="co">#&gt; 4 Asia       1967 &lt;tibble [33 × 4]&gt; &lt;lm&gt;  </span>
+<span class="co">#&gt; 5 Asia       1972 &lt;tibble [33 × 4]&gt; &lt;lm&gt;  </span>
+<span class="co">#&gt; 6 Asia       1977 &lt;tibble [33 × 4]&gt; &lt;lm&gt;  </span>
+<span class="co">#&gt; # … with 54 more rows</span></code></pre></div>
+<p>Before starting the pipeline we create a new function: It is a convenience function whose only job is to estimate a particular OLS model on some data. Like almost everything in R, functions are a kind of object. To make a new one, we use the slightly special <code>function()</code> function. (Nerds love that sort of thing.) There is a little more detail on creating functions in the Appendix. To see what fit_ols() looks like once it is created, type <code>fit_ols</code> without parentheses at the Console. To see what it does, try <code>fit_ols(df = gapminder)</code>, or <code><a href="https://rdrr.io/r/base/summary.html">summary(fit_ols(gapminder))</a></code>.</p>
+<p>Now we have two list-columns: <code>data</code>, and <code>model.</code> The latter was created by mapping the <code>fit_ols()</code> function to each row of data. Inside each element of model is a linear model for that continent-year. So we now have sixty OLS fits, one for every continent-year grouping. Having the models inside the list column is not much use to us in and of itself. But we can extract the information we want while keeping things in a tidy tabular form. For clarity we will run the pipeline from the beginning again, this time adding a few new steps.</p>
+<p>First we extract summary statistics from each model by mapping the <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code> function from <code>broom</code> to the model list column. Then we unnest the result, dropping the other columns in the process. Finally, we filter out all the Intercept terms, and also drop all observations from Oceania. In the case of the Intercepts we do this just out of convenience. Oceania we drop just because there are so few observations. We put the results in an object called <code>out_tidy.</code><br></p>
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit_ols</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">lifeExp</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">gdpPercap</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="va">out_tidy</span> <span class="op">&lt;-</span> <span class="va">gapminder</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">continent</span>, <span class="va">year</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">nest</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">fit_ols</span><span class="op">)</span>,
+           tidied <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">tidy</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="co"># unnest(tidied, .drop = TRUE) %&gt;%     # .drop is deprecated</span>
+    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">unnest</a></span><span class="op">(</span><span class="va">tidied</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">%nin%</span> <span class="st">"(Intercept)"</span> <span class="op">&amp;</span>
+           <span class="va">continent</span> <span class="op">%nin%</span> <span class="st">"Oceania"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 48 x 9</span>
+<span class="co">#&gt; # Groups:   continent, year [49]</span>
+<span class="co">#&gt;   continent  year data      model  term     estimate std.error statistic p.value</span>
+<span class="co">#&gt;   &lt;fct&gt;     &lt;int&gt; &lt;list&gt;    &lt;list&gt; &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Asia       1952 &lt;tibble … &lt;lm&gt;   log(gdp…     4.16      1.25      3.33 2.28e-3</span>
+<span class="co">#&gt; 2 Asia       1957 &lt;tibble … &lt;lm&gt;   log(gdp…     4.17      1.28      3.26 2.71e-3</span>
+<span class="co">#&gt; 3 Asia       1962 &lt;tibble … &lt;lm&gt;   log(gdp…     4.59      1.24      3.72 7.94e-4</span>
+<span class="co">#&gt; 4 Asia       1967 &lt;tibble … &lt;lm&gt;   log(gdp…     4.50      1.15      3.90 4.77e-4</span>
+<span class="co">#&gt; 5 Asia       1972 &lt;tibble … &lt;lm&gt;   log(gdp…     4.44      1.01      4.41 1.16e-4</span>
+<span class="co">#&gt; 6 Asia       1977 &lt;tibble … &lt;lm&gt;   log(gdp…     4.87      1.03      4.75 4.42e-5</span>
+<span class="co">#&gt; # … with 42 more rows</span></code></pre></div>
+<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># sample with replacement</span>
+<span class="va">out_tidy</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample_n</a></span><span class="op">(</span><span class="fl">5</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>    <span class="co"># replace to prevent error </span>
+<span class="co">#&gt; # A tibble: 240 x 9</span>
+<span class="co">#&gt; # Groups:   continent, year [49]</span>
+<span class="co">#&gt;   continent  year data       model term     estimate std.error statistic p.value</span>
+<span class="co">#&gt;   &lt;fct&gt;     &lt;int&gt; &lt;list&gt;     &lt;lis&gt; &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Africa     1952 &lt;tibble [… &lt;lm&gt;  log(gdp…     2.34     0.971      2.41  0.0199</span>
+<span class="co">#&gt; 2 Africa     1952 &lt;tibble [… &lt;lm&gt;  log(gdp…     2.34     0.971      2.41  0.0199</span>
+<span class="co">#&gt; 3 Africa     1952 &lt;tibble [… &lt;lm&gt;  log(gdp…     2.34     0.971      2.41  0.0199</span>
+<span class="co">#&gt; 4 Africa     1952 &lt;tibble [… &lt;lm&gt;  log(gdp…     2.34     0.971      2.41  0.0199</span>
+<span class="co">#&gt; 5 Africa     1952 &lt;tibble [… &lt;lm&gt;  log(gdp…     2.34     0.971      2.41  0.0199</span>
+<span class="co">#&gt; 6 Africa     1957 &lt;tibble [… &lt;lm&gt;  log(gdp…     2.69     1.06       2.55  0.0140</span>
+<span class="co">#&gt; # … with 234 more rows</span></code></pre></div>
+<p>We now have tidy regression output with an estimate of the association between <code>log</code> GDP per capita and life expectancy for each year, within continents. We can plot these estimates in a way that takes advantage of their groupiness.<br></p>
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Figure 6.9: Yearly estimates of the association between GDP and Life Expectancy, pooled by continent.</span>
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">out_tidy</span>,
+            mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">estimate</span>,
+                          ymin <span class="op">=</span> <span class="va">estimate</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span><span class="va">std.error</span>,
+                          ymax <span class="op">=</span> <span class="va">estimate</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span><span class="va">std.error</span>,
+                          group <span class="op">=</span> <span class="va">continent</span>, color <span class="op">=</span> <span class="va">continent</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange</a></span><span class="op">(</span>position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html">position_dodge</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/duplicated.html">unique</a></span><span class="op">(</span><span class="va">gapminder</span><span class="op">$</span><span class="va">year</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Year"</span>, y <span class="op">=</span> <span class="st">"Estimate"</span>, color <span class="op">=</span> <span class="st">"Continent"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-35-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>The call to <code><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html">position_dodge()</a></code> within <code><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange()</a></code> allows the point ranges for each continent to be near each other within years, instead of being plotted right on top of one another. We could have faceted the results by continent, but doing it this way lets us see differences in the yearly estimates much more easily. This technique is very useful not just for cases like this, but also when you want to compare the coefficients given by different kinds of statistical model. This sometimes happens when we’re interested in seeing how, say, OLS performs against some other model specification.</p>
+</div>
+<div id="plot-marginal-effects" class="section level2">
+<h2>
+<span class="header-section-number">6.8</span> Plot marginal effects<a class="anchor" aria-label="anchor" href="#plot-marginal-effects"><i class="fas fa-link"></i></a>
+</h2>
+<p>Our earlier discussion of <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> was about obtaining estimates of the average effect of some coefficient, net of the other terms in the model. Over the past decade, estimating and plotting partial or marginal effects from a model has become an increasingly common way of presenting accurate and interpretively useful predictions. Interest in marginal effects plots was stimulated by the realization that the interpretation of terms in logistic regression models, in particular, was trickier than it seemed—especially when there were interaction terms in the model (Ai &amp; Norton, 2003). Thomas Leeper’s <code>margins</code> package can make these plots for us.</p>
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/leeper/margins">margins</a></span><span class="op">)</span></code></pre></div>
+<p>To see it in action, we’ll take another look at the General Social Survey data in <code>gss_sm</code>, this time focusing on the binary variable, obama.As is common with retrospective questions on elections, rather more people claim to have voted for Obama than is consistent with the vote share he received in the election. It is coded 1 if the respondent said they voted for Barack Obama in the 2012 presidential election, and 0 otherwise. In this case, mostly for convenience here, the zero code includes all other answers to the question, including those who said they voted for Mitt Romney, those who said they did not vote, those who refused to answer, and those who said they didn’t know who they voted for. We will fit a logistic regression on obama, with <code>age</code>, <code>polviews</code>, <code>race</code>, and <code>sex</code> as the predictors. The <code>age</code> variable is the respondent’s age in years. The <code>sex</code> variable is coded as “Male” or “Female” with “Male” as the reference category. The <code>race</code> variable is coded as “White”, “Black”, or “Other” with “White” as the reference category. The polviews measure is a self-reported scale of the respondent’s political orientation from “Extremely Conservative” through “Extremely Liberal”, with “Moderate” in the middle. We take <code>polviews</code> and create a new variable, <code>polviews_m</code>, using the <code><a href="https://rdrr.io/r/stats/relevel.html">relevel()</a></code> function to recode “Moderate” to be the reference category. We fit the model with the <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> function, and specify an interaction between race and sex.</p>
+<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gss_sm</span><span class="op">$</span><span class="va">polviews_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/relevel.html">relevel</a></span><span class="op">(</span><span class="va">gss_sm</span><span class="op">$</span><span class="va">polviews</span>, ref <span class="op">=</span> <span class="st">"Moderate"</span><span class="op">)</span>
+
+<span class="va">out_bo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">obama</span> <span class="op">~</span> <span class="va">polviews_m</span> <span class="op">+</span> <span class="va">sex</span><span class="op">*</span><span class="va">race</span>,
+              family <span class="op">=</span> <span class="st">"binomial"</span>, data <span class="op">=</span> <span class="va">gss_sm</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">out_bo</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; glm(formula = obama ~ polviews_m + sex * race, family = "binomial", </span>
+<span class="co">#&gt;     data = gss_sm)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Deviance Residuals: </span>
+<span class="co">#&gt;    Min      1Q  Median      3Q     Max  </span>
+<span class="co">#&gt; -2.905  -0.554   0.177   0.542   2.244  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                                  Estimate Std. Error z value Pr(&gt;|z|)    </span>
+<span class="co">#&gt; (Intercept)                       0.29649    0.13409    2.21   0.0270 *  </span>
+<span class="co">#&gt; polviews_mExtremely Liberal       2.37295    0.52504    4.52  6.2e-06 ***</span>
+<span class="co">#&gt; polviews_mLiberal                 2.60003    0.35667    7.29  3.1e-13 ***</span>
+<span class="co">#&gt; polviews_mSlightly Liberal        1.29317    0.24843    5.21  1.9e-07 ***</span>
+<span class="co">#&gt; polviews_mSlightly Conservative  -1.35528    0.18129   -7.48  7.7e-14 ***</span>
+<span class="co">#&gt; polviews_mConservative           -2.34746    0.20038  -11.71  &lt; 2e-16 ***</span>
+<span class="co">#&gt; polviews_mExtremely Conservative -2.72738    0.38721   -7.04  1.9e-12 ***</span>
+<span class="co">#&gt; sexFemale                         0.25487    0.14537    1.75   0.0796 .  </span>
+<span class="co">#&gt; raceBlack                         3.84953    0.50132    7.68  1.6e-14 ***</span>
+<span class="co">#&gt; raceOther                        -0.00214    0.43576    0.00   0.9961    </span>
+<span class="co">#&gt; sexFemale:raceBlack              -0.19751    0.66007   -0.30   0.7648    </span>
+<span class="co">#&gt; sexFemale:raceOther               1.57483    0.58766    2.68   0.0074 ** </span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; (Dispersion parameter for binomial family taken to be 1)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     Null deviance: 2247.9  on 1697  degrees of freedom</span>
+<span class="co">#&gt; Residual deviance: 1345.9  on 1686  degrees of freedom</span>
+<span class="co">#&gt;   (1169 observations deleted due to missingness)</span>
+<span class="co">#&gt; AIC: 1370</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Number of Fisher Scoring iterations: 6</span></code></pre></div>
+<p>The summary reports the coefficients and other information. We can now graph the data in any one of several ways. Using <code><a href="https://rdrr.io/pkg/margins/man/margins.html">margins()</a></code> we calculate the marginal effects for each variable:</p>
+<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bo_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/margins/man/margins.html">margins</a></span><span class="op">(</span><span class="va">out_bo</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">bo_m</span><span class="op">)</span>
+<span class="co">#&gt;                            factor     AME     SE        z      p   lower</span>
+<span class="co">#&gt;            polviews_mConservative -0.4119 0.0283 -14.5394 0.0000 -0.4674</span>
+<span class="co">#&gt;  polviews_mExtremely Conservative -0.4538 0.0420 -10.7971 0.0000 -0.5361</span>
+<span class="co">#&gt;       polviews_mExtremely Liberal  0.2681 0.0295   9.0996 0.0000  0.2103</span>
+<span class="co">#&gt;                 polviews_mLiberal  0.2768 0.0229  12.0736 0.0000  0.2319</span>
+<span class="co">#&gt;   polviews_mSlightly Conservative -0.2658 0.0330  -8.0596 0.0000 -0.3304</span>
+<span class="co">#&gt;        polviews_mSlightly Liberal  0.1933 0.0303   6.3896 0.0000  0.1340</span>
+<span class="co">#&gt;                         raceBlack  0.4032 0.0173  23.3568 0.0000  0.3694</span>
+<span class="co">#&gt;                         raceOther  0.1247 0.0386   3.2297 0.0012  0.0490</span>
+<span class="co">#&gt;                         sexFemale  0.0443 0.0177   2.5073 0.0122  0.0097</span>
+<span class="co">#&gt;    upper</span>
+<span class="co">#&gt;  -0.3564</span>
+<span class="co">#&gt;  -0.3714</span>
+<span class="co">#&gt;   0.3258</span>
+<span class="co">#&gt;   0.3218</span>
+<span class="co">#&gt;  -0.2011</span>
+<span class="co">#&gt;   0.2526</span>
+<span class="co">#&gt;   0.4371</span>
+<span class="co">#&gt;   0.2005</span>
+<span class="co">#&gt;   0.0789</span></code></pre></div>
+<p>The <code>margins</code> library comes with several plot methods of its own. If you wish, at this point you can just try <code><a href="https://rdrr.io/r/graphics/plot.html">plot(bo_m)</a></code> to see a plot of the average marginal effects, produced with the general look of a Stata graphic. Other plot methods in the margins library include <code><a href="https://rdrr.io/pkg/margins/man/cplot.html">cplot()</a></code>, which visualizes marginal effects conditional on a second variable, and <code><a href="https://rdrr.io/r/graphics/image.html">image()</a></code>, which shows predictions or marginal effects as a filled heatmap or contour plot.</p>
+<p>Alternatively, we can take results from <code><a href="https://rdrr.io/pkg/margins/man/margins.html">margins()</a></code> and plot them ourselves. To clean up the summary a little a little, we convert it to a tibble, then use <code><a href="http://kjhealy.github.io/socviz/reference/prefix_strip.html">prefix_strip()</a></code> and <code><a href="http://kjhealy.github.io/socviz/reference/prefix_replace.html">prefix_replace()</a></code> to tidy the labels. We want to strip the polviews_m and sex prefixes, and (to avoid ambiguity about “Other”), adjust the race prefix.</p>
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bo_gg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">bo_m</span><span class="op">)</span><span class="op">)</span>
+<span class="va">prefixes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"polviews_m"</span>, <span class="st">"sex"</span><span class="op">)</span>
+<span class="va">bo_gg</span><span class="op">$</span><span class="va">factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://kjhealy.github.io/socviz/reference/prefix_strip.html">prefix_strip</a></span><span class="op">(</span><span class="va">bo_gg</span><span class="op">$</span><span class="va">factor</span>, <span class="va">prefixes</span><span class="op">)</span>
+<span class="va">bo_gg</span><span class="op">$</span><span class="va">factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://kjhealy.github.io/socviz/reference/prefix_replace.html">prefix_replace</a></span><span class="op">(</span><span class="va">bo_gg</span><span class="op">$</span><span class="va">factor</span>, <span class="st">"race"</span>, <span class="st">"Race: "</span><span class="op">)</span>
+
+<span class="va">bo_gg</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">factor</span>, <span class="va">AME</span>, <span class="va">lower</span>, <span class="va">upper</span><span class="op">)</span> 
+<span class="co">#&gt; # A tibble: 9 x 4</span>
+<span class="co">#&gt;   factor                    AME  lower  upper</span>
+<span class="co">#&gt;   &lt;chr&gt;                   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Conservative           -0.412 -0.467 -0.356</span>
+<span class="co">#&gt; 2 Extremely Conservative -0.454 -0.536 -0.371</span>
+<span class="co">#&gt; 3 Extremely Liberal       0.268  0.210  0.326</span>
+<span class="co">#&gt; 4 Liberal                 0.277  0.232  0.322</span>
+<span class="co">#&gt; 5 Slightly Conservative  -0.266 -0.330 -0.201</span>
+<span class="co">#&gt; 6 Slightly Liberal        0.193  0.134  0.253</span>
+<span class="co">#&gt; # … with 3 more rows</span></code></pre></div>
+<p>Now we have a table that we can plot as we have learned:</p>
+<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bo_gg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">factor</span>, <span class="va">AME</span><span class="op">)</span>,
+                              y <span class="op">=</span> <span class="va">AME</span>, ymin <span class="op">=</span> <span class="va">lower</span>, ymax <span class="op">=</span> <span class="va">upper</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"gray80"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Average Marginal Effect"</span><span class="op">)</span> </code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-40-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>If we are just interested in getting conditional effects for a particular variable, then conveniently we can ask the plot methods in the margins library to do the work calculating effects for us but without drawing their plot. Instead, they can return the results in a format we can easily use in ggplot, and with less need for clean up, for the clean-up. For example, with <code><a href="https://rdrr.io/pkg/margins/man/cplot.html">cplot()</a></code>:</p>
+<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pv_cp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/margins/man/cplot.html">cplot</a></span><span class="op">(</span><span class="va">out_bo</span>, x <span class="op">=</span> <span class="st">"sex"</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt;    xvals yvals upper lower</span>
+<span class="co">#&gt; 1   Male 0.574 0.638 0.509</span>
+<span class="co">#&gt; 2 Female 0.634 0.689 0.580</span>
+
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pv_cp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">xvals</span>, <span class="va">yvals</span><span class="op">)</span>,
+                              y <span class="op">=</span> <span class="va">yvals</span>, ymin <span class="op">=</span> <span class="va">lower</span>, ymax <span class="op">=</span> <span class="va">upper</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"gray80"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Conditional Effect"</span><span class="op">)</span> </code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-41-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>The <code>margins</code> package is under active development. It can do much more than described here. The vignettes that come with the package provide more extensive discussion and numerous examples.</p>
+</div>
+<div id="plots-from-complex-surveys" class="section level2">
+<h2>
+<span class="header-section-number">6.9</span> Plots from complex surveys<a class="anchor" aria-label="anchor" href="#plots-from-complex-surveys"><i class="fas fa-link"></i></a>
+</h2>
+<p>Social scientists often work with data collected using a complex survey design. Survey instruments may be stratified by region or some other characteristic, contain replicate weights to make them comparable to a reference population, have a clustered structure, and so on. In Chapter 4 we learned how calculate and then plot frequency tables of categorical variables, using some data from the General Social Survey (GSS). However, if we want accurate estimates of US households from the GSS, we will need to take the survey’s design into account, and use the survey weights provided in the dataset. Thomas Lumley’s <code>survey</code> library provides a comprehensive set of tools for addressing these issues. The tools and the theory behind them are discussed in detail in Lumley (2010), and an overview of the package is provided in Lumley (2004). While the functions in the <code>survey</code> package are straightforward to use and return results in a generally tidy form, the package predates the tidyverse and its conventions by several years. This means we cannot use survey functions directly with <code>dplyr</code>. However, Greg Freedman Ellis has written a helper package, <code>srvyr</code>, that solves this problem for us, and lets us use the <code>survey</code> library’s functions within a data analysis pipeline in a familiar way.</p>
+<p>For example, the <code>gss_lon</code> data contains a small subset of measures from every wave of the GSS since its inception in 1972. It also contains several variables that describe the design of the survey and provide replicate weights for observations in various years. These technical details are described in the GSS documentation. Similar information is typically provided by other complex surveys. Here we will use this design information to calculate weighted estimates of the distribution of educational attainment by race, for selected survey years from 1976 to 2016.</p>
+<p>To begin, we load the <code>survey</code> and <code>srvyr</code> libraries.<br></p>
+<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-survey.r-forge.r-project.org/survey/">survey</a></span><span class="op">)</span>
+<span class="co">#&gt; Loading required package: grid</span>
+<span class="co">#&gt; Loading required package: Matrix</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'Matrix'</span>
+<span class="co">#&gt; The following objects are masked from 'package:tidyr':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     expand, pack, unpack</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'survey'</span>
+<span class="co">#&gt; The following object is masked from 'package:graphics':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     dotchart</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://gdfe.co/srvyr">srvyr</a></span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'srvyr'</span>
+<span class="co">#&gt; The following object is masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter</span></code></pre></div>
+<p>Next, we take our <code>gss_lon</code> dataset and use the survey tools to create a new object that contains the data, as before, but with some additional information about the survey’s design:<br></p>
+<div class="sourceCode" id="cb184"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>survey.lonely.psu <span class="op">=</span> <span class="st">"adjust"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>na.action<span class="op">=</span><span class="st">"na.pass"</span><span class="op">)</span>
+
+<span class="va">gss_wt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">gss_lon</span>, <span class="va">year</span> <span class="op">&gt;</span> <span class="fl">1974</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/dplyr_single.html">mutate</a></span><span class="op">(</span>stratvar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html">interaction</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">vstrat</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/as_survey_design.html">as_survey_design</a></span><span class="op">(</span>ids <span class="op">=</span> <span class="va">vpsu</span>,
+                     strata <span class="op">=</span> <span class="va">stratvar</span>,
+                     weights <span class="op">=</span> <span class="va">wtssall</span>,
+                     nest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p>The two options set at the beginning provide some information to the survey library about how to behave. You should consult Lumley (2010) and the survey package documentation for details. The subsequent operations create <code>gss_wt</code>, an object with one additional column (<code>stratvar</code>), describing the yearly sampling strata. We use the <code><a href="https://rdrr.io/r/base/interaction.html">interaction()</a></code> function to do this. It multiplies the <code>vstrat</code> variable by the <code>year</code> variable to get a vector of stratum information for each year. We have to do this because of the way the GSS codes its stratum information. In the next step, we use the <code><a href="http://gdfe.co/srvyr/reference/as_survey_design.html">as_survey_design()</a></code> function to add the key pieces of information about the survey design. It adds information about the sampling identifiers (<code>ids</code>), the strata (<code>strata</code>), and the replicate weights (<code>weights</code>). With those in place we can take advantage of a large number of specialized functions in the survey library that allow us to calculate properly weighted survey means or estimate models with the correct sampling specification. For example, we can easily calculate the distribution of education by race for a series of years from 1976 to 2016. We use <code><a href="http://gdfe.co/srvyr/reference/survey_mean.html">survey_mean()</a></code> to do this:<br></p>
+<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_grp</span> <span class="op">&lt;-</span> <span class="va">gss_wt</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/dplyr_single.html">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1976</span>, <span class="fl">2016</span>, by <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">race</span>, <span class="va">degree</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/summarise.html">summarize</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="fu"><a href="http://gdfe.co/srvyr/reference/survey_mean.html">survey_mean</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Factor `degree` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Column `year` has different attributes on LHS and RHS of join</span>
+
+<span class="va">out_grp</span>
+<span class="co">#&gt; # A tibble: 162 x 5</span>
+<span class="co">#&gt;    year race  degree            prop  prop_se</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;            &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  1976 White Lt High School  0.328   0.0160 </span>
+<span class="co">#&gt; 2  1976 White High School     0.518   0.0162 </span>
+<span class="co">#&gt; 3  1976 White Junior College  0.0129  0.00298</span>
+<span class="co">#&gt; 4  1976 White Bachelor        0.101   0.00960</span>
+<span class="co">#&gt; 5  1976 White Graduate        0.0393  0.00644</span>
+<span class="co">#&gt; 6  1976 White &lt;NA&gt;           NA      NA      </span>
+<span class="co">#&gt; # … with 156 more rows</span></code></pre></div>
+<p>The results returned in <code>out_grp</code> include standard errors. We can also ask <code><a href="http://gdfe.co/srvyr/reference/survey_mean.html">survey_mean()</a></code> to calculate confidence intervals for us, if we wish.</p>
+<p>Grouping with <code><a href="http://gdfe.co/srvyr/reference/group_by.html">group_by()</a></code> lets us calculate counts or means for the innermost variable, grouped by the next variable “up” or “out”, in this case, degree by race, such that the proportions for degree will sum to one for each group in race, and this will be done separately for each value of year. If we want the marginal frequencies, such that the values for all combinations of race and degree sum to one within each year, we first have to interact the variables we are cross-classifying. Then we group by the new interacted variable and do the calculation as before:<br></p>
+<div class="sourceCode" id="cb186"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_mrg</span> <span class="op">&lt;-</span> <span class="va">gss_wt</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/dplyr_single.html">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1976</span>, <span class="fl">2016</span>, by <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/dplyr_single.html">mutate</a></span><span class="op">(</span>racedeg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html">interaction</a></span><span class="op">(</span><span class="va">race</span>, <span class="va">degree</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">racedeg</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/summarise.html">summarize</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="fu"><a href="http://gdfe.co/srvyr/reference/survey_mean.html">survey_mean</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Factor `racedeg` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Column `year` has different attributes on LHS and RHS of join</span>
+
+<span class="va">out_mrg</span>
+<span class="co">#&gt; # A tibble: 155 x 4</span>
+<span class="co">#&gt;    year racedeg                 prop prop_se</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;fct&gt;                  &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  1976 White.Lt High School 0.298   0.0146 </span>
+<span class="co">#&gt; 2  1976 Black.Lt High School 0.0471  0.00840</span>
+<span class="co">#&gt; 3  1976 Other.Lt High School 0.00195 0.00138</span>
+<span class="co">#&gt; 4  1976 White.High School    0.471   0.0160 </span>
+<span class="co">#&gt; 5  1976 Black.High School    0.0283  0.00594</span>
+<span class="co">#&gt; 6  1976 Other.High School    0.00325 0.00166</span>
+<span class="co">#&gt; # … with 149 more rows</span></code></pre></div>
+<p>This gives us the numbers that we want and returns them in a tidy data frame. The <code><a href="https://rdrr.io/r/base/interaction.html">interaction()</a></code> function produces variable labels that are a compound of the two variables we interacted, with each combination of categories separated by a period, (such as White.Graduate. However, perhaps we would like to see these categories as two separate columns, one for race and one for education, as before. Because the variable labels are organized in a predictable way, we can use one of the convenient functions in the tidyverse’s <code>tidyr</code> library to separate the single variable into two columns while correctly preserving the row values. Appropriately, this function is called <code><a href="https://tidyr.tidyverse.org/reference/separate.html">separate()</a></code>.</p>
+<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out_mrg</span> <span class="op">&lt;-</span> <span class="va">gss_wt</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/dplyr_single.html">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1976</span>, <span class="fl">2016</span>, by <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/dplyr_single.html">mutate</a></span><span class="op">(</span>racedeg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html">interaction</a></span><span class="op">(</span><span class="va">race</span>, <span class="va">degree</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">racedeg</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/summarise.html">summarize</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="fu"><a href="http://gdfe.co/srvyr/reference/survey_mean.html">survey_mean</a></span><span class="op">(</span>na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span><span class="op">(</span><span class="va">racedeg</span>, sep <span class="op">=</span> <span class="st">"\\."</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"race"</span>, <span class="st">"degree"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Factor `racedeg` contains implicit NA, consider using</span>
+<span class="co">#&gt; `forcats::fct_explicit_na`</span>
+<span class="co">#&gt; Warning: Column `year` has different attributes on LHS and RHS of join</span>
+
+<span class="va">out_mrg</span>
+<span class="co">#&gt; # A tibble: 155 x 5</span>
+<span class="co">#&gt;    year race  degree            prop prop_se</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;            &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  1976 White Lt High School 0.298   0.0146 </span>
+<span class="co">#&gt; 2  1976 Black Lt High School 0.0471  0.00840</span>
+<span class="co">#&gt; 3  1976 Other Lt High School 0.00195 0.00138</span>
+<span class="co">#&gt; 4  1976 White High School    0.471   0.0160 </span>
+<span class="co">#&gt; 5  1976 Black High School    0.0283  0.00594</span>
+<span class="co">#&gt; 6  1976 Other High School    0.00325 0.00166</span>
+<span class="co">#&gt; # … with 149 more rows</span></code></pre></div>
+<p>The call to <code><a href="https://tidyr.tidyverse.org/reference/separate.html">separate()</a></code> says to take the <code>racedeg</code> column, split each value when it sees a period, and reorganize the results into two columns, race and degree. This gives us a tidy table much like <code>out_grp</code>, but for the marginal frequencies.</p>
+<p>Reasonable people can disagree over how best to plot a small multiple of a frequency table while faceting by year, especially when there is some measure of uncertainty attached. A barplot is the obvious approach for a single case, but when there are many years it can become difficult to compare bars across panels. This is especially the case when standard errors or confidence intervals are used in conjunction with bars.Sometimes it may be preferable to show that the underlying variable is categorical, as a bar chart makes clear, and not continuous, as a line graph suggests. Here the trade-off is in favor of the line graphs as the bars are very hard to compare across facets. This is sometimes called a “dynamite plot”, not because it looks amazing but because the t-shaped error bars on the tops of the columns make them look like cartoon dynamite plungers. An alternative is to use a line graph to join up the time observations, faceting on educational categories instead of year. Figure 6.12 shows the results for our GSS data in <em>dynamite-plot</em> form, where the error bars are defined as twice the standard error in either direction around the point estimate.<br></p>
+<div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">out_grp</span>, <span class="va">race</span> <span class="op">%nin%</span> <span class="st">"Other"</span><span class="op">)</span>,
+            mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">degree</span>, y <span class="op">=</span> <span class="va">prop</span>,
+                          ymin <span class="op">=</span> <span class="va">prop</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span><span class="va">prop_se</span>,
+                          ymax <span class="op">=</span> <span class="va">prop</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span><span class="va">prop_se</span>,
+                          fill <span class="op">=</span> <span class="va">race</span>,
+                          color <span class="op">=</span> <span class="va">race</span>,
+                          group <span class="op">=</span> <span class="va">race</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">dodge</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html">position_dodge</a></span><span class="op">(</span>width<span class="op">=</span><span class="fl">0.9</span><span class="op">)</span>
+
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="va">dodge</span>, alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_errorbar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="va">dodge</span>, width <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html">scale_x_discrete</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org//reference/label_wrap.html">wrap_format</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Educational Attainment by Race"</span>,
+         subtitle <span class="op">=</span> <span class="st">"GSS 1976-2016"</span>,
+         fill <span class="op">=</span> <span class="st">"Race"</span>,
+         color <span class="op">=</span> <span class="st">"Race"</span>,
+         x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Percent"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">year</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Removed 13 rows containing missing values (geom_col).</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-47-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>This plot has a few cosmetic details and adjustments that we will learn more about in Chapter 8. As before, I encourage you to peel back the plot from the bottom, one instruction at a time, to see what changes. One useful adjustment to notice is the new call to the <code>scales</code> library to adjust the labels on the x-axis. The adjustment on the y-axis is familiar, <code><a href="https://scales.r-lib.org//reference/label_percent.html">scales::percent</a></code> to convert the proportion to a percentage. On the x-axis, the issue is that several of the labels are rather long. If we do not adjust them they will print over one another. The <code><a href="https://scales.r-lib.org//reference/label_wrap.html">scales::wrap_format()</a></code> function will break long labels into lines. It takes a single numerical argument (here 10) that is the maximum length a string can be before it is wrapped onto a new line.</p>
+<p>Faceting by education instead.Figure 6.13: Faceting by education instead.
+A graph like this is true to the categorical nature of the data, while showing the breakdown of groups within each year. But you should experiment with some alternatives. For example, we might decide that it is better to facet by degree category instead, and put the year on the x-axis within each panel. If we do that, then we can use <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line()</a></code> to show a time trend, which is more natural, and <code><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon()</a></code> to show the error range. This is perhaps a better way to show the data, especially as it brings out the time trends within each degree category, and allows us to see the similarities and differences by racial classification at the same time.<br></p>
+<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">out_grp</span>, <span class="va">race</span> <span class="op">%nin%</span> <span class="st">"Other"</span><span class="op">)</span>,
+            mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">prop</span>, ymin <span class="op">=</span> <span class="va">prop</span> <span class="op">-</span> <span class="fl">2</span><span class="op">*</span><span class="va">prop_se</span>,
+                          ymax <span class="op">=</span> <span class="va">prop</span> <span class="op">+</span> <span class="fl">2</span><span class="op">*</span><span class="va">prop_se</span>, fill <span class="op">=</span> <span class="va">race</span>, color <span class="op">=</span> <span class="va">race</span>,
+                          group <span class="op">=</span> <span class="va">race</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.3</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">degree</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Educational Attainment\nby Race"</span>,
+         subtitle <span class="op">=</span> <span class="st">"GSS 1976-2016"</span>, fill <span class="op">=</span> <span class="st">"Race"</span>,
+         color <span class="op">=</span> <span class="st">"Race"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Percent"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span>
+<span class="co">#&gt; Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning</span>
+<span class="co">#&gt; -Inf</span>
+
+<span class="co">#&gt; Warning in max(ids, na.rm = TRUE): no non-missing arguments to max; returning</span>
+<span class="co">#&gt; -Inf</span>
+<span class="co">#&gt; Warning: Removed 13 row(s) containing missing values (geom_path).</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-48-1.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+<div id="where-to-go-next" class="section level2">
+<h2>
+<span class="header-section-number">6.10</span> Where to go next<a class="anchor" aria-label="anchor" href="#where-to-go-next"><i class="fas fa-link"></i></a>
+</h2>
+<p>In general, when you estimate models and want to plot the results, the difficult step is not the plotting but rather calculating and extracting the right numbers. Generating predicted values and measures of confidence or uncertainty from models requires that you understand the model you are fitting, and the function you use to fit it, especially when it involves interactions, cross-level effects, or transformations of the predictor or response scales. The details can vary substantially from model type to model type, and also with the goals of any particular analysis. It is unwise to approach them mechanically. That said, several tools exist to help you work with model objects and produce a default set of plots from them.</p>
+<div id="default-plots-for-models" class="section level3">
+<h3>
+<span class="header-section-number">6.10.1</span> Default plots for models<a class="anchor" aria-label="anchor" href="#default-plots-for-models"><i class="fas fa-link"></i></a>
+</h3>
+<p>Just as model objects in R usually have a default <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method, printing out an overview tailored to the type of model it is, they will usually have a default <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> method, too. Figures produced by <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> are typically not generated via <code>ggplot</code>, but it is usually worth exploring them. They typically make use of either R’s base graphics or the <code>lattice</code> library (Sarkar, 2008). These are two plotting systems that we do not cover in this book. Default plot methods are easy to examine. Let’s take a look again at our simple OLS model.<br></p>
+<div class="sourceCode" id="cb190"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">lifeExp</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">gdpPercap</span><span class="op">)</span> <span class="op">+</span> <span class="va">pop</span> <span class="op">+</span> <span class="va">continent</span>, data <span class="op">=</span> <span class="va">gapminder</span><span class="op">)</span></code></pre></div>
+<p>To look at some of R’s default plots for this model, use the <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> function.<br></p>
+<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Plot not shown</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">out</span>, which <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>, ask<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-50-1.png" width="70%" style="display: block; margin: auto;"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-50-2.png" width="70%" style="display: block; margin: auto;"></p>
+<p>The <code><a href="https://rdrr.io/r/base/which.html">which()</a></code> statement here selects the first two of four default plots for this kind of model. If you want to easily reproduce base R’s default model graphics using <code>ggplot</code>, the <code>ggfortify</code> library is worth examining. It is in some ways similar to <code>broom</code>, in that it tidies the output of model objects, but it focuses on producing a standard plot (or group of plots) for a wide variety of model types. It does this by defining a function called <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>. The idea is to be able to use <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> with the output of many different kinds of model.</p>
+<p>A second option worth looking at is the <code>coefplot</code> library. It provides a quick way to produce good-quality plots of point estimates and confidence intervals. It has the advantage of managing the estimation of interaction effects and other occasionally tricky calculations.<br></p>
+<div class="sourceCode" id="cb192"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">coefplot</span><span class="op">)</span>
+<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">lifeExp</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">gdpPercap</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">pop</span><span class="op">)</span> <span class="op">+</span> <span class="va">continent</span>, data <span class="op">=</span> <span class="va">gapminder</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/pkg/coefplot/man/coefplot.html">coefplot</a></span><span class="op">(</span><span class="va">out</span>, sort <span class="op">=</span> <span class="st">"magnitude"</span>, intercept <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-51-1.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+<div id="tools-in-development" class="section level3">
+<h3>
+<span class="header-section-number">6.10.2</span> Tools in development<a class="anchor" aria-label="anchor" href="#tools-in-development"><i class="fas fa-link"></i></a>
+</h3>
+<p>Tidyverse tools for modeling and model exploration are being actively developed. The <code>broom</code> and <code>margins</code> libraries continue to get more and more useful. There are also other projects worth paying attention to. The <code>infer</code> packageinfer.netlify.com is in its early stages but can already do useful things in a pipeline-friendly way. You can install it from CRAN with <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("infer")</a></code>.</p>
+</div>
+<div id="extensions-to-ggplot" class="section level3">
+<h3>
+<span class="header-section-number">6.10.3</span> Extensions to ggplot<a class="anchor" aria-label="anchor" href="#extensions-to-ggplot"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code>GGally</code> package provides a suite of functions designed to make producing standard but somewhat complex plots a little easier. For instance, it can produce generalized pairs plots, a useful way of quickly examining possible relationships between several different variables at once. This sort of plot is like the visual version of a correlation matrix. It shows a bivariate plot for all pairs of variables in the data. This is relatively straightforward when all the variables are continuous measures. Things get more complex when, as is often the case in the social sciences, some or all variables are categorical or otherwise limited in the range of values they can take. A generalized pairs plot can handle these cases. For example, Figure ?? shows a generalized pairs plot for five variables from the <code>organdata</code> dataset.</p>
+<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally">GGally</a></span><span class="op">)</span>
+
+<span class="va">organdata_sm</span> <span class="op">&lt;-</span> <span class="va">organdata</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="http://gdfe.co/srvyr/reference/dplyr_single.html">select</a></span><span class="op">(</span><span class="va">donors</span>, <span class="va">pop_dens</span>, <span class="va">pubhealth</span>,
+           <span class="va">roads</span>, <span class="va">consent_law</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">organdata_sm</span>,
+        mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">consent_law</span><span class="op">)</span>,
+        upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>continuous <span class="op">=</span> <span class="fu"><a href="https://ggobi.github.io/ggally/reference/wrap.html">wrap</a></span><span class="op">(</span><span class="st">"density"</span><span class="op">)</span>, combo <span class="op">=</span> <span class="st">"box_no_facet"</span><span class="op">)</span>,
+        lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>continuous <span class="op">=</span> <span class="fu"><a href="https://ggobi.github.io/ggally/reference/wrap.html">wrap</a></span><span class="op">(</span><span class="st">"points"</span><span class="op">)</span>, combo <span class="op">=</span> <span class="fu"><a href="https://ggobi.github.io/ggally/reference/wrap.html">wrap</a></span><span class="op">(</span><span class="st">"dot_no_facet"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="004-misc_140-data_visualization-modeling_files/figure-html/unnamed-chunk-52-1.png" width="70%" style="display: block; margin: auto;"></div>
+<p>Multi-panel plots like this are intrinsically very rich in information. When combined with several within-panel types of representation, or any more than a modest number of variables, they can become quite complex. They should be used less for the presentation of finished work, although it is possible. More often they are a useful tool for the working researcher to quickly investigate aspects of a dataset. The goal is not to pithily summarize a single point one already knows, but to open things up for further exploration.</p>
+
+</div>
+</div>
+</div>
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">5</span> Sensitivity analysis for a neural network</a></div>
+<div class="next"><a href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">7</span> Ten methods to assess Variable Importance</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#data-visualization-for-ml-models"><span class="header-section-number">6</span> Data Visualization for ML models</a></li>
+<li><a class="nav-link" href="#introduction-2"><span class="header-section-number">6.1</span> Introduction</a></li>
+<li><a class="nav-link" href="#show-several-fits-at-once-with-a-legend"><span class="header-section-number">6.2</span> Show several fits at once, with a legend</a></li>
+<li><a class="nav-link" href="#look-inside-model-objects"><span class="header-section-number">6.3</span> Look inside model objects</a></li>
+<li>
+<a class="nav-link" href="#get-model-based-graphics-right"><span class="header-section-number">6.4</span> Get model-based graphics right</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#present-your-findings-in-substantive-terms"><span class="header-section-number">6.4.1</span> Present your findings in substantive terms</a></li>
+<li><a class="nav-link" href="#show-your-degree-of-confidence"><span class="header-section-number">6.4.2</span> Show your degree of confidence</a></li>
+<li><a class="nav-link" href="#show-your-data-when-you-can"><span class="header-section-number">6.4.3</span> Show your data when you can</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#generate-predictions-to-graph"><span class="header-section-number">6.5</span> Generate predictions to graph</a></li>
+<li>
+<a class="nav-link" href="#tidy-model-objects-with-broom"><span class="header-section-number">6.6</span> Tidy model objects with broom</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#get-component-level-statistics-with-tidy"><span class="header-section-number">6.6.1</span> Get component-level statistics with tidy()</a></li>
+<li><a class="nav-link" href="#get-observation-level-statistics-with-augment"><span class="header-section-number">6.6.2</span> Get observation-level statistics with augment()</a></li>
+<li><a class="nav-link" href="#get-model-level-statistics-with-glance"><span class="header-section-number">6.6.3</span> Get model-level statistics with glance()</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#grouped-analysis-and-list-columns"><span class="header-section-number">6.7</span> Grouped analysis and list-columns</a></li>
+<li><a class="nav-link" href="#plot-marginal-effects"><span class="header-section-number">6.8</span> Plot marginal effects</a></li>
+<li><a class="nav-link" href="#plots-from-complex-surveys"><span class="header-section-number">6.9</span> Plots from complex surveys</a></li>
+<li>
+<a class="nav-link" href="#where-to-go-next"><span class="header-section-number">6.10</span> Where to go next</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#default-plots-for-models"><span class="header-section-number">6.10.1</span> Default plots for models</a></li>
+<li><a class="nav-link" href="#tools-in-development"><span class="header-section-number">6.10.2</span> Tools in development</a></li>
+<li><a class="nav-link" href="#extensions-to-ggplot"><span class="header-section-number">6.10.3</span> Extensions to ggplot</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/004-misc_140-data_visualization-modeling.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/004-misc_140-data_visualization-modeling.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>A Machine Learning Book</strong>" was written by Alfonso R. Reyes. It was last built on 2020-11-18.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>
