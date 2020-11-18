@@ -1,0 +1,144 @@
+# (PART) Linear Regression {.unnumbered}
+
+# Linear Regression with ISLR
+
+Dataset: `Advertising.csv`
+
+Videos, slides:
+
+* https://www.r-bloggers.com/in-depth-introduction-to-machine-learning-in-15-hours-of-expert-videos/
+
+Data:
+
+* http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv
+
+code:
+
+* http://subasish.github.io/pages/ISLwithR/
+* http://math480-s15-zarringhalam.wikispaces.umb.edu/R+Code
+* https://github.com/yahwes/ISLR
+* https://www.tau.ac.il/~saharon/IntroStatLearn.html
+* https://www.waxworksmath.com/Authors/G_M/James/WWW/chapter_3.html
+* https://github.com/asadoughi/stat-learning
+
+plots:
+
+* https://onlinecourses.science.psu.edu/stat857/node/28/
+
+```{r}
+library(readr)
+
+advertising <- read_csv(file.path(data_raw_dir, "Advertising.csv"))
+advertising
+```
+
+The Advertising data set. The plot displays sales, in thousands
+of units, as a function of TV, radio, and newspaper budgets, in thousands of
+dollars, for 200 diﬀerent markets. 
+
+```{r}
+par(mfrow=c(1,3))
+plot(advertising$TV, advertising$sales, xlab = "TV", ylab = "Sales", col = "red")
+plot(advertising$radio, advertising$sales, xlab="Radio", ylab="Sales", col="red")
+plot(advertising$radio, advertising$newspaper, xlab="Newspaper", 
+     ylab="Sales", col="red")
+```
+
+In each plot we show the simple least squares
+ﬁt of sales to that variable, as described in Chapter 3. In other words, each blue
+line represents a simple model that can be used to predict sales using TV, radio,
+and newspaper, respectively.
+
+```{r}
+par(mfrow=c(1,3))
+tv_model <- lm(sales ~ TV, data = advertising)
+radio_model <- lm(sales ~ radio, data = advertising)
+newspaper_model <- lm(sales ~ newspaper, data = advertising)
+
+plot(advertising$TV, advertising$sales, xlab = "TV", ylab = "Sales", col = "red")
+abline(tv_model, col = "blue")
+plot(advertising$radio, advertising$sales, xlab="Radio", ylab="Sales", col="red")
+abline(radio_model)
+plot(advertising$newspaper, advertising$sales, xlab="Newspaper", 
+     ylab="Sales", col="red")
+abline(newspaper_model)
+```
+
+Recall the Advertising data from Chapter 2. Figure 2.1 displays sales
+(in thousands of units) for a particular product as a function of advertis-
+ing budgets (in thousands of dollars) for TV, radio, and newspaper media.
+Suppose that in our role as statistical consultants we are asked to suggest,
+on the basis of this data, a marketing plan for next year that will result in
+high product sales. What information would be useful in order to provide
+such a recommendation? Here are a few important questions that we might
+seek to address:
+
+1.  Is there a relationship between advertising budget and sales?
+
+2. How strong is the relationship between advertising budget and sales?
+
+3. Which media contribute to sales?
+
+4. How accurately can we estimate the eﬀect of each medium on sales?
+
+
+ For the Advertising data, the least squares fit for the regression
+of sales onto TV is shown. The fit is found by minimizing the sum of squared
+errors. Each grey line segment represents an error, and the fit makes a compro-
+mise by averaging their squares. In this case a linear fit captures the essence of
+the relationship, although it is somewhat deficient in the left of the plot.
+
+```{r}
+tv_model <- lm(sales ~ TV, data = advertising)
+plot(advertising$TV, advertising$sales, xlab = "TV", ylab = "Sales", 
+     col = "red", pch=16)
+abline(tv_model, col = "blue", lwd=2)
+segments(advertising$TV, advertising$sales, advertising$TV, predict(tv_model), 
+         col = "gray")
+```
+
+```{r}
+smry <- summary(tv_model)
+smry
+```
+
+```{r}
+library(lattice)
+
+minRss <- sqrt(abs(min(smry$residuals))) * sign(min(smry$residuals))
+maxRss <- sqrt(max(smry$residuals))
+
+twovar <- function(x, y) { 
+  x^2 + y^2 }
+
+mat <- outer( seq(minRss, maxRss, length = 100),  
+                seq(minRss, maxRss, length = 100), 
+                Vectorize( function(x,y) twovar(x, y) ) )
+
+
+
+contourplot(mat, at = c(1,2,3))
+```
+
+```{r}
+tv_model
+```
+
+```{r}
+tv.lm <- lm(sales ~ poly(sales, TV, degree=2), data = advertising)
+# contour(tv.lm, sales ~ TV)
+```
+
+```{r}
+library(rsm)
+mpg.lm <- lm(mpg ~ poly(hp, disp, degree = 3), data = mtcars)
+contour(mpg.lm, hp ~ disp)
+```
+
+```{r}
+x <- -6:16
+op <- par(mfrow = c(2, 2))
+contour(outer(x, x), method = "flattest", vfont = c("sans serif", "plain"))
+```
+
+

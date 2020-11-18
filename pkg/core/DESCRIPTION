@@ -1,0 +1,55 @@
+Package: ml.core
+Type: Package
+Title: Machine Learning Core Packages
+Version: 0.1
+Date: 2019-05-12
+Author: datascience
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+Imports: 
+  bookdown,
+  broom,
+  caret,
+  corrplot,
+  data.table,
+  dplyr,
+  e1071,
+  ElemStatLearn,
+  ellipse,
+  ExPosition,
+  faraway,
+  factoextra, 
+  gapminder,
+  ggplot2,
+  glmnet,
+  gmodels,
+  gbm,
+  ggbiplot,
+  ISLR,
+  klaR,
+  kernlab,
+  lattice,
+  microbenchmark,
+  purrr,
+  randomForest,
+  rbenchmark,
+  readr,
+  reticulate,
+  rmarkdown,
+  rpart,
+  servr,
+  skimr,
+  socviz,
+  svglite,
+  tidyr,
+  tibble,
+  TH.data,
+  tictoc,
+  tree,
+  usethis,
+  UsingR
+Remotes:
+  cran/ElemStatLearn,
+  vqv/ggbiplot
+RoxygenNote: 6.1.1

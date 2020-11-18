@@ -1,0 +1,563 @@
+# Linear and Non-Linear Algorithms for Classification
+
+* Datasets: `BreastCancer`
+* Algorithms: *LG, LDA, GLMNET, KNN, CARTM NB, SVM*
+
+## Introduction
+
+In this classification problem we apply these algorithms:
+
+-   Linear
+
+    1.  LG (logistic regression)
+    2.  LDA (linear discriminant analysis)
+    3.  GLMNET (Regularized logistic regression)
+
+-   Non-linear
+
+    4.  KNN (k-Nearest Neighbors)
+    5.  CART (Classification and Regression Trees)
+    6.  NB (Naive Bayes)
+    7.  SVM (Support Vector Machines)
+
+```{r}
+# load packages
+library(mlbench)
+library(caret)
+library(tictoc)
+
+# Load data
+data(BreastCancer)
+```
+
+## Workflow
+
+1.  Load dataset
+2.  Create train and validation datasets, 80/20
+3.  Inspect dataset:
+
+-   dimension
+-   class of variables
+-   `skimr`
+
+4.  Clean up features
+
+-   Convert character to numeric
+-   Frequency table on class
+-   remove NAs
+
+5.  Visualize features
+
+-   histograms (loop on variables)
+-   density plots (loop)
+-   boxplot (loop)
+-   Pairwise jittered plot
+-   Barplots for all features (loop)
+
+6.  Train as-is\
+
+-   Set the train control to
+
+    -   10 cross-validations
+    -   3 repetitions
+    -   Metric: Accuracy
+
+-   Train the models
+
+-   Numeric comparison of model results
+
+-   Visual comparison
+
+    -   dot plot
+
+7.  Train with data transformation
+
+-   data transformatiom
+
+    -   BoxCox
+
+-   Train models
+
+-   Numeric comparison
+
+-   Visual comparison
+
+    -   dot plot
+
+8.  Tune the best model: SVM
+
+-   Set the train control to
+
+    -   10 cross-validations
+    -   3 repetitions
+    -   Metric: Accuracy
+
+-   Train the models
+
+    -   Radial SVM
+    -   Sigma vector
+    -   `.C`
+    -   BoxCox
+
+-   Evaluate tuning parameters
+
+9.  Tune the best model: KNN
+
+-   Set the train control to
+
+    -   10 cross-validations
+    -   3 repetitions
+    -   Metric: Accuracy
+
+-   Train the models
+
+    -   .k
+    -   BoxCox
+
+-   Evaluate tuning parameters
+
+    -   Scatter plot 10, Ensembling
+
+-   Select the algorithms
+
+    -   Bagged CART
+    -   Random Forest
+    -   Stochastic Gradient Boosting
+    -   C5.0
+
+-   Numeric comparison
+
+    -   resamples
+    -   summary
+
+-   Visual comparison
+
+    -   dot plot\
+
+11. Finalize the model
+
+-   Back transformation
+
+    -   `preProcess`
+    -   `predict`
+
+12. Apply model to validation set
+
+-   Prepare validation set
+
+-   Transform the dataset
+
+-   Make prediction
+
+    -   `knn3Train`
+
+-   Calculate accuracy
+
+    -   Confusion Matrix
+
+## Inspect the dataset
+
+```{r}
+dplyr::glimpse(BreastCancer)
+```
+
+```{r}
+tibble::as_tibble(BreastCancer)
+```
+
+```{r}
+# Split out validation dataset
+# create a list of 80% of the rows in the original dataset we can use for training
+set.seed(7)
+validationIndex <- createDataPartition(BreastCancer$Class, 
+                                       p=0.80, 
+                                       list=FALSE)
+
+# select 20% of the data for validation
+validation <- BreastCancer[-validationIndex,]
+# use the remaining 80% of data to training and testing the models
+dataset <- BreastCancer[validationIndex,]
+```
+
+```{r}
+# dimensions of dataset
+dim(validation)
+dim(dataset)
+```
+
+```{r}
+# peek
+head(dataset, n=20)
+```
+
+```{r}
+library(skimr)
+print(skim(dataset))
+```
+
+```{r}
+# types
+sapply(dataset, class)
+```
+
+We can see that besides the `Id`, the attributes are factors. This makes sense. I think for modeling it may be more useful to work with the data as numbers than factors. Factors might make things easier for decision tree algorithms (or not). Given that there is an ordinal relationship between the levels we can expose that structure to other algorithms better if we work directly with the integer numbers.
+
+## clean up
+
+```{r}
+# Remove redundant variable Id
+dataset <- dataset[,-1]
+```
+
+```{r}
+# convert input values to numeric
+for(i in 1:9) {
+    dataset[,i] <- as.numeric(as.character(dataset[,i]))
+}
+```
+
+```{r}
+# summary
+summary(dataset)
+```
+
+```{r}
+print(skim(dataset))
+```
+
+> we can see we have 13 NA values for the Bare.nuclei attribute. This suggests we may need to remove the records (or impute values) with `NA` values for some analysis and modeling techniques.
+
+## Analyze the class variable
+
+```{r}
+# class distribution
+cbind(freq = table(dataset$Class), 
+      percentage = prop.table(table(dataset$Class))*100)
+```
+
+> There is indeed a 65% to 35% split for benign-malignant in the class values which is imbalanced, but not so much that we need to be thinking about rebalancing the dataset, at least not yet.
+
+### remove NAs
+
+```{r}
+# summarize correlations between input variables
+complete_cases <- complete.cases(dataset)
+cor(dataset[complete_cases,1:9])
+```
+
+> We can see some modest to high correlation between some of the attributes. For example between cell shape and cell size at 0.90 correlation.
+
+## Unimodal visualization
+
+```{r}
+# histograms each attribute
+par(mfrow=c(3,3))
+for(i in 1:9) {
+    hist(dataset[,i], main=names(dataset)[i])
+}
+```
+
+> We can see that almost all of the distributions have an exponential or bimodal shape to them.
+
+```{r}
+# density plot for each attribute
+par(mfrow=c(3,3))
+complete_cases <- complete.cases(dataset)
+for(i in 1:9) {
+    plot(density(dataset[complete_cases,i]), main=names(dataset)[i])
+}
+```
+
+> These plots add more support to our initial ideas. We can see bimodal distributions (two bumps) and exponential-looking distributions.
+
+```{r}
+# boxplots for each attribute
+par(mfrow=c(3,3))
+for(i in 1:9) {
+    boxplot(dataset[,i], main=names(dataset)[i])
+}
+```
+
+## Multimodal visualization
+
+```{r fig.asp=1}
+# scatter plot matrix
+jittered_x <- sapply(dataset[,1:9], jitter)
+pairs(jittered_x, names(dataset[,1:9]), col=dataset$Class)
+```
+
+> We can see that the black (benign) a part to be clustered around the bottom-right corner (smaller values) and red (malignant) are all over the place.
+
+```{r fig.asp=1}
+# bar plots of each variable by class
+par(mfrow=c(3,3))
+for(i in 1:9) {
+    barplot(table(dataset$Class,dataset[,i]), main=names(dataset)[i], 
+            legend.text=unique(dataset$Class))
+}
+```
+
+## Algorithms Evaluation
+
+-   Linear Algorithms: Logistic Regression (LG), Linear Discriminate Analysis (LDA) and Regularized Logistic Regression (GLMNET).
+
+-   Nonlinear Algorithms: k-Nearest Neighbors (KNN), Classiﬁcation and Regression Trees (CART), Naive Bayes (NB) and Support Vector Machines with Radial Basis Functions (SVM).
+
+For simplicity, we will use Accuracy and Kappa metrics. Given that it is a medical test, we could have gone with the Area Under ROC Curve (AUC) and looked at the sensitivity and speciﬁcity to select the best algorithms.
+
+```{r}
+# 10-fold cross-validation with 3 repeats
+trainControl <- trainControl(method = "repeatedcv", number=10, repeats=3)
+metric <- "Accuracy"
+```
+
+```{r models-first-run, warning=FALSE, message=FALSE}
+tic()
+# LG
+set.seed(7)
+fit.glm <- train(Class~., data=dataset, method="glm", metric=metric,
+                 trControl=trainControl, na.action=na.omit)
+# LDA
+set.seed(7)
+fit.lda <- train(Class~., data=dataset, method="lda", metric=metric,
+                 trControl=trainControl, na.action=na.omit)
+# GLMNET
+set.seed(7)
+fit.glmnet <- train(Class~., data=dataset, method="glmnet", metric=metric,
+                    trControl=trainControl, na.action=na.omit)
+# KNN
+set.seed(7)
+fit.knn <- train(Class~., data=dataset, method="knn", metric=metric, 
+                 trControl=trainControl, na.action=na.omit)
+# CART
+set.seed(7)
+fit.cart <- train(Class~., data=dataset, method="rpart", metric=metric, 
+                  trControl=trainControl, na.action=na.omit)
+# Naive Bayes
+set.seed(7)
+fit.nb <- train(Class~., data=dataset, method="nb", metric=metric, 
+                trControl=trainControl, na.action=na.omit)
+# SVM
+set.seed(7)
+fit.svm <- train(Class~., data=dataset, method="svmRadial", metric=metric, 
+                 trControl=trainControl, na.action=na.omit)
+
+# Compare algorithms
+results <- resamples(list(LG     = fit.glm, 
+                          LDA    = fit.lda, 
+                          GLMNET = fit.glmnet, 
+                          KNN    = fit.knn, 
+                          CART   = fit.cart, 
+                          NB     = fit.nb, 
+                          SVM    = fit.svm))
+toc()
+summary(results)
+dotplot(results)
+```
+
+> We can see good accuracy across the board. All algorithms have a mean accuracy above 90%, well above the baseline of 65% if we just predicted benign. The problem is learnable. We can see that KNN (97.08%) and logistic regression (NB was 96.2% and GLMNET was 96.4%) had the highest accuracy on the problem.
+
+## Data transform
+
+We know we have some skewed distributions. There are transform methods that we can use to adjust and normalize these distributions. A favorite for positive input attributes (which we have in this case) is the Box-Cox transform.
+
+```{r models-second-run-BoxCox}
+# 10-fold cross-validation with 3 repeats
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "Accuracy"
+
+# LG
+set.seed(7)
+fit.glm <- train(Class~., data=dataset, method="glm", metric=metric, 
+                 preProc=c("BoxCox"), 
+                 trControl=trainControl, na.action=na.omit)
+# LDA
+set.seed(7)
+fit.lda <- train(Class~., data=dataset, method="lda", metric=metric,
+                 preProc=c("BoxCox"), 
+                 trControl=trainControl, na.action=na.omit)
+# GLMNET
+set.seed(7)
+fit.glmnet <- train(Class~., data=dataset, method="glmnet", metric=metric, 
+                    preProc=c("BoxCox"), 
+                    trControl=trainControl, 
+                    na.action=na.omit)
+# KNN
+set.seed(7)
+fit.knn <- train(Class~., data=dataset, method="knn", metric=metric, 
+                 preProc=c("BoxCox"), 
+                 trControl=trainControl, na.action=na.omit)
+# CART
+set.seed(7)
+fit.cart <- train(Class~., data=dataset, method="rpart", metric=metric, 
+                  preProc=c("BoxCox"), 
+                  trControl=trainControl, 
+                  na.action=na.omit)
+# Naive Bayes
+set.seed(7)
+fit.nb <- train(Class~., data=dataset, method="nb", metric=metric, 
+                preProc=c("BoxCox"), trControl=trainControl, na.action=na.omit)
+# SVM
+set.seed(7)
+fit.svm <- train(Class~., data=dataset, method="svmRadial", metric=metric, 
+                 preProc=c("BoxCox"), 
+                 trControl=trainControl, na.action=na.omit)
+
+# Compare algorithms
+transformResults <- resamples(list(LG     = fit.glm, 
+                                  LDA    = fit.lda, 
+                                  GLMNET = fit.glmnet, 
+                                  KNN    = fit.knn, 
+                                  CART   = fit.cart, 
+                                  NB     = fit.nb, 
+                                  SVM    = fit.svm))
+summary(transformResults)
+dotplot(transformResults)
+```
+
+> We can see that the accuracy of the previous best algorithm KNN was elevated to 97.14%. We have a new ranking, showing SVM with the most accurate mean accuracy at 97.20%.
+
+## Tuning SVM
+
+```{r model-svm-run-takes_a_while}
+# 10-fold cross-validation with 3 repeats
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "Accuracy"
+set.seed(7)
+
+grid <- expand.grid(.sigma = c(0.025, 0.05, 0.1, 0.15), 
+                    .C = seq(1, 10, by=1))
+
+fit.svm <- train(Class~., data=dataset, method="svmRadial", metric=metric, 
+                 tuneGrid=grid, 
+                 preProc=c("BoxCox"), trControl=trainControl, 
+                 na.action=na.omit)
+print(fit.svm)
+plot(fit.svm)
+```
+
+> We can see that we have made very little difference to the results. The most accurate model had a score of 97.31% (the same as our previously rounded score of 97.20%) using a `sigma = 0.1` and `C = 1`. We could tune further, but I don't expect a payoﬀ.
+
+## Tuning KNN
+
+```{r model-knn-run}
+# 10-fold cross-validation with 3 repeats
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "Accuracy"
+set.seed(7)
+
+grid <- expand.grid(.k = seq(1,20, by=1))
+fit.knn <- train(Class~., data=dataset, method="knn", metric=metric, 
+                 tuneGrid=grid, 
+                 preProc=c("BoxCox"), trControl=trainControl, 
+                 na.action=na.omit)
+print(fit.knn)
+plot(fit.knn)
+```
+
+> We can see again that tuning has made little difference, settling on a value of `k = 7` with an accuracy of 97.19%. This is higher than the previous 97.14%, but very similar (or perhaps identical!) to the result achieved by the tuned SVM.
+
+## Ensemble
+
+```{r models-ensembling-run}
+# 10-fold cross-validation with 3 repeats
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "Accuracy"
+
+# Bagged CART
+set.seed(7)
+fit.treebag <- train(Class~., data=dataset, method="treebag", 
+                     metric=metric, 
+                     trControl=trainControl, na.action=na.omit)
+
+# Random Forest
+set.seed(7)
+fit.rf <- train(Class~., data=dataset, method="rf", 
+                metric=metric, preProc=c("BoxCox"), 
+                trControl=trainControl, na.action=na.omit)
+
+# Stochastic Gradient Boosting
+set.seed(7)
+fit.gbm <- train(Class~., data=dataset, method="gbm", 
+                 metric=metric, preProc=c("BoxCox"), 
+                 trControl=trainControl, verbose=FALSE, na.action=na.omit)
+
+# C5.0
+set.seed(7)
+fit.c50 <- train(Class~., data=dataset, method="C5.0", 
+                 metric=metric, preProc=c("BoxCox"), 
+                 trControl=trainControl, na.action=na.omit)
+
+# Compare results
+ensembleResults <- resamples(list(BAG = fit.treebag, 
+                                  RF  = fit.rf, 
+                                  GBM = fit.gbm, 
+                                  C50 = fit.c50))
+summary(ensembleResults)
+dotplot(ensembleResults)
+```
+
+> We see that Random Forest was the most accurate with a score of 97.26%. Very similar to our tuned models above. We could spend time tuning the parameters of Random Forest (e.g. increasing the number of trees) and the other ensemble methods, but I don't expect to see better accuracy scores other than random statistical fluctuations.
+
+## Finalize model
+
+We now need to finalize the model, which really means choose which model we would like to use. For simplicity I would probably select the KNN method, at the expense of the memory required to store the training dataset. SVM would be a good choice to trade-oﬀ space and time complexity. I probably would not select the Random Forest algorithm given the complexity of the model. It seems overkill for this dataset, lots of trees with little benefit in Accuracy.
+
+Let's go with the KNN algorithm. This is really simple, as we do not need to store a model. We do need to capture the parameters of the Box-Cox transform though. And we also need to prepare the data by removing the unused Id attribute and converting all of the inputs to numeric format.
+
+The implementation of KNN (`knn3()`) belongs to the caret package and does not support missing values. We will have to remove the rows with missing values from the training dataset as well as the validation dataset. The code below shows the preparation of the pre-processing parameters using the training dataset.
+
+```{r}
+# prepare parameters for data transform
+set.seed(7)
+
+datasetNoMissing <- dataset[complete.cases(dataset),]
+x <- datasetNoMissing[,1:9]
+
+# transform
+preprocessParams <- preProcess(x, method=c("BoxCox"))
+x <- predict(preprocessParams, x)
+```
+
+## Prepare the validation set
+
+Next we need to prepare the validation dataset for making a prediction. We must:
+
+1.  Remove the Id attribute.
+2.  Remove those rows with missing data.
+3.  Convert all input attributes to numeric.
+4.  Apply the Box-Cox transform to the input attributes using parameters prepared on the training dataset.
+
+```{r}
+# prepare the validation dataset
+set.seed(7)
+
+# remove id column
+validation <- validation[,-1]
+
+# remove missing values (not allowed in this implementation of knn)
+validation <- validation[complete.cases(validation),]
+
+# convert to numeric
+for(i in 1:9) {
+    validation[,i] <- as.numeric(as.character(validation[,i]))
+}
+
+# transform the validation dataset
+validationX <- predict(preprocessParams, validation[,1:9])
+```
+
+```{r validation-knn3}
+# make predictions
+set.seed(7)
+# knn3Train(train, test, cl, k = 1, l = 0, prob = TRUE, use.all = TRUE)
+# k: number of neighbours considered.
+predictions <- knn3Train(x, validationX, datasetNoMissing$Class, 
+                         k = 9, 
+                         prob = FALSE)
+
+# convert 
+confusionMatrix(as.factor(predictions), validation$Class)
+```
+
+> We can see that the accuracy of the final model on the validation dataset is 99.26%. This is optimistic because there is only 136 rows, but it does show that we have an accurate standalone model that we could use on other unclassified data.

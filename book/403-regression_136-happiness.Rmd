@@ -1,0 +1,191 @@
+# Finding the factors of happiness 
+
+Dataset: World Happiness, `happiness`
+
+## Introduction
+
+Source: http://enhancedatascience.com/2017/04/25/r-basics-linear-regression-with-r/
+Data: https://www.kaggle.com/unsdsn/world-happiness
+
+Linear regression is one of the basics of statistics and machine learning. Hence, it is a must-have to know how to perform a linear regression with R and how to interpret the results.
+
+Linear regression algorithm will fit the best straight line that fits the data? To do so, it will minimise the squared distance between the points of the dataset and the fitted line.
+
+For this tutorial, we will use the World Happiness report dataset from Kaggle. This report analyses the Happiness of each country according to several factors such as wealth, health, family life, … Our goal will be to find the most important factors of happiness. What a noble goal!
+
+## A quick exploration of the data
+Before fitting any model, we need to know our data better. First, let’s import the data into R. Please download the dataset from Kaggle and put it in your working directory.
+
+The code below imports the data as data.table and clean the column names (a lot of . were appearing in the original ones)
+
+```{r load-data}
+require(data.table)
+data_happiness_dir <- file.path(data_raw_dir, "happiness")
+
+Happiness_Data = data.table(read.csv(file.path(data_happiness_dir, '2016.csv')))
+colnames(Happiness_Data) <- gsub('.','',colnames(Happiness_Data), fixed=T)
+```
+
+Now, let’s plot a Scatter Plot Matrix to get a grasp of how our variables are related one to another. To do so, the GGally package is great.
+
+```{r pairplot, fig.asp=1}
+require(ggplot2)
+require(GGally)
+ggpairs(Happiness_Data[,c(4,7:13), with=F], lower = list( continuous = "smooth"))
+```
+
+All the variables are positively correlated with the Happiness score. We can expect that most of the coefficients in the linear regression will be positive. However, the correlation between the variable is often more than 0.5, so we can expect that multicollinearity will appear in the regression.
+
+In the data, we also have access to the Country where the score was computed. Even if it’s not useful for the regression, let’s plot the data on a map!
+
+```{r worldmap}
+require('rworldmap')
+library(reshape2)
+
+map.world <- map_data(map="world")
+
+dataPlot<- melt(Happiness_Data, id.vars ='Country', 
+                measure.vars = colnames(Happiness_Data)[c(4,7:13)])
+
+#Correcting names that are different
+dataPlot[Country == 'United States', Country:='USA']
+dataPlot[Country == 'United Kingdoms', Country:='UK']
+
+##Rescaling each variable to have nice gradient
+dataPlot[,value:=value/max(value), by=variable]
+dataMap = data.table(merge(map.world, dataPlot, 
+                           by.x='region', 
+                           by.y='Country', 
+                           all.x=T))
+dataMap = dataMap[order(order)]
+dataMap = dataMap[order(order)][!is.na(variable)]
+gg <- ggplot()
+gg <- gg + 
+    geom_map(data=dataMap, map=dataMap, 
+             aes(map_id = region, x=long, y=lat, fill=value)) +
+    # facet_wrap(~variable, scale='free')
+    facet_wrap(~variable)
+gg <- gg + scale_fill_gradient(low = "navy", high = "lightblue")
+gg <- gg + coord_equal()
+
+```
+
+The code above is a classic code for a map. A few important points:
+
+We reordered the point before plotting to avoid some artefacts.
+The merge is a right outer join, all the points of the map need to be kept. Otherwise, points will be missing which will mess up the map.
+Each variable is rescaled so that a facet_wrap can be used. Here, the absolute level of a variable is not of primary interest. This is the relative level of a variable between countries that we want to visualise.
+
+
+```{r}
+gg
+```
+
+The distinction between North and South is quite visible. In addition to this, countries that have suffered from the crisis are also really visible.
+
+## Linear regression with R
+Now that we have taken a look at our data, a first model can be fitted. The explanatory variables are the DGP per capita, the life expectancy, the level of freedom and the trust in the government.
+
+```{r model}
+##First model
+model1 <- lm(HappinessScore ~ EconomyGDPperCapita + Family + 
+                 HealthLifeExpectancy + Freedom + TrustGovernmentCorruption, 
+             data=Happiness_Data)
+
+```
+
+## Regression summary
+The summary function provides a very easy way to assess a linear regression in R.
+
+```{r summary}
+require(stargazer)
+
+##Quick summary
+sum1=summary(model1)
+sum1
+
+stargazer(model1,type='text')
+```
+
+A quick interpretation:
+
+* All the coefficient are significative at a .05 threshold
+* The overall model is also significative
+* It explains 78.7% of Happiness in the dataset
+* As expected all the relationship between the explanatory variables and the output variable are positives.
+
+The model is doing well!
+
+You can also easily get a given indicator of the model performance, such as R², the different coefficients or the p-value of the overall model.
+
+```{r rsquared}
+##R²
+sum1$r.squared*100
+##Coefficients
+sum1$coefficients
+##p-value
+df(sum1$fstatistic[1],sum1$fstatistic[2],sum1$fstatistic[3])
+ 
+##Confidence interval of the coefficient
+confint(model1,level = 0.95)
+confint(model1,level = 0.99)
+confint(model1,level = 0.90)
+```
+
+## Regression analysis
+### Residual analysis
+Now that the regression has been done, the analysis and validity of the result can be analysed. Let’s begin with residuals and the assumption of normality and homoscedasticity.
+
+```{r normal-curve}
+# Visualisation of residuals
+ggplot(model1, aes(model1$residuals)) + 
+    geom_histogram(bins=20, aes(y = ..density..)) + 
+    geom_density(color='blue', fill = 'blue', alpha = 0.2) + 
+    geom_vline(xintercept = mean(model1$residuals), color='red') + 
+    stat_function(fun=dnorm, color="red", size=1, 
+                  args = list(mean = mean(model1$residuals), 
+                            sd = sd(model1$residuals))) + 
+    xlab('residuals values')
+```
+
+The residual versus fitted plot is used to see if the residuals behave the same for the different value of the output (i.e, they have the same variance and mean). The plot shows no strong evidence of heteroscedasticity.
+
+```{r residuals-vs-fitted}
+ggplot(model1, aes(model1$fitted.values, model1$residuals)) + 
+    geom_point() + 
+    geom_hline(yintercept = c(1.96 * sd(model1$residuals), 
+                              - 1.96 * sd(model1$residuals)), color='red') + 
+    xlab('fitted value') + 
+    ylab('residuals values')
+```
+
+## Analysis of colinearity
+The colinearity can be assessed using VIF, the car package provides a function to compute it directly.
+
+```{r vif-colinearity}
+require('car')
+vif(model1)
+```
+
+All the VIF are less than 5, and hence there is no sign of colinearity.
+
+## What drives happiness
+Now let’s compute standardised betas to see what really drives happiness.
+
+```{r std-betas}
+##Standardized betas
+std_betas = sum1$coefficients[-1,1] * 
+    data.table(model1$model)[, lapply(.SD, sd), .SDcols=2:6] / 
+    sd(model1$model$HappinessScore)
+
+std_betas
+```
+
+Though the code above may seem complicated, it is just computing the standardised betas for all variables `std_beta=beta*sd(x)/sd(y)`.
+
+The top three coefficients are **Health and Life expectancy**, **Family** and **GDP per Capita**. Though money does not make happiness it is among the top three factors of Happiness!
+
+Now you know how to perform a linear regression with R!
+
+
+

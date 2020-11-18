@@ -1,0 +1,677 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# (PART) Feature Engineering {.unnumbered}
+
+# Ten methods to assess Variable Importance
+
+-   Datasets: `GlaucomaM`
+
+-   Algorithms:
+
+    -   Partition Trees
+    -   Regularized Random Forest (RRF)
+    -   Lasso Regression
+    -   Linear Regression
+    -   Recursive Feature Elimination (RFE)
+    -   Genetic Algorithm
+    -   Simulated Annealing
+
+Source:
+<https://www.machinelearningplus.com/machine-learning/feature-selection/>
+
+In real-world datasets, it is fairly common to have columns that are
+nothing but noise.
+
+You are better off getting rid of such variables because of the memory
+space they occupy, the time and the computational esources it is going
+to cost, especially in large datasets.
+
+Sometimes, you have a variable that makes business sense, but you are
+not sure if it actually helps in predicting the Y. You also need to
+consider the fact that, a feature that could be useful in one ML
+algorithm (say a decision tree) may go underrepresented or unused by
+another (like a regression model).
+
+Having said that, it is still possible that a variable that shows poor
+signs of helping to explain the response variable (Y), can turn out to
+be significantly useful in the presence of (or combination with) other
+predictors. What I mean by that is, a variable might have a low
+correlation value of (\~0.2) with Y. But in the presence of other
+variables, it can help to explain certain patterns/phenomenon that other
+variables can't explain.
+
+In such cases, it can be hard to make a call whether to include or
+exclude such variables.
+
+The strategies we are about to discuss can help fix such problems. Not
+only that, it will also help understand if a particular variable is
+important or not and how much it is contributing to the model
+
+An important caveat. It is always best to have variables that have sound
+business logic backing the inclusion of a variable and rely solely on
+variable importance metrics.
+
+Alright. Let's load up the 'Glaucoma' dataset where the goal is to
+predict if a patient has Glaucoma or not based on 63 different
+physiological measurements. You can directly run the codes or download
+the dataset here.
+
+A lot of interesting examples ahead. Let's get started.
+
+```{r}
+# Load Packages and prepare dataset
+library(DALEX)
+library(TH.data)
+library(caret)
+library(tictoc)
+
+data("GlaucomaM", package = "TH.data")
+trainData <- GlaucomaM
+head(trainData)
+```
+
+## 1. Boruta
+
+Boruta is a feature ranking and selection algorithm based on random
+forests algorithm. The advantage with Boruta is that it clearly decides
+if a variable is important or not and helps to select variables that are
+statistically significant. Besides, you can adjust the strictness of the
+algorithm by adjusting the $p$ values that defaults to 0.01 and the
+`maxRuns`.
+
+`maxRuns` is the number of times the algorithm is run. The higher the
+`maxRuns` the more selective you get in picking the variables. The
+default value is 100.
+
+In the process of deciding if a feature is important or not, some
+features may be marked by Boruta as 'Tentative'. Sometimes increasing
+the maxRuns can help resolve the 'Tentativeness' of the feature.
+
+Lets see an example based on the Glaucoma dataset from `TH.data` package
+that I created earlier.
+
+```{r}
+# install.packages('Boruta')
+library(Boruta)
+```
+
+The `boruta` function uses a formula interface just like most predictive
+modeling functions. So the first argument to `boruta()` is the formula
+with the response variable on the left and all the predictors on the
+right. By placing a dot, all the variables in `trainData` other than
+Class will be included in the model.
+
+The `doTrace` argument controls the amount of output printed to the
+console. Higher the value, more the log details you get. So save space I
+have set it to 0, but try setting it to 1 and 2 if you are running the
+code.
+
+Finally the output is stored in `boruta_output`.
+
+```{r train_boruta}
+# Perform Boruta search
+boruta_output <- Boruta(Class ~ ., data=na.omit(trainData), doTrace=0)  
+```
+
+Let's see what the boruta_output contains.
+
+```{r}
+names(boruta_output)
+```
+
+```{r}
+# Get significant variables including tentatives
+boruta_signif <- getSelectedAttributes(boruta_output, withTentative = TRUE)
+print(boruta_signif)  
+```
+
+If you are not sure about the tentative variables being selected for
+granted, you can choose a `TentativeRoughFix` on `boruta_output`.
+
+```{r}
+# Do a tentative rough fix
+roughFixMod <- TentativeRoughFix(boruta_output)
+boruta_signif <- getSelectedAttributes(roughFixMod)
+print(boruta_signif)
+```
+
+There you go. Boruta has decided on the 'Tentative' variables on our
+behalf. Let's find out the importance scores of these variables.
+
+```{r}
+# Variable Importance Scores
+imps <- attStats(roughFixMod)
+imps2 = imps[imps$decision != 'Rejected', c('meanImp', 'decision')]
+head(imps2[order(-imps2$meanImp), ])  # descending sort
+```
+
+Let's plot it to see the importances of these variables.
+
+```{r boruta-plot}
+# Plot variable importance
+plot(boruta_output, cex.axis=.7, las=2, xlab="", main="Variable Importance")  
+```
+
+This plot reveals the importance of each of the features.
+
+The columns in green are 'confirmed' and the ones in red are not. There
+are couple of blue bars representing `ShadowMax` and `ShadowMin.` They
+are not actual features, but are used by the `boruta` algorithm to
+decide if a variable is important or not.
+
+## 2. Variable Importance
+
+Another way to look at feature selection is to consider variables most
+used by various ML algorithms the most to be important.
+
+Depending on how the machine learning algorithm learns the relationship
+between $X$'s and \$Y\$, different machine learning algorithms may
+possibly end up using different variables (but mostly common vars) to
+various degrees.
+
+What I mean by that is, the variables that proved useful in a tree-based
+algorithm like `rpart`, can turn out to be less useful in a
+regression-based model. **So all variables need not be equally useful to
+all algorithms.**
+
+So how do we find the variable importance for a given ML algo?
+
+`train()` the desired model using the caret package. Then, use
+`varImp()` to determine the feature importance.
+
+You may want to try out multiple algorithms, to get a feel of the
+usefulness of the features across algos.
+
+## 3. rpart
+
+```{r rpart-setup}
+# Train an rpart model and compute variable importance.
+library(caret)
+set.seed(100)
+rPartMod <- train(Class ~ ., 
+                  data=trainData, 
+                  method="rpart")
+
+rpartImp <- varImp(rPartMod)
+print(rpartImp)
+```
+
+Only 5 of the 63 features was used by rpart and if you look closely, the
+5 variables used here are in the top 6 that boruta selected.
+
+Let's do one more: the variable importances from Regularized Random
+Forest (RRF) algorithm.
+
+## 4. Regularized Random Forest (RRF)
+
+```{r rrf-train}
+tic()
+# Train an RRF model and compute variable importance.
+set.seed(100)
+rrfMod <- train(Class ~ ., 
+                data = trainData, 
+                method = "RRF")
+
+rrfImp <- varImp(rrfMod, scale=F)
+toc()
+rrfImp
+```
+
+```{r}
+plot(rrfImp, top = 20, main='Variable Importance')
+```
+
+The topmost important variables are pretty much from the top tier of
+Boruta's selections.
+
+Some of the other algorithms available in `train()` that you can use to
+compute varImp are the following:
+
+    ada, AdaBag, AdaBoost.M1, adaboost, bagEarth, bagEarthGCV, bagFDA, bagFDAGCV, bartMachine, blasso, BstLm, bstSm, C5.0, C5.0Cost, C5.0Rules, C5.0Tree, cforest, chaid, ctree, ctree2, cubist, deepboost, earth, enet, evtree, extraTrees, fda, gamboost, gbm_h2o, gbm, gcvEarth, glmnet_h2o, glmnet, glmStepAIC, J48, JRip, lars, lars2, lasso, LMT, LogitBoost, M5, M5Rules, msaenet, nodeHarvest, OneR, ordinalNet, ORFlog, ORFpls, ORFridge, ORFsvm, pam, parRF, PART, penalized, PenalizedLDA, qrf, ranger, Rborist, relaxo, rf, rFerns, rfRules, rotationForest, rotationForestCp, rpart, rpart1SE, rpart2, rpartCost, rpartScore, rqlasso, rqnc, RRF, RRFglobal, sdwd, smda, sparseLDA, spikeslab, wsrf, xgbLinear, xgbTree.
+
+## 5. Lasso Regression
+
+Least Absolute Shrinkage and Selection Operator (LASSO) regression is a
+type of regularization method that penalizes with L1-norm.
+
+It basically imposes a cost to having large weights (value of
+coefficients). And its called L1 regularization, because the cost added,
+is proportional to the absolute value of weight coefficients.
+
+As a result, in the process of shrinking the coefficients, it eventually
+reduces the coefficients of certain unwanted features all the to zero.
+That is, it removes the unneeded variables altogether.
+
+So effectively, LASSO regression can be considered as a variable
+selection technique as well.
+
+```{r lasso-train}
+library(glmnet)
+
+# online data
+# trainData <- read.csv('https://raw.githubusercontent.com/selva86/datasets/master/GlaucomaM.csv')
+
+trainData <- read.csv(file.path(data_raw_dir, "glaucoma.csv"))
+
+x <- as.matrix(trainData[,-63]) # all X vars
+y <- as.double(as.matrix(ifelse(trainData[, 63]=='normal', 0, 1))) # Only Class
+
+# Fit the LASSO model (Lasso: Alpha = 1)
+set.seed(100)
+cv.lasso <- cv.glmnet(x, y, family='binomial', alpha=1, parallel=TRUE, standardize=TRUE, type.measure='auc')
+
+# Results
+plot(cv.lasso)
+```
+
+Let's see how to interpret this plot.
+
+The X axis of the plot is the log of `lambda`. That means when it is 2
+here, the lambda value is actually 100.
+
+The numbers at the top of the plot show how many predictors were
+included in the model. The position of red dots along the Y-axis tells
+what `AUC` we got when you include as many variables shown on the top
+x-axis.
+
+You can also see two dashed vertical lines.
+
+The first one on the left points to the lambda with the lowest mean
+squared error. The one on the right point to the number of variables
+with the highest deviance within 1 standard deviation.
+
+The best lambda value is stored inside 'cv.lasso\$lambda.min'.
+
+```{r}
+# plot(cv.lasso$glmnet.fit, xvar="lambda", label=TRUE)
+cat('Min Lambda: ', cv.lasso$lambda.min, '\n 1Sd Lambda: ', cv.lasso$lambda.1se)
+df_coef <- round(as.matrix(coef(cv.lasso, s=cv.lasso$lambda.min)), 2)
+
+# See all contributing variables
+df_coef[df_coef[, 1] != 0, ]
+```
+
+The above output shows what variables LASSO considered important. A high
+positive or low negative implies more important is that variable.
+
+## 6. Step wise Forward and Backward Selection
+
+Stepwise regression can be used to select features if the Y variable is
+a numeric variable. It is particularly used in selecting best linear
+regression models.
+
+It searches for the best possible regression model by iteratively
+selecting and dropping variables to arrive at a model with the lowest
+possible AIC.
+
+It can be implemented using the `step()` function and you need to
+provide it with a lower model, which is the base model from which it
+won't remove any features and an upper model, which is a full model that
+has all possible features you want to have.
+
+Our case is not so complicated (\< 20 vars), so lets just do a simple
+stepwise in 'both' directions.
+
+I will use the `ozone` dataset for this where the objective is to
+predict the `ozone_reading` based on other weather related observations.
+
+```{r data-ozone1}
+# Load data
+# online
+# trainData <- read.csv("http://rstatistics.net/wp-content/uploads/2015/09/ozone1.csv",
+#                      stringsAsFactors=F)
+trainData <- read.csv(file.path(data_raw_dir, "ozone1.csv"))
+print(head(trainData))
+```
+
+The data is ready. Let's perform the stepwise.
+
+```{r step-wise}
+# Step 1: Define base intercept only model
+base.mod <- lm(ozone_reading ~ 1 , data=trainData)  
+
+# Step 2: Full model with all predictors
+all.mod <- lm(ozone_reading ~ . , data= trainData) 
+
+# Step 3: Perform step-wise algorithm. direction='both' implies both forward and backward stepwise
+stepMod <- step(base.mod, scope = list(lower = base.mod, upper = all.mod), direction = "both", trace = 0, steps = 1000)  
+
+# Step 4: Get the shortlisted variable.
+shortlistedVars <- names(unlist(stepMod[[1]])) 
+shortlistedVars <- shortlistedVars[!shortlistedVars %in% "(Intercept)"] # remove intercept
+
+# Show
+print(shortlistedVars)
+```
+
+The selected model has the above 6 features in it.
+
+But if you have too many features (\> 100) in training data, then it
+might be a good idea to split the dataset into chunks of 10 variables
+each with Y as mandatory in each dataset. Loop through all the chunks
+and collect the best features.
+
+We are doing it this way because some variables that came as important
+in a training data with fewer features may not show up in a linear reg
+model built on lots of features.
+
+Finally, from a pool of shortlisted features (from small chunk models),
+run a full stepwise model to get the final set of selected features.
+
+You can take this as a learning assignment to be solved within 20
+minutes.
+
+## 7. Relative Importance from Linear Regression
+
+This technique is specific to linear regression models.
+
+Relative importance can be used to assess which variables contributed
+how much in explaining the linear model's R-squared value. So, if you
+sum up the produced importances, it will add up to the model's R-sq
+value.
+
+In essence, it is not directly a feature selection method, because you
+have already provided the features that go in the model. But after
+building the model, the `relaimpo` can provide a sense of how important
+each feature is in contributing to the R-sq, or in other words, in
+'explaining the Y variable'.
+
+So, how to calculate relative importance?
+
+It is implemented in the `relaimpo` package. Basically, you build a
+linear regression model and pass that as the main argument to
+`calc.relimp()`. relaimpo has multiple options to compute the relative
+importance, but the recommended method is to use `type='lmg'`, as I have
+done below.
+
+```{r relaimpo-ozone}
+# install.packages('relaimpo')
+library(relaimpo)
+
+# Build linear regression model
+model_formula = ozone_reading ~ Temperature_Sandburg + Humidity + Temperature_ElMonte + Month + pressure_height + Inversion_base_height
+lmMod <- lm(model_formula, data=trainData)
+
+# calculate relative importance
+relImportance <- calc.relimp(lmMod, type = "lmg", rela = F)  
+
+# Sort
+cat('Relative Importances: \n')
+sort(round(relImportance$lmg, 3), decreasing=TRUE)
+```
+
+Additionally, you can use bootstrapping (using `boot.relimp`) to compute
+the confidence intervals of the produced relative importances.
+
+```{r}
+bootsub <- boot.relimp(ozone_reading ~ Temperature_Sandburg + Humidity + Temperature_ElMonte + Month + pressure_height + Inversion_base_height, data=trainData,
+                       b = 1000, type = 'lmg', rank = TRUE, diff = TRUE)
+
+plot(booteval.relimp(bootsub, level=.95))
+```
+
+## 8. Recursive Feature Elimination (RFE)
+
+Recursive feature elimnation (rfe) offers a rigorous way to determine
+the important variables before you even feed them into a ML algo.
+
+It can be implemented using the `rfe()` from caret package.
+
+The rfe() also takes two important parameters.
+
+-   `sizes`
+-   `rfeControl`
+
+So, what does `sizes` and `rfeControl` represent?
+
+The sizes determines the number of most important features the rfe
+should iterate. Below, I have set the size as 1 to 5, 10, 15 and 18.
+
+Secondly, the `rfeControl` parameter receives the output of the
+`rfeControl()`. You can set what type of variable evaluation algorithm
+must be used. Here, I have used random forests based rfFuncs. The
+`method='repeatedCV'` means it will do a repeated k-Fold cross
+validation with `repeats=5`.
+
+Once complete, you get the accuracy and kappa for each model size you
+provided. The final selected model subset size is marked with a \* in
+the rightmost selected column.
+
+```{r}
+str(trainData)
+```
+
+```{r rfe}
+tic()
+set.seed(100)
+options(warn=-1)
+
+subsets <- c(1:5, 10, 15, 18)
+
+ctrl <- rfeControl(functions = rfFuncs,
+                   method = "repeatedcv",
+                   repeats = 5,
+                   verbose = FALSE)
+
+lmProfile <- rfe(x=trainData[, c(1:3, 5:13)], y=trainData$ozone_reading,
+                 sizes = subsets,
+                 rfeControl = ctrl)
+toc()
+lmProfile
+```
+
+So, it says, Temperature_ElMonte, Pressure_gradient,
+Temperature_Sandburg, Inversion_temperature, Humidity are the top 5
+variables in that order.
+
+And the best model size out of the provided models sizes (in subsets) is
+10.
+
+You can see all of the top 10 variables from '`lmProfile$optVariables`'
+that was created using `rfe` function above.
+
+## 9. Genetic Algorithm
+
+You can perform a supervised feature selection with genetic algorithms
+using the `gafs()`. This is **quite resource expensive** so consider
+that before choosing the number of iterations (iters) and the number of
+repeats in `gafsControl()`.
+
+```{r Genetic_Algorithm, warning=FALSE, message=FALSE}
+tic()
+# Define control function
+ga_ctrl <- gafsControl(functions = rfGA,  # another option is `caretGA`.
+                        method = "cv",
+                        repeats = 3)
+
+# Genetic Algorithm feature selection
+set.seed(100)
+ga_obj <- gafs(x=trainData[, c(1:3, 5:13)], 
+               y=trainData[, 4], 
+               iters = 3,   # normally much higher (100+)
+               gafsControl = ga_ctrl)
+toc()
+ga_obj
+```
+
+```{r}
+# Optimal variables
+ga_obj$optVariables
+```
+
+'Month' 'Day_of_month' 'Wind_speed' 'Temperature_ElMonte'
+'Pressure_gradient' 'Visibility'
+
+So the optimal variables according to the genetic algorithms are listed
+above. But, I wouldn't use it just yet because, the above variant was
+tuned for only 3 iterations, which is quite low. I had to set it so low
+to save computing time.
+
+## 10. Simulated Annealing
+
+Simulated annealing is a global search algorithm that allows a
+suboptimal solution to be accepted in hope that a better solution will
+show up eventually.
+
+It works by making small random changes to an initial solution and sees
+if the performance improved. The change is accepted if it improves, else
+it can still be accepted if the difference of performances meet an
+acceptance criteria.
+
+In caret it has been implemented in the `safs()` which accepts a control
+parameter that can be set using the `safsControl()` function.
+
+`safsControl` is similar to other control functions in caret (like you
+saw in rfe and ga), and additionally it accepts an improve parameter
+which is the number of iterations it should wait without improvement
+until the values are reset to previous iteration.
+
+```{r Simulated_Annealing}
+tic()
+# Define control function
+sa_ctrl <- safsControl(functions = rfSA,
+                        method = "repeatedcv",
+                        repeats = 3,
+                        improve = 5) # n iterations without improvement before a reset
+
+# Genetic Algorithm feature selection
+set.seed(100)
+sa_obj <- safs(x=trainData[, c(1:3, 5:13)], 
+               y=trainData[, 4],
+               safsControl = sa_ctrl)
+toc()
+sa_obj
+```
+
+```{r}
+# Optimal variables
+print(sa_obj$optVariables)
+```
+
+## Information Value and Weights of Evidence
+
+The Information Value can be used to judge how important a given
+categorical variable is in explaining the binary Y variable. It goes
+well with logistic regression and other classification models that can
+model binary variables.
+
+Let's try to find out how important the categorical variables are in
+predicting if an individual will earn \> 50k from the `adult.csv`
+dataset. Just run the code below to import the dataset.
+
+```{r infovalue}
+library(InformationValue)
+
+# online data
+# inputData <- read.csv("http://rstatistics.net/wp-content/uploads/2015/09/adult.csv")
+
+inputData <- read.csv(file.path(data_raw_dir, "adult.csv"))
+print(head(inputData))
+```
+
+```{r get_information_value}
+# Choose Categorical Variables to compute Info Value.
+cat_vars <- c ("WORKCLASS", "EDUCATION", "MARITALSTATUS", "OCCUPATION", "RELATIONSHIP", "RACE", "SEX", "NATIVECOUNTRY")  # get all categorical variables
+
+factor_vars <- cat_vars
+
+
+# Init Output
+df_iv <- data.frame(VARS=cat_vars, IV=numeric(length(cat_vars)), STRENGTH=character(length(cat_vars)), stringsAsFactors = F)  # init output dataframe
+
+# Get Information Value for each variable
+for (factor_var in factor_vars){
+  df_iv[df_iv$VARS == factor_var, "IV"] <- InformationValue::IV(X=inputData[, factor_var], Y=inputData$ABOVE50K)
+  df_iv[df_iv$VARS == factor_var, "STRENGTH"] <- attr(InformationValue::IV(X=inputData[, factor_var], Y=inputData$ABOVE50K), "howgood")
+}
+
+# Sort
+df_iv <- df_iv[order(-df_iv$IV), ]
+
+df_iv
+```
+
+Here is what the quantum of Information Value means:
+
+Less than 0.02, then the predictor is not useful for modeling
+(separating the Goods from the Bads)
+
+0.02 to 0.1, then the predictor has only a weak relationship. 0.1 to
+0.3, then the predictor has a medium strength relationship. 0.3 or
+higher, then the predictor has a strong relationship. That was about IV.
+Then what is Weight of Evidence?
+
+Weights of evidence can be useful to find out how important a given
+categorical variable is in explaining the 'events' (called 'Goods' in
+below table.)
+
+The 'Information Value' of the categorical variable can then be derived
+from the respective WOE values.
+
+IV=(perc good of all goods−perc bad of all bads) \*WOE
+
+The 'WOETable' below given the computation in more detail.
+
+```{r WOETable}
+WOETable(X=inputData[, 'WORKCLASS'], Y=inputData$ABOVE50K)
+```
+
+The total IV of a variable is the sum of IV's of its categories.
+
+## DALEX Package
+
+The `DALEX` is a powerful package that explains various things about the
+variables used in an ML model.
+
+For example, using the `variable_dropout()` function you can find out
+how important a variable is based on a dropout loss, that is how much
+loss is incurred by removing a variable from the model.
+
+Apart from this, it also has the `single_variable()` function that gives
+you an idea of how the model's output will change by changing the values
+of one of the X's in the model.
+
+It also has the `single_prediction()` that can decompose a single model
+prediction so as to understand which variable caused what effect in
+predicting the value of Y.
+
+```{r dalex-adult}
+library(randomForest)
+library(DALEX)
+
+# Load data
+# inputData <- read.csv("http://rstatistics.net/wp-content/uploads/2015/09/adult.csv")
+
+inputData <- read.csv(file.path(data_raw_dir, "adult.csv"))
+
+# Train random forest model
+rf_mod <- randomForest(factor(ABOVE50K) ~ ., data = inputData, ntree=100)
+rf_mod
+
+# Variable importance with DALEX
+explained_rf <- explain(rf_mod, data=inputData, y=inputData$ABOVE50K)
+
+# Get the variable importances
+# varimps = variable_dropout(explained_rf, type='raw')
+varimps = variable_importance(explained_rf, type='raw')
+print(varimps)
+```
+
+```{r}
+plot(varimps)
+```
+
+## Conclusion
+
+Hope you find these methods useful. As it turns out different methods
+showed different variables as important, or at least the degree of
+importance changed. This need not be a conflict, because each method
+gives a different perspective of how the variable can be useful
+depending on how the algorithms learn `Y ~ x`. So its cool.
+
+If you find any code breaks or bugs, report the issue here or just write
+it below.

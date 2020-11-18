@@ -1,0 +1,161 @@
+# Vehicles classiification with Decision Trees 
+
+* Datasets: Vehicle (mlbench)
+* Algorithms:
+    * Decision Trees
+* Instructions: book "Applied Predictive Modeling Techniques", Lewis, N.D.
+
+## Load packages
+
+```{r}
+library(tree)
+library(mlbench)
+
+data(Vehicle)
+str(Vehicle)
+```
+
+
+
+```{r}
+summary(Vehicle[1])
+```
+
+
+
+```{r}
+summary(Vehicle[2])
+```
+
+```{r}
+attributes(Vehicle$Class)
+```
+
+## Prepare data
+
+```{r sample-to-train}
+set.seed(107)
+N = nrow(Vehicle)
+train <- sample(1:N, 500, FALSE)
+```
+
+```{r create_trainset_testset}
+# training and test sets
+trainset <- Vehicle[train,]
+testset  <- Vehicle[-train,]
+```
+
+
+## Estimate the decision tree
+
+```{r model-tree-run}
+fit <- tree(Class ~., data = trainset, split = "deviance")
+fit
+```
+
+
+```{r}
+# fit <- tree(Class ~., data = Vehicle[train,], split ="deviance")
+# fit
+```
+
+> We use deviance as the splitting criteria, a common alternative is to use
+split="gini".
+
+> At each branch of the tree (after root) we see in order:
+1. The branch number (e.g. in this case 1,2,14 and 15);
+2. the split (e.g. Elong < 41.5);
+3. the number of samples going along that split (e.g. 229);
+4. the deviance associated with that split (e.g. 489.1);
+5. the predicted class (e.g. opel);
+6. the associated probabilities (e.g. ( 0.222707 0.410480 0.366812 0.000000
+);
+7. and for a terminal node (or leaf), the symbol "*".
+
+```{r summary-fit}
+summary(fit)
+```
+
+> Notice that summary(fit) shows:
+1. The type of tree, in this case a Classification tree;
+2. the formula used to fit the tree;
+3. the variables used to fit the tree;
+4. the number of terminal nodes in this case 15;
+5. the residual mean deviance - 0.9381;
+6. the misclassification error rate 0.232 or 23.2%.
+
+```{r fig.asp=1}
+plot(fit); text(fit)
+```
+
+## Assess model
+Unfortunately, classification trees have a tendency to overfit the data. One
+approach to reduce this risk is to use cross-validation. For each hold out
+sample we fit the model and note at what level the tree gives the best results
+(using deviance or the misclassification rate). Then we hold out a different
+sample and repeat. This can be carried out using the `cv.tree()` function.
+We use a leave-one-out cross-validation using the misclassification rate and
+deviance (`FUN=prune.misclass`, followed by `FUN=prune.tree`).
+
+```{r model-tree-tune}
+fitM.cv <- cv.tree(fit, K=346, FUN = prune.misclass)
+fitP.cv <- cv.tree(fit, K=346, FUN = prune.tree)
+```
+
+The results are plotted out side by side in Figure 1.2. The jagged lines
+shows where the minimum deviance / misclassification occurred with the
+cross-validated tree. Since the cross validated misclassification and deviance
+both reach their minimum close to the number of branches in the original
+fitted tree there is little to be gained from pruning this tree
+
+```{r plot-fit}
+par(mfrow = c(1, 2))
+plot(fitM.cv)
+plot(fitP.cv)
+```
+
+
+## Make predictions
+We use the validation data set and the fitted decision tree to predict vehicle
+classes; then we display the confusion matrix and calculate the error rate of
+the fitted tree. Overall, the model has an error rate of 32%.
+
+```{r test-labels}
+testLabels <- Vehicle$Class[-train]
+testLabels
+```
+
+
+```{r confusion-matrix}
+# Confusion Matrix
+pred <- predict(fit, newdata = testset)
+# find column whih has the maximum of all rows 
+pred.class <- colnames(pred)[max.col(pred, ties.method = c("random"))]
+cm <- table(testLabels, pred.class, 
+      dnn = c("Observed Class", "Predicted Class"))
+cm
+```
+
+```{r}
+# Sensitivity
+sum(diag(cm)) / sum(cm)
+```
+
+
+```{r}
+# pred <- predict(fit, newdata = Vehicle[-train,])
+# pred.class <- colnames(pred)[max.col(pred, ties.method = c("random"))]
+# table(Vehicle$Class[-train], pred.class, 
+#       dnn = c("Observed Class", "Predicted Class"))
+```
+
+```{r}
+error_rate = (1 - sum(pred.class == testset) / nrow(testset))
+round(error_rate, 3)
+```
+
+```{r}
+# error_rate = (1 - sum(pred.class == Vehicle$Class[-train])/346)
+# round(error_rate,3)
+```
+

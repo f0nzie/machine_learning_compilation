@@ -1,0 +1,27 @@
+Package: ml.advanced
+Type: Package
+Title: Machine Learning Advanced packages
+Version: 0.1
+Date: 2019-05-14
+Author: datascience
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+biocViews:
+Imports: 
+  animation,
+  brms,
+  clusterGeneration,
+  gganimate,
+  keras,
+  magick,
+  Metrics,  
+  pcaGoPromoter,
+  plotly,
+  rbokeh,
+  rstan,
+  rstanarm,
+  RSNNS,
+  schoenberg,
+  vtreat
+RoxygenNote: 6.1.1

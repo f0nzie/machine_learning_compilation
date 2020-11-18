@@ -1,0 +1,568 @@
+# Comparison of six Linear Regression algorithms
+
+* Datasets: `Boston`
+* Algorithms:
+  * *LM, GKM, GLMNET, SVM, CART, KNN*
+* Objective: Comparison of various algorithms
+
+
+## Introduction
+These are the algorithms used:
+
+1. LM
+2. GLM
+3. GLMNET
+4. SVM
+5. CART
+6. KNN
+
+
+```{r}
+# load packages
+library(mlbench)
+library(caret)
+library(corrplot)
+
+# attach the BostonHousing dataset
+data(BostonHousing)
+```
+
+```{r}
+dplyr::glimpse(BostonHousing)
+```
+
+```{r}
+tibble::as_tibble(BostonHousing)
+```
+
+
+## Workflow
+
+1. Load dataset 
+2. Create train and test datasets, 80/20
+3. Inspect dataset:
+  * Dimension
+  * classes
+  * `skimr`
+4. Analyze features
+  * correlation
+5. Visualize features
+  * histograms
+  * density plots
+  * pairwise
+  * correlogram
+5. Train as-is  
+  - Set the train control to
+    * 10 cross-validations
+    * 3 repetitions
+    * Metric: RMSE
+  - Train the models 
+  - Compare accuracy of models
+  - Visual comparison
+    * dot plot
+6. Train with Feature selection
+  - Feature selection
+    * `findCorrelation`
+    * generate new dataset
+  - Train models again  
+  - Compare RMSE again
+  - Visual comparison
+    * dot plot  
+7. Train with dataset transformation
+  * data transformatiom
+    * Center
+    * Scale
+    * BoxCox
+  - Train models 
+  - Compare RMSE 
+  - Visual comparison
+    * dot plot 
+8. Tune the best model
+  - Set the train control to
+    * 10 cross-validations
+    * 3 repetitions
+    * Metric: RMSE
+  - Train the models 
+    * Radial SVM
+    * Sigma vector
+    * .C
+    * BoxCox
+9, Ensembling
+  - Select the algorithms
+    * Random Forest
+    * Stochastic Gradient Boosting
+    * Cubist
+  - Numeric comparison
+    * resample
+    * summary
+  - Visual comparison
+  * dot plot 
+10. Tune the best model: Cubist
+  - Set the train control to
+    * 10 cross-validations
+    * 3 repetitions
+    * Metric: RMSE
+  - Train the models 
+    * Cubist
+    * `.committees`
+    * `.neighbors`
+    * BoxCox
+  - Evaluate the tuning parameters
+    - Numeric comparison
+      * print tuned model
+    - Visual comparison
+      * scatter plot
+11. Finalize the model
+  - Back transformation
+  - Summary
+12. Apply model to validation set
+    - Transform the dataset
+    - Make prediction
+    - Calculate the RMSE
+
+
+## Preparing the data
+
+```{r}
+# Split out validation dataset
+# create a list of 80% of the rows in the original dataset we can use for training
+set.seed(7)
+validationIndex <- createDataPartition(BostonHousing$medv, 
+                                       p=0.80, list=FALSE)
+
+# select 20% of the data for validation
+validation <- BostonHousing[-validationIndex,]
+
+# use the remaining 80% of data to training and testing the models
+dataset <- BostonHousing[validationIndex,]
+```
+
+
+```{r}
+# dimensions of dataset
+dim(validation)
+dim(dataset)
+```
+
+
+```{r}
+# list types for each attribute
+sapply(dataset, class)
+```
+
+
+
+```{r}
+# take a peek at the first 20 rows of the data
+head(dataset, n=20)
+```
+
+
+```{r}
+library(skimr)
+print(skim_with(numeric = list(hist = NULL)))
+print(skim(dataset))
+```
+
+
+```{r}
+dataset[,4] <- as.numeric(as.character(dataset[,4]))
+```
+
+```{r}
+print(skim(dataset))
+```
+
+> no more factors or character variables
+
+### Variables correlation
+
+```{r}
+# find correlation between variables
+cor(dataset[,1:13])
+```
+
+```{r}
+library(dplyr)
+
+m <- cor(dataset[,1:13])
+diag(m) <- 0
+```
+
+```{r}
+# select variables with correlation 0.7 and above
+threshold <- 0.7
+ok <- apply(abs(m) >= threshold, 1, any)
+m[ok, ok]
+```
+
+
+```{r}
+# values of correlation >= 0.7
+ind <- sapply(1:13, function(x) abs(m[, x]) > 0.7)
+m[ind]
+```
+
+```{r}
+# defining a index for selecting if the condition is met
+cind <- apply(m, 2, function(x) any(abs(x) > 0.7))
+cm <- m[, cind] # since col6 only has values less than 0.5 it is not taken
+cm
+```
+
+```{r}
+rind <- apply(cm, 1, function(x) any(abs(x) > 0.7))  
+rm <- cm[rind, ]
+rm
+```
+
+### A look at the variables
+
+```{r plot-histograms, fig.width=7, fig.height=7}
+# histograms for each attribute
+par(mfrow=c(3,5))
+for(i in 1:13) {
+    hist(dataset[,i], main=names(dataset)[i])
+}
+```
+
+```{r plot-density, fig.width=7, fig.height=7}
+# density plot for each attribute
+par(mfrow=c(3,5))
+for(i in 1:13) {
+plot(density(dataset[,i]), main=names(dataset)[i])
+}
+```
+
+```{r plot-boxplots, , fig.width=8, fig.height=8}
+# boxplots for each attribute
+par(mfrow=c(3,5))
+for(i in 1:13) {
+boxplot(dataset[,i], main=names(dataset)[i])
+}
+```
+
+```{r fig.asp=1}
+# scatter plot matrix
+pairs(dataset[,1:13])
+```
+
+```{r plot-correlation}
+# correlation plot
+correlations <- cor(dataset[,1:13])
+corrplot(correlations, method="circle")
+```
+
+## Evaluation of algorithms
+
+```{r}
+# Run algorithms using 10-fold cross-validation
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "RMSE"
+```
+
+
+```{r models-first-run}
+# LM
+set.seed(7)
+fit.lm <- train(medv~., data=dataset, method="lm", 
+                metric=metric, preProc=c("center", "scale"), 
+                trControl=trainControl)
+# GLM
+set.seed(7)
+fit.glm <- train(medv~., data=dataset, method="glm", 
+                 metric=metric, preProc=c("center", "scale"), 
+                 trControl=trainControl)
+# GLMNET
+set.seed(7)
+fit.glmnet <- train(medv~., data=dataset, method="glmnet", 
+                    metric=metric, 
+                    preProc=c("center", "scale"), 
+                    trControl=trainControl)
+# SVM
+set.seed(7)
+fit.svm <- train(medv~., data=dataset, method="svmRadial", 
+                 metric=metric, 
+                 preProc=c("center", "scale"), 
+                 trControl=trainControl)
+# CART
+set.seed(7)
+grid <- expand.grid(.cp=c(0, 0.05, 0.1))
+fit.cart <- train(medv~., data=dataset, method="rpart", 
+                  metric=metric, tuneGrid=grid, 
+                  preProc=c("center", "scale"), 
+                  trControl=trainControl)
+# KNN
+set.seed(7)
+fit.knn <- train(medv~., data=dataset, method="knn", 
+                 metric=metric, preProc=c("center", "scale"), 
+                 trControl=trainControl)
+```
+
+
+```{r}
+# Compare algorithms
+results <- resamples(list(LM     = fit.lm, 
+                          GLM    = fit.glm, 
+                          GLMNET = fit.glmnet, 
+                          SVM    = fit.svm, 
+                          CART   = fit.cart, 
+                          KNN    = fit.knn))
+summary(results)
+dotplot(results)
+```
+
+## Feature selection
+
+```{r}
+# remove correlated attributes
+# find attributes that are highly correlated
+set.seed(7)
+cutoff <- 0.70
+correlations <- cor(dataset[,1:13])
+highlyCorrelated <- findCorrelation(correlations, cutoff=cutoff)
+
+for (value in highlyCorrelated) {
+    print(names(dataset)[value])
+}
+
+# create a new dataset without highly correlated features
+datasetFeatures <- dataset[,-highlyCorrelated]
+dim(datasetFeatures)
+```
+
+```{r models-second-run-removeFeatures}
+# Run algorithms using 10-fold cross-validation
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "RMSE"
+
+# LM
+set.seed(7)
+fit.lm <- train(medv~., data=dataset, method="lm", 
+                metric=metric, preProc=c("center", "scale"), 
+                trControl=trainControl)
+# GLM
+set.seed(7)
+fit.glm <- train(medv~., data=dataset, method="glm", 
+                 metric=metric, preProc=c("center", "scale"), 
+                 trControl=trainControl)
+# GLMNET
+set.seed(7)
+fit.glmnet <- train(medv~., data=dataset, method="glmnet", 
+                    metric=metric, 
+                    preProc=c("center", "scale"), 
+                    trControl=trainControl)
+# SVM
+set.seed(7)
+fit.svm <- train(medv~., data=dataset, method="svmRadial", 
+                 metric=metric, 
+                 preProc=c("center", "scale"), 
+                 trControl=trainControl)
+# CART
+set.seed(7)
+grid <- expand.grid(.cp=c(0, 0.05, 0.1))
+fit.cart <- train(medv~., data=dataset, method="rpart", 
+                  metric=metric, tuneGrid=grid, 
+                  preProc=c("center", "scale"), 
+                  trControl=trainControl)
+# KNN
+set.seed(7)
+fit.knn <- train(medv~., data=dataset, method="knn", 
+                 metric=metric, preProc=c("center", "scale"), 
+                 trControl=trainControl)
+
+# Compare algorithms
+feature_results <- resamples(list(LM     = fit.lm, 
+                                  GLM    = fit.glm, 
+                                  GLMNET = fit.glmnet, 
+                                  SVM    = fit.svm, 
+                                  CART   = fit.cart, 
+                                  KNN    = fit.knn))
+summary(feature_results)
+dotplot(feature_results)
+```
+
+Comparing the results, we can see that this has made the RMSE worse for the linear and the nonlinear algorithms. The correlated attributes we removed are contributing to the accuracy of the models.
+
+
+## Evaluate Algorithms: Box-Cox Transform
+We know that some of the attributes have a skew and others perhaps have an
+exponential distribution. One option would be to explore squaring and log
+transforms respectively (you could try this!). Another approach would be to use a power transform and let it figure out the amount to correct each attribute. One example is the `Box-Cox` power transform. Let’s try using this transform to rescale the original data and evaluate the effect on the same 6 algorithms. We will also leave in the centering and scaling for the benefit of the instance-based methods.
+
+```{r model-third-run-boxcox}
+# Run algorithms using 10-fold cross-validation
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "RMSE"
+
+# lm
+set.seed(7)
+fit.lm <- train(medv~., data=dataset, method="lm", metric=metric, 
+                preProc=c("center", "scale", "BoxCox"), 
+                trControl=trainControl)
+# GLM
+set.seed(7)
+fit.glm <- train(medv~., data=dataset, method="glm", metric=metric, 
+                 preProc=c("center", "scale", "BoxCox"), 
+                 trControl=trainControl)
+# GLMNET
+set.seed(7)
+fit.glmnet <- train(medv~., data=dataset, method="glmnet", metric=metric, 
+                    preProc=c("center", "scale", "BoxCox"),
+                    trControl=trainControl)
+# SVM
+set.seed(7)
+fit.svm <- train(medv~., data=dataset, method="svmRadial", metric=metric, 
+                 preProc=c("center", "scale", "BoxCox"),
+                 trControl=trainControl)
+# CART
+set.seed(7)
+grid <- expand.grid(.cp=c(0, 0.05, 0.1))
+fit.cart <- train(medv~., data=dataset, method="rpart", metric=metric,
+                  tuneGrid=grid,
+                  preProc=c("center", "scale", "BoxCox"),
+                  trControl=trainControl)
+# KNN
+set.seed(7)
+fit.knn <- train(medv~., data=dataset, method="knn", metric=metric, 
+                 preProc=c("center", "scale", "BoxCox"), 
+                 trControl=trainControl)
+
+# Compare algorithms
+transformResults <- resamples(list(LM     = fit.lm, 
+                                  GLM    = fit.glm, 
+                                  GLMNET = fit.glmnet, 
+                                  SVM    = fit.svm, 
+                                  CART   = fit.cart, 
+                                  KNN    = fit.knn))
+summary(transformResults)
+dotplot(transformResults)
+```
+
+## Tune SVM
+
+```{r}
+print(fit.svm)
+```
+
+Let’s design a grid search around a C value of 1. We might see a small trend of decreasing RMSE with increasing C, so let’s try all integer C values between 1 and 10. Another parameter that caret let us tune is the sigma parameter. This is a smoothing parameter. Good sigma values often start around 0.1, so we will try numbers before and after.
+
+```{r model-svm-run}
+# tune SVM sigma and C parametres
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "RMSE"
+set.seed(7)
+
+grid <- expand.grid(.sigma = c(0.025, 0.05, 0.1, 0.15), 
+                    .C = seq(1, 10, by=1))
+
+fit.svm <- train(medv~., data=dataset, method="svmRadial", metric=metric, 
+                 tuneGrid=grid, 
+                 preProc=c("BoxCox"), trControl=trainControl)
+print(fit.svm)
+plot(fit.svm)
+```
+
+## Ensembling
+We can try some ensemble methods on the problem and see if we can get a further decrease in our RMSE. 
+
+* Random Forest, bagging (RF).
+* Gradient Boosting Machines (GBM).
+* Cubist, boosting (CUBIST).
+
+```{r models-ensembling-run}
+# try ensembles
+seed <- 7
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "RMSE"
+
+# Random Forest
+set.seed(seed)
+fit.rf <- train(medv~., data=dataset, method="rf", metric=metric, 
+                preProc=c("BoxCox"),
+                trControl=trainControl)
+
+# Stochastic Gradient Boosting
+set.seed(seed)
+fit.gbm <- train(medv~., data=dataset, method="gbm", metric=metric, 
+                 preProc=c("BoxCox"), 
+                 trControl=trainControl, verbose=FALSE)
+# Cubist
+set.seed(seed)
+fit.cubist <- train(medv~., data=dataset, method="cubist", metric=metric, 
+                    preProc=c("BoxCox"), trControl=trainControl)
+# Compare algorithms
+ensembleResults <- resamples(list(RF  = fit.rf, 
+                                  GBM = fit.gbm, 
+                                  CUBIST = fit.cubist))
+summary(ensembleResults)
+dotplot(ensembleResults)
+```
+
+Let’s dive deeper into Cubist and see if we can tune it further and get more skill out of it. Cubist has two parameters that are tunable with caret: committees which is the number of boosting operations and neighbors which is used during prediction and is the number of instances used to correct the rule-based prediction (although the documentation is perhaps a little ambiguous on this). 
+
+
+```{r}
+# look at parameters used for Cubist
+print(fit.cubist)
+```
+
+Let’s use a grid search to tune around those values. We’ll try all committees between 15 and 25 and spot-check a neighbors value above and below 5.
+
+```{r model-cubist-run}
+library(Cubist)
+# Tune the Cubist algorithm
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+metric <- "RMSE"
+set.seed(7)
+grid <- expand.grid(.committees = seq(15, 25, by=1), 
+                    .neighbors = c(3, 5, 7))
+
+tune.cubist <- train(medv~., data=dataset, method = "cubist", metric=metric, 
+                     preProc=c("BoxCox"), 
+                     tuneGrid=grid, trControl=trainControl)
+print(tune.cubist)
+plot(tune.cubist)
+```
+
+> We can see that we have achieved a more accurate model again with an RMSE of 2.822 using committees = 18 and neighbors = 3.
+
+
+It looks like the results for the Cubist algorithm are the most accurate. Let’s finalize it by creating a new standalone Cubist model with the parameters above trained using the whole dataset. We must also use the Box-Cox power transform.
+
+## Finalize the model
+
+```{r model-cubist-run-fineTune}
+# prepare the data transform using training data
+set.seed(7)
+x <- dataset[,1:13]
+y <- dataset[,14]
+
+# transform
+preprocessParams <- preProcess(x, method=c("BoxCox"))
+transX <- predict(preprocessParams, x)
+
+# train the final model
+finalModel <- cubist(x = transX, y=y, committees=18)
+summary(finalModel)
+```
+
+We can now use this model to evaluate our held-out validation dataset. Again, we must prepare the input data using the same Box-Cox transform.
+
+```{r}
+# transform the validation dataset
+set.seed(7)
+valX <- validation[,1:13]
+trans_valX <- predict(preprocessParams, valX)
+valY <- validation[,14]
+
+# use final model to make predictions on the validation dataset
+predictions <- predict(finalModel, newdata = trans_valX, neighbors=3)
+
+# calculate RMSE
+rmse <- RMSE(predictions, valY)
+r2 <- R2(predictions, valY)
+print(rmse)
+```
+
+> We can see that the estimated RMSE on this unseen data is about 2.666, lower but not too dissimilar from our expected RMSE of 2.822.

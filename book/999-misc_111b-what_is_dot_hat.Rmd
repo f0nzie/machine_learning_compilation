@@ -1,0 +1,102 @@
+# (APPENDIX) Appendix {-}
+
+# What is dot hat in a regression output
+
+https://stats.stackexchange.com/a/256364/154908
+
+**Q.**  The augment() function in the broom package for R creates a dataframe of predicted values from a regression model. Columns created include the fitted values, the standard error of the fit and Cook's distance. They also include something with which I'm not familar and that is the column .hat.
+
+```{r}
+library(broom)
+data(mtcars)
+
+m1 <- lm(mpg ~ wt, data = mtcars)
+
+head(augment(m1))
+```
+
+```{r}
+# .hat vector
+augment(m1)$.hat
+```
+
+
+Can anyone explain what this value is, and is it different between linear regression and logistic regression?
+
+
+**A.** Those would be the diagonal elements of the hat-matrix which describe the leverage each point has on its fitted values.
+
+If one fits:
+
+$$\vec{Y} = \mathbf{X} \vec {\beta} + \vec {\epsilon}$$
+
+then:
+
+$$\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$$
+In this example:
+
+$$
+\begin{pmatrix}Y_1\\
+\vdots\\
+Y_{32}\end{pmatrix} = \begin{pmatrix}
+1 & 2.620\\
+\vdots\\
+1 & 2.780
+\end{pmatrix} \cdot \begin{pmatrix}
+\beta_0\\
+\beta_1
+\end{pmatrix} + \begin{pmatrix}\epsilon_1\\
+\vdots\\
+\epsilon_{32}\end{pmatrix}
+$$
+
+Then calculating this $\mathbf{H}$ matrix results in:
+
+```{r}
+library(MASS)
+
+wt <- mtcars[, 6]
+
+X <- matrix(cbind(rep(1, length(wt)), wt), ncol=2)
+
+H <- X %*% ginv(t(X) %*% X) %*% t(X)
+```
+
+Where this last matrix is a $32 \times 32$ matrix and contains these hat values on the diagonal.
+
+
+
+    X                           32x2
+    t(X)                        2x32
+    X %*% t(X)                  32x32
+    t(X) %*% X                  2x2
+    ginv(t(X) %*% X)            2x2
+    ginv(t(X) %*% X) %*% t(X)   2x32
+    X %*% ginv(t(X) %*% X)      32x2
+    
+    
+    
+```{r}
+dim(ginv(t(X) %*% X) %*% t(X))
+```
+    
+    
+```{r}
+x1 <- X %*% ginv(t(X) %*% X)
+dim(x1)
+dim(x1 %*% t(X))
+```
+    
+```{r}
+x2 <- ginv(t(X) %*% X) %*% t(X)
+dim(x2)
+dim(X %*% x2)
+```
+  
+```{r}
+# this last matrix is a 32×32 matrix and contains these hat values on the diagonal.
+diag(H)
+```
+
+
+    

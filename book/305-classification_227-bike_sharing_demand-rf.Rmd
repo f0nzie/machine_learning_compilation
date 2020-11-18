@@ -1,0 +1,764 @@
+# A detailed study of bike sharing demand
+
+* Datasets: `bike-sharing-demand`
+* Algorithms:
+    * Decision Trees
+    * Conditional Inference Tree
+    * Random Forest
+
+
+```{r}
+#loading the required libraries
+library(rpart)
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
+library(randomForest)
+library(corrplot)
+library(dplyr)
+library(tictoc)
+```
+
+
+
+Source: https://www.analyticsvidhya.com/blog/2015/06/solution-kaggle-competition-bike-sharing-demand/
+
+## Hypothesis Generation
+
+Before exploring the data to understand the relationship between variables, I’d recommend you to focus on hypothesis generation first. Now, this might sound counter-intuitive for solving a data science problem, but if there is one thing I have learnt over years, it is this. Before exploring data, you should spend some time thinking about the business problem, gaining the domain knowledge and may be gaining first hand experience of the problem (only if I could travel to North America!)
+
+How does it help? This practice usually helps you form better features later on, which are not biased by the data available in the dataset. At this stage, you are expected to posses structured thinking i.e. a thinking process which takes into consideration all the possible aspects of a particular problem.
+
+Here are some of the hypothesis which I thought could influence the demand of bikes:
+
+* **Hourly trend**: There must be high demand during office timings. Early morning and late evening can have different trend (cyclist) and low demand during 10:00 pm to 4:00 am.
+
+* **Daily Trend**: Registered users demand more bike on weekdays as compared to weekend or holiday.
+
+* **Rain**: The demand of bikes will be lower on a rainy day as compared to a sunny day. Similarly, higher humidity will cause to lower the demand and vice versa.
+
+* **Temperature**: Would high or low temperature encourage or disencourage bike riding?
+
+* **Pollution**: If the pollution level in a city starts soaring, people may start using Bike (it may be influenced by government / company policies or increased awareness).
+
+* **Time**: Total demand should have higher contribution of registered user as compared to casual because registered user base would increase over time.
+
+* **Traffic**: It can be positively correlated with Bike demand. Higher traffic may force people to use bike as compared to other road transport medium like car, taxi etc
+
+
+## Understanding the Data Set
+The dataset shows hourly rental data for two years (2011 and 2012). The training data set is for the **first 19 days of each month**. The test dataset is from **20th day to month’s end**. We are required to predict the total count of bikes rented during each hour covered by the test set.
+
+In the training data set, they have separately given bike demand by registered, casual users and sum of both is given as count.
+
+Training data set has 12 variables (see below) and Test has 9 (excluding registered, casual and count).
+
+### Independent variables
+
+    datetime:   date and hour in "mm/dd/yyyy hh:mm" format
+    season:     Four categories-> 1 = spring, 2 = summer, 3 = fall, 4 = winter
+    holiday:    whether the day is a holiday or not (1/0)
+    workingday: whether the day is neither a weekend nor holiday (1/0)
+    weather:    Four Categories of weather
+                1-> Clear, Few clouds, Partly cloudy, Partly cloudy
+                2-> Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist
+                3-> Light Snow and Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds
+                4-> Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog
+    temp:       hourly temperature in Celsius
+    atemp:      "feels like" temperature in Celsius
+    humidity:   relative humidity
+    windspeed:  wind speed
+
+### Dependent variables
+
+    registered: number of registered user
+    casual:     number of non-registered user
+    count:      number of total rentals (registered + casual)
+
+## Importing the dataset and Data Exploration
+For this solution, I have used R (R Studio 0.99.442) in Windows Environment.
+
+Below are the steps to import and perform data exploration. If you are new to this concept, you can refer this guide on Data Exploration in R
+
+1. Import Train and Test Data Set
+
+```{r}
+# https://www.kaggle.com/c/bike-sharing-demand/data
+train = read.csv(file.path(data_raw_dir, "bike_train.csv"))
+test = read.csv(file.path(data_raw_dir, "bike_test.csv"))
+```
+
+```{r}
+glimpse(train)
+glimpse(test)
+```
+
+
+2. Combine both Train and Test Data set (to understand the distribution of independent variable together).
+
+```{r}
+# add variables to test dataset before merging
+test$registered=0
+test$casual=0
+test$count=0
+
+data = rbind(train,test)
+```
+
+
+3. Variable Type Identification
+
+```{r}
+str(data)
+```
+
+4. Find missing values in the dataset if any
+
+```{r}
+table(is.na(data))
+```
+
+> No NAs in the dataset.
+
+5. Understand the distribution of numerical variables and generate a frequency table for numeric variables. Analyze the distribution.
+
+### histograms
+```{r}
+# histograms each attribute
+par(mfrow=c(2,4))
+for(i in 2:9) {
+    hist(data[,i], main = names(data)[i])
+}
+```
+
+### density plots
+```{r}
+# density plot for each attribute
+par(mfrow=c(2,4))
+for(i in 2:9) {
+    plot(density(data[,i]), main=names(data)[i])
+}
+```
+
+### boxplots
+```{r fig.asp=1}
+# boxplots for each attribute
+par(mfrow=c(2,4))
+for(i in 2:9) {
+    boxplot(data[,i], main=names(data)[i])
+}
+```
+
+### Unique values of discrete variables
+
+```{r}
+# the discrete variables in this case are integers
+ints <- unlist(lapply(data, is.integer))
+names(data)[ints]
+```
+
+> Humidity should not be an integer or discrete variable; it is a continuous or numeric variable.
+
+```{r}
+# convert humidity to numeric
+data$humidity <- as.numeric(data$humidity)
+```
+
+```{r}
+# list unique values of integer variables
+ints <- unlist(lapply(data, is.integer))
+int_vars <- names(data)[ints]
+
+sapply(int_vars, function(x) unique(data[x]))
+```
+
+
+### Inferences
+1. The variables `season`, `holiday`, `workingday` and `weather` are discrete (integer).
+2. Activity is even through all seasons.
+3. Most of the activitity happens during non-holidays.
+4. Activity doubles during the working days.
+5. Activity happens mostly during clear (1) weather.
+6. temp, atemp and humidity are continuous variables (numeric).
+
+
+## Hypothesis Testing (using multivariate analysis)
+Till now, we have got a fair understanding of the data set. Now, let’s test the hypothesis which we had generated earlier.  Here I have added some additional hypothesis from the dataset. Let’s test them one by one:
+
+### Hourly trend
+> *There must be high demand during office timings. Early morning and late evening can have different trend (cyclist) and low demand during 10:00 pm to 4:00 am.*
+
+We don’t have the variable ‘hour’ with us. But we can extract it using the datetime column.
+
+```{r}
+head(data$datetime)
+```
+
+```{r}
+class(data$datetime)
+```
+
+```{r}
+# show hour and day from the variable datetime
+head(substr(data$datetime, 12, 13))  # hour
+head(substr(data$datetime, 9, 10))   # day
+```
+
+```{r}
+# extracting hour
+data$hour = substr(data$datetime,12,13)
+data$hour = as.factor(data$hour)
+head(data$hour)
+```
+
+
+```{r}
+### dividing again in train and test
+# the train dataset is for the first 19 days
+train = data[as.integer(substr(data$datetime, 9, 10)) < 20,]
+
+# the test dataset is from day 20 to the end of the month
+test = data[as.integer(substr(data$datetime, 9, 10)) > 19,]
+```
+
+### boxplot count vs hour in training set
+```{r}
+boxplot(train$count ~ train$hour, xlab="hour", ylab="count of users")
+```
+
+> Rides increase from 6 am to 6pm, during office hours.
+
+```{r}
+# casual users
+casual <- data[data$casual > 0, ]
+registered <- data[data$registered > 0, ]
+
+dim(casual)
+dim(registered)
+```
+
+### Boxplot hourly: casual vs registered users in the training set
+```{r fig.asp=1}
+# by hour: casual vs registered users
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$hour, xlab="hour", ylab="casual users")
+boxplot(train$registered ~ train$hour, xlab="hour", ylab="registered users")
+```
+
+> Casual and Registered users have different distributions. Casual users tend to rent more during office hours. 
+
+### outliers in the training set
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+boxplot(train$count ~ train$hour, xlab="hour", ylab="count of users")
+boxplot(log(train$count) ~ train$hour,xlab="hour",ylab="log(count)")
+```
+
+### Daily trend
+> *Registered users demand more bike on weekdays as compared to weekend or holiday.*
+
+```{r}
+# extracting days of week
+date <- substr(data$datetime, 1, 10)
+days <- weekdays(as.Date(date))
+data$day <- days
+```
+
+```{r}
+# split the dataset again at day 20 of the month, before and after
+train = data[as.integer(substr(data$datetime,9,10)) < 20,]
+test  = data[as.integer(substr(data$datetime,9,10)) > 19,]
+```
+
+### Boxplot daily trend: casual vs registered users, training set
+```{r fig.asp=1}
+# creating boxplots for rentals with different variables to see the variation
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$day, xlab="day", ylab="casual users")
+boxplot(train$registered ~ train$day, xlab="day", ylab="registered users")
+```
+
+> Demand of casual users increases during the weekend, contrary of registered users.
+
+### Rain
+> *The demand of bikes will be lower on a rainy day as compared to a sunny day. Similarly, higher humidity will cause to lower the demand and vice versa.*
+
+We use the variable weather (1 to 4) to analyze riding under rain conditions.
+
+#### Boxplot of rain effect on bike riding, training set
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$weather, xlab="day", ylab="casual users")
+boxplot(train$registered ~ train$weather, xlab="day", ylab="registered users")
+```
+
+> Registered used tend to ride even with rain.
+
+### Temperature
+> *Would high or low temperature encourage or disencourage bike riding?*
+
+#### boxplot of temperature effect, training set
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$temp, xlab="temp", ylab="casual users")
+boxplot(train$registered ~ train$temp, xlab="temp", ylab="registered users")
+```
+
+> Casual users tend to ride with milder temperatures while registered users ride even at low temperatures. 
+
+### Correlation
+
+```{r}
+sub = data.frame(train$registered, train$casual, train$count, train$temp,
+                 train$humidity, train$atemp, train$windspeed)
+cor(sub)
+```
+
+
+```{r}
+# do not show the diagonal
+corrplot(cor(sub), diag = FALSE)
+```
+
+1. correlation between `casual` and atemp, temp.
+2. Strong correlation between temp and atemp.
+
+### Activity by year
+
+#### Year extraction
+```{r}
+# extracting year
+data$year = substr(data$datetime, 1, 4)
+data$year = as.factor(data$year)
+```
+
+```{r}
+# ignore the division of data again and again, this could have been done together also
+train = data[as.integer(substr(data$datetime,9,10)) < 20,]
+test = data[as.integer(substr(data$datetime,9,10)) > 19,]
+```
+
+#### Trend by year, training set
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+# again some boxplots with different variables
+# these boxplots give important information about the dependent variable with respect to the independent variables
+boxplot(train$casual ~ train$year, xlab="year", ylab="casual users")
+boxplot(train$registered ~ train$year, xlab="year", ylab="registered users")
+```
+
+> Activity increased in 2012.
+
+#### trend by windspeed, training set
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$windspeed, xlab="windspeed", ylab="casual users")
+boxplot(train$registered ~ train$windspeed, xlab="windspeed", ylab="registered users")
+```
+
+> Casual users ride even with stron winds.
+
+#### trend by humidity, training set
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$humidity, xlab="humidity", ylab="casual users")
+boxplot(train$registered ~ train$humidity, xlab="humidity", ylab="registered users")
+```
+
+> Casual users prefer not to ride with humid weather.
+
+
+## Feature Engineering
+
+### Prepare data
+```{r}
+# factoring some variables from integer
+data$season     <- as.factor(data$season)
+data$weather    <- as.factor(data$weather)
+data$holiday    <- as.factor(data$holiday)
+data$workingday <- as.factor(data$workingday)
+```
+
+```{r}
+# new column
+data$hour <- as.integer(data$hour)
+```
+
+```{r}
+# created this variable to divide a day into parts, but did not finally use it
+data$day_part <- 0
+```
+
+```{r}
+# split in training and test sets again
+train <- data[as.integer(substr(data$datetime, 9, 10)) < 20,]
+test  <- data[as.integer(substr(data$datetime, 9, 10)) > 19,]
+```
+
+```{r}
+# combine the sets
+data <- rbind(train, test)
+```
+
+### Build hour bins
+
+```{r model-rpart-registered-hour}
+# for registered users
+d = rpart(registered ~ hour, data = train)
+fancyRpartPlot(d)
+```
+
+
+```{r model-rpart-casual-hour}
+# for casual users
+d = rpart(casual ~ hour, data = train)
+fancyRpartPlot(d)
+```
+
+
+```{r}
+# Assign the timings according to tree
+# fill the hour bins
+data = rbind(train,test)
+
+# create hour buckets for registered users
+# 0,1,2,3,4,5,6,7 < 7.5
+# 22,23,24 >=22
+# 10,11,12,13,14,15,16,17: h>=9.5 & h<18
+# h<9.5 & h<8.5 : 8
+# h<9.5 & h>=8.5 : 9
+# h>=20: 20,21
+# h < 20: 18,19
+
+data$dp_reg = 0
+data$dp_reg[data$hour < 8] = 1
+data$dp_reg[data$hour >= 22] = 2
+data$dp_reg[data$hour > 9 & data$hour < 18] = 3
+data$dp_reg[data$hour == 8] = 4
+data$dp_reg[data$hour == 9] = 5
+data$dp_reg[data$hour == 20 | data$hour == 21] = 6
+data$dp_reg[data$hour == 19 | data$hour == 18] = 7
+```
+
+
+```{r}
+# casual users
+# h<11, h<8.5: 0,1,2,3,4,5,6,7,8
+# h>=8.5 & h<11: 9, 10 
+# h >=11 & h>=21: 21,22,23,24
+# h >=11 & h<21: 11,12,13,14,15,16,17,18,19,20
+data$dp_cas = 0
+data$dp_cas[data$hour < 11 & data$hour >= 8] = 1
+data$dp_cas[data$hour == 9 | data$hour == 10] = 2
+data$dp_cas[data$hour >= 11 & data$hour < 21] = 3
+data$dp_cas[data$hour >= 21] = 4
+```
+
+### Temperature bins
+
+```{r model-rpart-temperature}
+# partition the data by temperature, registered users
+f = rpart(registered ~ temp, data=train)
+fancyRpartPlot(f)
+```
+
+```{r}
+# partition the data by temperature,, casual users
+f=rpart(casual ~ temp, data=train)
+fancyRpartPlot(f)
+```
+
+#### Assign temperature ranges accoding to trees
+
+```{r}
+data$temp_reg = 0
+data$temp_reg[data$temp < 13] = 1
+data$temp_reg[data$temp >= 13 & data$temp < 23] = 2
+data$temp_reg[data$temp >= 23 & data$temp < 30] = 3
+data$temp_reg[data$temp >= 30] = 4
+```
+
+
+```{r}
+data$temp_cas = 0
+data$temp_cas[data$temp < 15] = 1
+data$temp_cas[data$temp >= 15 & data$temp < 23] = 2
+data$temp_cas[data$temp >= 23 & data$temp < 30] = 3
+data$temp_cas[data$temp >= 30] = 4
+```
+
+### Year bins by quarter
+
+```{r}
+# add new variable with the month number
+data$month <- substr(data$datetime, 6, 7)
+data$month <- as.integer(data$month)
+```
+
+
+```{r}
+# bin by quarter manually
+data$year_part[data$year=='2011']                = 1
+data$year_part[data$year=='2011' & data$month>3] = 2
+data$year_part[data$year=='2011' & data$month>6] = 3
+data$year_part[data$year=='2011' & data$month>9] = 4
+data$year_part[data$year=='2012']                = 5
+data$year_part[data$year=='2012' & data$month>3] = 6
+data$year_part[data$year=='2012' & data$month>6] = 7
+data$year_part[data$year=='2012' & data$month>9] = 8
+table(data$year_part)
+```
+
+### Day Type
+Created a variable having categories like “weekday”, “weekend” and “holiday”.
+
+```{r}
+# creating another variable day_type which may affect our accuracy as weekends and weekdays are important in deciding rentals
+data$day_type = 0
+data$day_type[data$holiday==0 & data$workingday==0] = "weekend"
+data$day_type[data$holiday==1]                      = "holiday"
+data$day_type[data$holiday==0 & data$workingday==1] = "working day"
+```
+
+```{r}
+# split dataset again
+train = data[as.integer(substr(data$datetime,9,10)) < 20,]
+test = data[as.integer(substr(data$datetime,9,10)) > 19,]
+```
+
+
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$dp_cas, xlab = "day partition", ylab="casual users")
+boxplot(train$registered ~ train$dp_reg, xlab = "day partition", ylab="registered users")
+```
+
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$day_type, xlab = "day type", 
+        ylab="casual users", ylim = c(0,900))
+boxplot(train$registered ~ train$day_type, xlab = "day type", 
+        ylab="registered users", ylim = c(0,900))
+```
+
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$year_part, xlab = "year partition, quarter", 
+        ylab="casual users", ylim = c(0,900))
+boxplot(train$registered ~ train$year_part, xlab = "year partition, quarter", 
+        ylab="registered users", ylim = c(0,900))
+```
+
+### Temperatures
+
+```{r fig.asp=1}
+par(mfrow=c(2,1))
+boxplot(train$casual ~ train$temp, xlab = "temperature", 
+        ylab="casual users", ylim = c(0,900))
+boxplot(train$registered ~ train$temp, xlab = "temperature", 
+        ylab="registered users", ylim = c(0,900))
+```
+
+```{r}
+plot(train$temp, train$count)
+data <- rbind(train, test)
+# data$month <- substr(data$datetime, 6, 7)
+# data$month <- as.integer(data$month)
+```
+
+### Imputting missing data to wind speed
+
+```{r}
+# dividing total data depending on windspeed to impute/predict the missing values
+table(data$windspeed == 0)
+    # FALSE  TRUE 
+    # 15199  2180 
+
+k = data$windspeed == 0
+
+wind_0 = subset(data, k)    # windspeed is zero
+wind_1 = subset(data, !k)   # windspeed not zero
+```
+
+```{r model-rf1-windspeed-run-predict-may_take_a_while, cache=TRUE}
+tic()
+# predicting missing values in windspeed using a random forest model
+# this is a different approach to impute missing values rather than 
+# just using the mean or median or some other statistic for imputation
+
+set.seed(415)
+fit <- randomForest(windspeed ~ season + weather + humidity + month + temp + 
+                        year + atemp, 
+                    data = wind_1, 
+                    importance = TRUE, 
+                    ntree = 250)
+
+pred = predict(fit, wind_0)
+wind_0$windspeed = pred       # fill with wind speed predictions
+toc()
+```
+
+```{r}
+# recompose the whole dataset
+data = rbind(wind_0, wind_1)
+```
+
+```{r}
+# how many zero values now?
+sum(data$windspeed == 0)
+```
+
+
+### Weekend variable
+Created a separate variable for weekend (0/1)
+
+```{r}
+data$weekend = 0
+data$weekend[data$day=="Sunday" | data$day=="Saturday" ] = 1
+```
+
+
+## Model Building
+As this was our first attempt, we applied decision tree, conditional inference tree and random forest algorithms and found that random forest is performing the best. You can also go with regression, boosted regression, neural network and find which one is working well for you.
+
+Before executing the random forest model code, I have followed following steps:
+
+Convert discrete variables into factor (weather, season, hour, holiday, working day, month, day)
+
+```{r}
+str(data)
+```
+
+### Convert variables to factors
+
+```{r}
+# converting all relevant categorical variables into factors to feed to our random forest model
+data$season     = as.factor(data$season)
+data$holiday    = as.factor(data$holiday)
+data$workingday = as.factor(data$workingday)
+data$weather    = as.factor(data$weather)
+data$hour       = as.factor(data$hour)
+data$month      = as.factor(data$month)
+data$day_part   = as.factor(data$dp_cas)
+data$day_type   = as.factor(data$dp_reg)
+data$day        = as.factor(data$day)
+data$temp_cas   = as.factor(data$temp_cas)
+data$temp_reg   = as.factor(data$temp_reg)
+```
+
+```{r}
+str(data)
+```
+
+* As we know that dependent variables have natural outliers so we will predict log of dependent variables.
+
+* Predict bike demand registered and casual users separately.
+$y1 = \log(casual+1)$ and $y2 = \log(registered+1)$, Here we have added 1 to deal with zero values in the casual and registered columns.
+
+```{r}
+# separate again as train and test set
+train = data[as.integer(substr(data$datetime, 9, 10)) < 20,]
+test = data[as.integer(substr(data$datetime, 9, 10)) > 19,]
+```
+
+### Log transform
+
+```{r}
+# log transformation for some skewed variables, 
+# which can be seen from their distribution
+train$reg1   = train$registered + 1
+train$cas1   = train$casual + 1
+train$logcas = log(train$cas1)
+train$logreg = log(train$reg1)
+test$logreg  = 0
+test$logcas  = 0
+```
+
+#### Plot by weather, by season
+
+```{r fig.asp=1}
+# cartesian plot
+par(mfrow=c(2,1))
+boxplot(train$registered ~ train$weather, xlab="weather", ylab="registered users")
+boxplot(train$registered ~ train$season, xlab="season", ylab="registered users")
+```
+
+
+```{r fig.asp=1}
+# semilog plot
+par(mfrow=c(2,1))
+boxplot(train$logreg ~ train$weather, xlab = "weather")
+boxplot(train$logreg ~ train$season, xlab = "season")
+```
+
+### Predicting for registered and casual users, test dataset
+
+```{r model-rf2-run-registered-predict, cache=TRUE}
+tic()
+# final model building using random forest
+# note that we build different models for predicting for 
+# registered and casual users
+# this was seen as giving best result after a lot of experimentation
+set.seed(415)
+fit1 <- randomForest(logreg ~ hour + workingday + day + holiday + day_type +
+                         temp_reg + humidity + atemp + windspeed + season + 
+                         weather + dp_reg + weekend + year + year_part, 
+                     data = train, 
+                     importance = TRUE, 
+                     ntree = 250)
+
+pred1 = predict(fit1, test)
+test$logreg = pred1
+toc()
+```
+
+
+```{r model-rf3-run-casual-predict, cache=TRUE}
+# casual users
+set.seed(415)
+fit2 <- randomForest(logcas ~ hour + day_type + day + humidity + atemp + 
+                         temp_cas + windspeed + season + weather + holiday +
+                         workingday + dp_cas + weekend + year + year_part, 
+                     data = train, importance = TRUE, ntree = 250)
+
+pred2 = predict(fit2, test)
+test$logcas = pred2
+```
+
+### Preparing and exporting results
+
+```{r}
+# creating the final submission file
+# reverse log conversion
+test$registered <- exp(test$logreg) - 1
+test$casual     <- exp(test$logcas) - 1
+test$count      <- test$casual + test$registered
+
+r <- data.frame(datetime = test$datetime, 
+                casual = test$casual, 
+                registered = test$registered)
+
+print(sum(r$casual))
+print(sum(r$registered))
+
+s <- data.frame(datetime = test$datetime, count = test$count)
+write.csv(s, file =file.path(data_out_dir, "bike-submit.csv"), row.names = FALSE)
+
+# sum(cas+reg) = 1168638
+# month number now is correct
+```
+
+
+After following the steps mentioned above, you can score 0.38675 on Kaggle leaderboard i.e. top 5 percentile of total participants. As you might have seen, we have not applied any extraordinary science in getting to this level. But, the real competition starts here. I would like to see, if I can improve this further by use of more features and some more advanced modeling techniques.
+
+## End Notes
+In this article, we have looked at structured approach of problem solving and how this method can help you to improve performance. I would recommend you to generate hypothesis before you deep dive in the data set as this technique will not limit your thought process. You can improve your performance by applying advanced techniques (or ensemble methods) and understand your data trend better.
+
+You can find the complete solution here : [GitHub Link](https://github.com/adityashrm21/Kaggle/blob/master/Bike_Sharing_Demand.R)
+
+```{r}
+# this is the older submission. months were incomplete
+old <- read.csv(file = file.path(data_raw_dir, "bike-submit-old.csv"))
+sum(old$count)
+```
+

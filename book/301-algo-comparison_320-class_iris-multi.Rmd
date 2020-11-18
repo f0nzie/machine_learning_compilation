@@ -1,0 +1,197 @@
+# Comparing Classification algorithms 
+
+* Datasets: `iris`
+* Algorithms: *LDA, CART, KNN, SVM, RF*
+
+
+
+## Introduction
+These are the algorithms used:
+
+1. LDA
+2. CART
+3. KNN
+4. SVM
+5. RF
+
+```{r}
+# load the caret package
+library(caret)
+# attach the iris dataset to the environment
+data(iris)
+# rename the dataset
+dataset <- iris
+```
+
+## Workflow
+
+1. Load dataset 
+2. Create train and test datasets, 80/20
+3. Inspect dataset
+4. Visualize features
+5. Set the train control to
+  * 10 cross-validations
+  * Metric: accuracy
+6. Train the models 
+7. Compare accuracy of models
+8. Visual comparison
+9. Make predictions on `validation` set
+
+
+We will split the loaded dataset into two, $80\%$ of which we will use to train our models and $20\%$ that we will hold back as a validation dataset.
+
+```{r}
+# create a list of 80% of the rows in the original dataset we can use for training
+validationIndex <- createDataPartition(dataset$Species, p=0.80, list=FALSE)
+# select 20% of the data for validation
+validation <- dataset[-validationIndex,]
+
+# use the remaining 80% of data to training and testing the models
+dataset <- dataset[validationIndex,]
+
+# dimensions of dataset
+dim(dataset)
+```
+
+
+```{r}
+# list types for each attribute
+sapply(dataset, class)
+```
+
+## Peek at the dataset
+
+```{r}
+# take a peek at the first 5 rows of the data
+head(dataset)
+```
+
+
+```{r}
+library(dplyr)
+
+glimpse(dataset)
+```
+
+```{r}
+library(skimr)
+print(skim(dataset))
+```
+
+## Levels of the class
+
+```{r}
+# list the levels for the class
+levels(dataset$Species)
+```
+
+## class distribution
+
+```{r}
+# summarize the class distribution
+percentage <- prop.table(table(dataset$Species)) * 100
+cbind(freq=table(dataset$Species), percentage=percentage)
+```
+
+## Visualize the dataset
+
+```{r}
+# split input and output
+x <- dataset[,1:4]
+y <- dataset[,5]
+```
+
+
+```{r}
+# boxplot for each attribute on one image
+par(mfrow=c(1,4))
+for(i in 1:4) {
+    boxplot(x[,i], main=names(dataset)[i])
+}
+```
+
+
+```{r}
+# barplot for class breakdown
+plot(y)
+```
+
+```{r fig.asp=1}
+# scatter plot matrix
+featurePlot(x=x, y=y, plot="ellipse")
+```
+
+```{r}
+# box and whisker plots for each attribute
+featurePlot(x=x, y=y, plot="box")
+```
+
+```{r}
+# density plots for each attribute by class value
+scales <- list(x=list(relation="free"), y=list(relation="free"))
+featurePlot(x=x, y=y, plot="density", scales=scales)
+```
+
+## Evaluate algorithms
+
+### split and metrics
+
+```{r}
+# Run algorithms using 10-fold cross-validation
+trainControl <- trainControl(method="cv", number=10)
+metric <- "Accuracy"
+```
+
+### build models
+```{r}
+# LDA
+set.seed(7)
+fit.lda <- train(Species~., data=dataset, method = "lda", 
+                 metric=metric, trControl=trainControl)
+# CART
+set.seed(7)
+fit.cart <- train(Species~., data=dataset, method = "rpart", 
+                  metric=metric, trControl=trainControl)
+# KNN
+set.seed(7)
+fit.knn <- train(Species~., data=dataset, method = "knn", 
+                 metric=metric, trControl=trainControl)
+# SVM
+set.seed(7)
+fit.svm <- train(Species~., data=dataset, method = "svmRadial", 
+                 metric=metric, trControl=trainControl)
+# Random Forest
+set.seed(7)
+fit.rf <- train(Species~., data=dataset, method = "rf", 
+                metric=metric, trControl=trainControl)
+```
+
+### compare
+```{r}
+#summarize accuracy of models
+results <- resamples(list(lda  = fit.lda, 
+                          cart = fit.cart, 
+                          knn  = fit.knn, 
+                          svm  = fit.svm, 
+                          rf   = fit.rf))
+summary(results)
+```
+
+```{r}
+# compare accuracy of models
+dotplot(results)
+```
+
+```{r}
+# summarize Best Model
+print(fit.lda)
+```
+
+## Make predictions
+
+```{r}
+# estimate skill of LDA on the validation dataset
+predictions <- predict(fit.lda, validation)
+confusionMatrix(predictions, validation$Species)
+```
+

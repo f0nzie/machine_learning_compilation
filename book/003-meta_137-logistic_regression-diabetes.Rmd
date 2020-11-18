@@ -1,0 +1,187 @@
+# Detection of diabetes using Logistic Regression
+
+* Datasets: `diabetes.csv`
+* Algorithms:
+    * Logistic Regression
+    * Feature Engineering
+
+## Introduction
+
+Source: https://github.com/AntoineGuillot2/Logistic-Regression-R/blob/master/script.R
+Source: http://enhancedatascience.com/2017/04/26/r-basics-logistic-regression-with-r/
+Data: https://www.kaggle.com/uciml/pima-indians-diabetes-database
+
+
+The goal of logistic regression is to predict whether an outcome will be positive (aka 1) or negative (i.e: 0). Some real life example could be:
+
+* Will Emmanuel Macron win the French Presidential election or will he lose?
+* Does Mr.X has this illness or not?
+* Will this visitor click on my link or not?
+
+So, logistic regression can be used in a lot of binary classification cases and will often be run before more advanced methods. For this tutorial, we will use the diabetes detection dataset from Kaggle.
+
+This dataset contains data from Pima Indians Women such as the number of pregnancies, the blood pressure, the skin thickness, … the goal of the tutorial is to be able to detect diabetes using only these measures.
+
+## Exploring the data
+As usual, first, let’s take a look at our data. You can download the data here then please put the file diabetes.csv in your working directory. With the summary function, we can easily summarise the different variables:
+
+```{r load-data}
+library(ggplot2)
+library(data.table)
+
+DiabetesData <- data.table(read.csv(file.path(data_raw_dir, 'diabetes.csv')))
+
+# Quick data summary
+summary(DiabetesData)
+```
+
+The mean of the outcome is 0.35 which shows an imbalance between the classes. However, the imbalance should not be too strong to be a problem.
+
+To understand the relationship between variables, a Scatter Plot Matrix will be used. To plot it, the GGally package was used.
+
+```{r plot-matrix, fig.asp=1}
+# Scatter plot matrix
+library(GGally)
+ggpairs(DiabetesData, lower = list(continuous='smooth'))
+```
+
+The correlations between explanatory variables do not seem too strong. Hence the model is not likely to suffer from multicollinearity. All explanatory variable are correlated with the Outcome. At first sight, glucose rate is the most important factor to detect the outcome.
+
+## Logistic regression with R
+After variable exploration, a first model can be fitted using the glm function. With stargazer, it is easy to get nice output in ASCII or even Latex.
+
+```{r model-1}
+# first model: all features
+glm1 = glm(Outcome~., 
+           DiabetesData, 
+           family = binomial(link="logit"))
+
+summary(glm1)
+require(stargazer)
+stargazer(glm1,type='text')
+
+```
+
+The overall model is significant. As expected the glucose rate has the lowest p-value of all the variables. However, Age, Insulin and Skin Thickness are not good predictors of Diabetes.
+
+## A second model
+Since some variables are not significant, removing them is a good way to improve model robustness. In the second model, SkinThickness, Insulin, and Age are removed.
+
+```{r model-2}
+# second model: selected features
+glm2 = glm(Outcome~., 
+         data = DiabetesData[,c(1:3,6:7,9), with=F], 
+         family = binomial(link="logit"))
+
+summary(glm2)
+
+```
+
+## Classification rate and confusion matrix
+Now that we have our model, let’s access its performance.
+
+```{r}
+# Correctly classified observations
+mean((glm2$fitted.values>0.5)==DiabetesData$Outcome)
+```
+
+Around 77.4% of all observations are correctly classified. Due to class imbalance, we need to go further with a confusion matrix.
+
+```{r cm-1}
+###Confusion matrix count
+RP=sum((glm2$fitted.values>=0.5)==DiabetesData$Outcome & DiabetesData$Outcome==1)
+FP=sum((glm2$fitted.values>=0.5)!=DiabetesData$Outcome & DiabetesData$Outcome==0)
+RN=sum((glm2$fitted.values>=0.5)==DiabetesData$Outcome & DiabetesData$Outcome==0)
+FN=sum((glm2$fitted.values>=0.5)!=DiabetesData$Outcome & DiabetesData$Outcome==1)
+confMat<-matrix(c(RP,FP,FN,RN),ncol = 2)
+colnames(confMat)<-c("Pred Diabetes",'Pred no diabetes')
+rownames(confMat)<-c("Real Diabetes",'Real no diabetes')
+confMat
+```
+
+The model is good to detect people who do not have diabetes. However, its performance on ill people is not great (only 154 out of 268 have been correctly classified).
+
+
+You can also get the percentage of Real/False Positive/Negative:
+
+```{r cm-2}
+# Confusion matrix proportion
+RPR=RP/sum(DiabetesData$Outcome==1)*100
+FNR=FN/sum(DiabetesData$Outcome==1)*100
+FPR=FP/sum(DiabetesData$Outcome==0)*100
+RNR=RN/sum(DiabetesData$Outcome==0)*100
+confMat<-matrix(c(RPR,FPR,FNR,RNR),ncol = 2)
+colnames(confMat)<-c("Pred Diabetes",'Pred no diabetes')
+rownames(confMat)<-c("Real Diabetes",'Real no diabetes')
+confMat
+```
+
+And here is the matrix, 57.5% of people with diabetes are correctly classified. A way to improve the false negative rate would lower the detection threshold. However, as a consequence, the false positive rate would increase.
+
+## Plots and decision boundaries
+The two strongest predictors of the outcome are Glucose rate and BMI. High glucose rate and high BMI are strong indicators of Diabetes.
+
+```{r plot-bmi-vs-glucose}
+# Plot and decision boundaries
+DiabetesData$Predicted <- glm2$fitted.values
+
+ggplot(DiabetesData, aes(x = BMI, y = Glucose, color = Predicted > 0.5)) + 
+    geom_point(size=2, alpha=0.5)
+
+```
+
+```{r}
+ggplot(DiabetesData, aes(x=BMI, y = Glucose, color=Outcome == (Predicted > 0.5))) + 
+    geom_point(size=2, alpha=0.5)
+```
+
+We can also plot both BMI and glucose against the outcomes, the other variables are taken at their mean level.
+
+```{r}
+range(DiabetesData$BMI)
+```
+
+
+
+```{r bmi-vs-predicted}
+# BMI vs predicted
+BMI_plot = data.frame(BMI = ((min(DiabetesData$BMI-2)*100):
+                               (max(DiabetesData$BMI+2)*100))/100,
+                    Glucose = mean(DiabetesData$Glucose),
+                    Pregnancies = mean(DiabetesData$Pregnancies),
+                    BloodPressure = mean(DiabetesData$BloodPressure),
+                    DiabetesPedigreeFunction = mean(DiabetesData$DiabetesPedigreeFunction))
+
+BMI_plot$Predicted = predict(glm2, newdata = BMI_plot, type = 'response')
+ggplot(BMI_plot, aes(x = BMI, y = Predicted)) + 
+    geom_line()
+```
+
+```{r}
+range(BMI_plot$BMI)
+```
+
+
+```{r}
+range(DiabetesData$Glucose)
+```
+
+```{r glucose-vs-predicted}
+# Glucose vs predicted
+Glucose_plot=data.frame(Glucose = 
+                        ((min(DiabetesData$Glucose-2)*100):
+                             (max(DiabetesData$Glucose+2)*100))/100,
+                    BMI=mean(DiabetesData$BMI),
+                    Pregnancies=mean(DiabetesData$Pregnancies),
+                    BloodPressure=mean(DiabetesData$BloodPressure),
+                    DiabetesPedigreeFunction=mean(DiabetesData$DiabetesPedigreeFunction))
+
+Glucose_plot$Predicted = predict(glm2, newdata = Glucose_plot, type = 'response')
+ggplot(Glucose_plot, aes(x = Glucose, y = Predicted)) + 
+    geom_line()
+```
+
+```{r}
+range(Glucose_plot$Glucose)
+```
+

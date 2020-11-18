@@ -1,0 +1,108 @@
+# (PART) The Basics of Machine Learning {.unnumbered}
+
+# Introduction to PCA
+
+-   Dataset: `iris`
+
+-   Algorithms:
+
+    -   PCA
+
+```{r}
+# devtools::install_github("vqv/ggbiplot")
+library(ggbiplot)
+
+iris.pca <- prcomp(iris[, 1:4], center = TRUE, scale = TRUE)
+print(iris.pca)
+```
+
+```{r}
+summary(iris.pca)
+```
+
+```{r}
+g <- ggbiplot(iris.pca,
+              obs.scale = 1,
+              var.scale = 1,
+              groups = iris$Species,
+              ellipse = TRUE,
+              circle = TRUE) +
+    scale_color_discrete(name = "") +
+    theme(legend.direction = "horizontal", legend.position = "top")
+
+print(g)
+```
+
+The PC1 axis explains 0.730 of the variance, while the PC2 axis explains 0.229 of the variance.
+
+## Underlying principal components
+
+```{r}
+# Run PCA here with prcomp ()
+iris.pca <- prcomp(iris[, 1:4], center = TRUE, scale = TRUE)
+
+print(iris.pca)
+```
+
+```{r}
+# Now, compute the new dataset aligned to the PCs by
+# using the predict() function .
+df.new <- predict(iris.pca, iris[, 1:4])
+head(df.new)
+```
+
+```{r}
+# Show the PCA model’s sdev values are the square root
+# of the projected variances, which are along the diagonal
+# of the covariance matrix of the projected data.
+iris.pca$sdev^2
+```
+
+```{r}
+# # Compute covariance matrix for new dataset.
+# Recall that the standard deviation is the square root of the variance.
+round(cov(df.new), 5)
+```
+
+## Compute eigenvectors and eigenvalues
+
+```{r}
+# Scale and center the data.
+df.scaled <- scale(iris[, 1:4], center = TRUE, scale = TRUE)
+
+# Compute the covariance matrix.
+cov.df.scaled <- cov(df.scaled)
+
+# Compute the eigenvectors and eigen values.
+# Each eigenvector (column) is a principal component.
+# Each eigenvalue is the variance explained by the
+# associated eigenvector.
+eigenInformation <- eigen(cov.df.scaled)
+
+print(eigenInformation)
+```
+
+```{r}
+# Now, compute the new dataset aligned to the PCs by
+# multiplying the eigenvector and data matrices.
+
+
+# Create transposes in preparation for matrix multiplication
+eigenvectors.t <- t(eigenInformation$vectors)     # 4x4
+df.scaled.t <- t(df.scaled)    # 4x150
+
+# Perform matrix multiplication.
+df.new <- eigenvectors.t %*% df.scaled.t   # 4x150
+
+# Create new data frame. First take transpose and
+# then add column names.
+df.new.t <- t(df.new)    # 150x4
+colnames(df.new.t) <- c("PC1", "PC2", "PC3", "PC4")
+
+head(df.new.t)
+```
+
+```{r}
+# Compute covariance matrix for new dataset 
+round(cov(df.new.t), 5)
+```

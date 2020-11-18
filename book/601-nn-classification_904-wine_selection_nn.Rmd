@@ -1,0 +1,209 @@
+# Wine classification with neuralnet
+
+Source: <https://www.r-bloggers.com/multilabel-classification-with-neuralnet-package/>
+
+The `neuralnet` package is perhaps not the best option in R for using neural networks. If you ask why, for starters it does not recognize the typical formula y\~., it does not support factors, it does not provide a lot of models other than a standard MLP, and it has great competitors in the nnet package that seems to be better integrated in R and can be used with the caret package, and in the MXnet package that is a high level deep learning library which provides a wide variety of neural networks.
+
+But still, I think there is some value in the ease of use of the neuralnet package, especially for a beginner, therefore I'll be using it.
+
+I'm going to be using both the neuralnet and, curiously enough, the nnet package. Let's load them:
+
+```{r}
+# load libs
+require(neuralnet)
+require(nnet)
+require(ggplot2)
+set.seed(10)
+```
+
+## The dataset
+
+I looked in the UCI Machine Learning Repository1 and found the wine dataset.
+
+This dataset contains the results of a chemical analysis on 3 different kind of wines. The target variable is the label of the wine which is a factor with 3 (unordered) levels. The predictors are all continuous and represent 13 variables obtained as a result of chemical measurements.
+
+```{r}
+# get the data file from the package location
+wine_dataset_path <- file.path(data_raw_dir, "wine.data")
+wine_dataset_path
+```
+
+```{r}
+wines <- read.csv(wine_dataset_path)
+wines
+```
+
+```{r}
+names(wines) <- c("label",
+                  "Alcohol",
+                  "Malic_acid",
+                  "Ash",
+                  "Alcalinity_of_ash",
+                  "Magnesium",
+                  "Total_phenols",
+                  "Flavanoids",
+                  "Nonflavanoid_phenols",
+                  "Proanthocyanins",
+                  "Color_intensity",
+                  "Hue",
+                  "OD280_OD315_of_diluted_wines",
+                  "Proline")
+```
+
+```{r}
+head(wines)
+```
+
+```{r}
+plt1 <- ggplot(wines, aes(x = Alcohol, y = Magnesium, colour = as.factor(label))) +
+    geom_point(size=3) +
+    ggtitle("Wines")
+
+plt1
+```
+
+```{r}
+plt2 <- ggplot(wines, aes(x = Alcohol, y = Proline, colour = as.factor(label))) +
+    geom_point(size=3) +
+    ggtitle("Wines")
+plt2
+```
+
+## Preprocessing
+
+During the preprocessing phase, I have to do at least the following two things:
+
+Encode the categorical variables. Standardize the predictors. First of all, let's encode our target variable. The encoding of the categorical variables is needed when using neuralnet since it does not like factors at all. It will shout at you if you try to feed in a factor (I am told nnet likes factors though).
+
+In the wine dataset the variable label contains three different labels: 1,2 and 3.
+
+The usual practice, as far as I know, is to encode categorical variables as a "one hot" vector. For instance, if I had three classes, like in this case, I'd need to replace the label variable with three variables like these:
+
+    #   l1,l2,l3
+    #   1,0,0
+    #   0,0,1
+    #   ...
+
+In this case the first observation would be labeled as a 1, the second would be labeled as a 2, and so on. Ironically, the `nnet` package provides a function to perform this encoding in a painless way:
+
+```{r}
+# Encode as a one hot vector multilabel data
+train <- cbind(wines[, 2:14], class.ind(as.factor(wines$label)))
+
+# Set labels name
+names(train) <- c(names(wines)[2:14],"l1","l2","l3")
+```
+
+By the way, since the predictors are all continuous, you do not need to encode any of them, however, in case you needed to, you could apply the same strategy applied above to all the categorical predictors. Unless of course you'd like to try some other kind of custom encoding.
+
+Now let's standardize the predictors in the [0−1]"\>[0−1] interval by leveraging the `lapply` function:
+
+```{r}
+# Scale data
+scl <- function(x) { (x - min(x))/(max(x) - min(x)) }
+train[, 1:13] <- data.frame(lapply(train[, 1:13], scl))
+head(train)
+```
+
+## Fitting the model with neuralnet
+
+Now it is finally time to fit the model. As you might remember from the old post I wrote, `neuralnet` does not like the formula `y~.`. Fear not, you can build the formula to be used in a simple step:
+
+```{r}
+# Set up formula
+n <- names(train)
+f <- as.formula(paste("l1 + l2 + l3 ~", paste(n[!n %in% c("l1","l2","l3")], collapse = " + ")))
+f
+```
+
+Note that the characters in the vector are not pasted to the right of the "\~" symbol. Just remember to check that the formula is indeed correct and then you are good to go.
+
+Let's train the neural network with the full dataset. It should take very little time to converge. If you did not standardize the predictors it could take a lot more though.
+
+```{r}
+nn <- neuralnet(f,
+                data = train,
+                hidden = c(13, 10, 3),
+                act.fct = "logistic",
+                linear.output = FALSE,
+                lifesign = "minimal")
+```
+
+Note that I set the argument linear.output to `FALSE` in order to tell the model that I want to apply the activation function act.fct and that I am not doing a regression task. Then I set the activation function to logistic (which by the way is the default option) in order to apply the logistic function. The other available option is `tanh` but the model seems to perform a little worse with it so I opted for the default option. As far as I know these two are the only two available options, there is no `relu` function available although it seems to be a common activation function in other packages.
+
+As far as the number of hidden neurons, I tried some combination and the one used seems to perform slightly better than the others (around 1% of accuracy difference in cross validation score).
+
+By using the in-built `plot` method you can get a visual take on what is actually happening inside the model, however the plot is not that helpful I think
+
+```{r}
+plot(nn)
+```
+
+Let's have a look at the accuracy on the training set:
+
+```{r}
+# Compute predictions
+pr.nn <- compute(nn, train[, 1:13])
+
+# Extract results
+pr.nn_ <- pr.nn$net.result
+head(pr.nn_)
+```
+
+```{r}
+# Accuracy (training set)
+original_values <- max.col(train[, 14:16])
+pr.nn_2 <- max.col(pr.nn_)
+mean(pr.nn_2 == original_values)
+```
+
+100% not bad! But wait, this may be because our model over fitted the data, furthermore evaluating accuracy on the training set is kind of cheating since the model already "knows" (or should know) the answers. In order to assess the "true accuracy" of the model you need to perform some kind of cross validation.
+
+## Cross validating the classifier
+
+Let's cross-validate the model using the evergreen 10 fold cross validation with the following train and test split: 95% of the dataset will be used as training set while the remaining 5% as test set.
+
+Just out of curiosity, I decided to run a LOOCV round too. In case you'd like to run this cross validation technique, just set the proportion variable to 0.995: this will select just one observation for as test set and leave all the other observations as training set. Running LOOCV you should get similar results to the 10 fold cross validation.
+
+```{r}
+# Set seed for reproducibility purposes
+set.seed(500)
+# 10 fold cross validation
+k <- 10
+# Results from cv
+outs <- NULL
+# Train test split proportions
+proportion <- 0.95 # Set to 0.995 for LOOCV
+
+# Crossvalidate, go!
+for(i in 1:k)
+{
+    index <- sample(1:nrow(train), round(proportion*nrow(train)))
+    train_cv <- train[index, ]
+    test_cv <- train[-index, ]
+    nn_cv <- neuralnet(f,
+                        data = train_cv,
+                        hidden = c(13, 10, 3),
+                        act.fct = "logistic",
+                        linear.output = FALSE)
+    
+    # Compute predictions
+    pr.nn <- compute(nn_cv, test_cv[, 1:13])
+    # Extract results
+    pr.nn_ <- pr.nn$net.result
+    # Accuracy (test set)
+    original_values <- max.col(test_cv[, 14:16])
+    pr.nn_2 <- max.col(pr.nn_)
+    outs[i] <- mean(pr.nn_2 == original_values)
+}
+
+mean(outs)
+```
+
+98.8%, awesome! Next time when you are invited to a relaxing evening that includes a wine tasting competition I think you should definitely bring your laptop as a contestant!
+
+Aside from that poor taste joke, (I made it again!), indeed this dataset is not the most challenging, I think with some more tweaking a better cross validation score could be achieved. Nevertheless I hope you found this tutorial useful. A gist with the entire code for this tutorial can be found here.
+
+Thank you for reading this article, please feel free to leave a comment if you have any questions or suggestions and share the post with others if you find it useful.
+
+Notes:

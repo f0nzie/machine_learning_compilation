@@ -1,0 +1,253 @@
+# Comparing regression models
+
+* Dataset: `Rates.csv`
+* Algorithms: *SLR, MLR, NN*
+
+## Introduction
+
+> line 29 does not plot
+
+**Source:** https://www.matthewrenze.com/workshops/practical-machine-learning-with-r/lab-3b-regression.html
+
+```{r}
+library(readr)
+
+policies <- read_csv(file.path(data_raw_dir, "Rates.csv"))
+policies
+```
+
+```{r}
+summary(policies)
+```
+
+```{r}
+library(RColorBrewer)
+palette <- brewer.pal(9, "Reds")
+```
+
+
+```{r}
+# plot(
+#   x = policies,
+#   col = palette[cut(x = policies$Rate, breaks = 9)]
+#   )
+```
+
+```{r}
+library(corrgram)
+
+corrgram(policies)
+```
+
+
+```{r}
+cor(policies[3:8])
+```
+
+```{r}
+cor(
+  x = policies$Age, 
+  y = policies$Rate)
+```
+
+```{r}
+plot(
+  x = policies$Age, 
+  y = policies$Rate)
+```
+
+## Split the Data into Test and Training Sets
+
+```{r}
+set.seed(42)
+
+```
+
+
+```{r}
+library(caret)
+
+indexes <- createDataPartition(
+  y = policies$Rate,
+  p = 0.80,
+  list = FALSE)
+
+train <- policies[indexes, ]
+test <- policies[-indexes, ]
+
+```
+
+```{r}
+print(nrow(train))
+print(nrow(test))
+```
+
+## Predict with Simple Linear Regression
+
+```{r}
+simpleModel <- lm(
+  formula = Rate ~ Age,
+  data = train)
+```
+
+```{r}
+plot(
+  x = policies$Age, 
+  y = policies$Rate)
+  
+lines(
+  x = train$Age,
+  y = simpleModel$fitted, 
+  col = "red",
+  lwd = 3)
+```
+
+```{r}
+summary(simpleModel)
+```
+
+```{r}
+simplePredictions <- predict(
+  object = simpleModel,
+  newdata = test)
+```
+
+```{r}
+plot(
+  x = policies$Age, 
+  y = policies$Rate)
+
+
+points(
+  x = test$Age,
+  y = simplePredictions,
+  col = "blue",
+  pch = 4,
+  lwd = 2)
+```
+
+```{r}
+simpleRMSE <- sqrt(mean((test$Rate - simplePredictions)^2))
+print(simpleRMSE)
+```
+
+## Predict with Multiple Linear Regression
+
+```{r}
+multipleModel <- lm(
+  formula = Rate ~ Age + Gender + State.Rate + BMI,
+  data = train)
+```
+
+```{r}
+summary(multipleModel)
+```
+
+```{r}
+multiplePredictions <- predict(
+  object = multipleModel,
+  newdata = test)
+```
+
+```{r}
+plot(
+  x = policies$Age, 
+  y = policies$Rate)
+
+points(
+  x = test$Age,
+  y = multiplePredictions,
+  col = "blue",
+  pch = 4,
+  lwd = 2)
+```
+
+```{r}
+multipleRMSE <- sqrt(mean((test$Rate - multiplePredictions)^2))
+print(multipleRMSE)
+```
+
+## Predict with Neural Network Regression
+
+```{r}
+normalize <- function(x) {
+  (x - min(x)) / (max(x) - min(x)) - 0.5
+}
+```
+
+```{r}
+denormalize <- function(x, y) {
+  ((x + 0.5) * (max(y) - min(y))) + min(y)
+}
+```
+
+```{r}
+scaledPolicies <- data.frame(
+  Gender = policies$Gender,
+  State.Rate = normalize(policies$State.Rate),
+  BMI = normalize(policies$BMI),
+  Age = normalize(policies$Age),
+  Rate = normalize(policies$Rate))
+```
+
+```{r}
+scaledTrain <- scaledPolicies[indexes, ]
+scaledTest <- scaledPolicies[-indexes, ]
+
+```
+
+```{r}
+library(nnet)
+
+neuralRegressor <- nnet(
+  formula = Rate ~ .,
+  data = scaledTrain,
+  linout = TRUE,
+  size = 5,
+  decay = 0.0001,
+  maxit = 1000)
+```
+
+```{r}
+scaledPredictions <- predict(
+  object = neuralRegressor, 
+  newdata = scaledTest)
+```
+
+```{r}
+neuralPredictions <- denormalize(
+  x = scaledPredictions, 
+  y = policies$Rate)
+```
+
+```{r}
+plot(
+  x = train$Age, 
+  y = train$Rate)
+
+points(
+  x = test$Age,
+  y = neuralPredictions,
+  col = "blue",
+  pch = 4,
+  lwd = 2)
+```
+
+```{r}
+library(NeuralNetTools)
+
+plotnet(neuralRegressor)
+```
+
+```{r}
+neuralRMSE <- sqrt(mean((test$Rate - neuralPredictions)^2))
+print(neuralRMSE)
+```
+
+## Evaluate the Regression Models
+
+```{r}
+print(simpleRMSE)
+print(multipleRMSE)
+print(neuralRMSE)
+```

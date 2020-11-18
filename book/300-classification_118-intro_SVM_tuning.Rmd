@@ -1,0 +1,231 @@
+# Tuning of Support Vector Machine prediction
+
+* Datasets: `iris`
+* Algorithms:
+    * Support Vector Machines
+
+https://eight2late.wordpress.com/2017/02/07/a-gentle-introduction-to-support-vector-machines-using-r/
+
+
+## Support vector machines in R
+In this demo we’ll use the svm interface that is implemented in the `e1071` R package. This interface provides R programmers access to the comprehensive `libsvm` library written by Chang and Lin. I’ll use two toy datasets: the famous iris dataset available with the base R package and the sonar dataset from the mlbench package. I won’t describe details of the datasets as they are discussed at length in the documentation that I have linked to. However, it is worth mentioning the reasons why I chose these datasets:
+
+As mentioned earlier, no real life dataset is linearly separable, but the iris dataset is almost so. Consequently, it is a good illustration of using linear SVMs. Although one almost never uses these in practice, I have illustrated their use primarily for pedagogical reasons.
+The sonar dataset is a good illustration of the benefits of using RBF kernels in cases where the dataset is hard to visualise (60 variables in this case!). In general, one would almost always use RBF (or other nonlinear) kernels in practice.
+
+With that said, let’s get right to it. I assume you have R and RStudio installed. For instructions on how to do this, have a look at the first article in this series. The processing preliminaries – loading libraries, data and creating training and test datasets are much the same as in my previous articles so I won’t dwell on these here. For completeness, however, I’ll list all the code so you can run it directly in R or R studio (a complete listing of the code can be found here):
+
+
+## SVM on `iris` dataset
+
+### Training and test datasets
+
+```{r}
+#load required library
+library(e1071)
+
+#load built-in iris dataset
+data(iris)
+
+#set seed to ensure reproducible results
+set.seed(42)
+
+#split into training and test sets
+iris[, "train"] <- ifelse(runif(nrow(iris)) < 0.8, 1, 0)
+
+#separate training and test sets
+trainset <- iris[iris$train == 1,]
+testset <- iris[iris$train == 0,]
+
+#get column index of train flag
+trainColNum <- grep("train", names(trainset))
+
+#remove train flag column from train and test sets
+trainset <- trainset[,-trainColNum]
+testset <- testset[,-trainColNum]
+
+dim(trainset)
+dim(testset)
+```
+
+### Build the SVM model
+
+```{r}
+#get column index of predicted variable in dataset
+typeColNum <- grep("Species", names(iris))
+
+#build model – linear kernel and C-classification (soft margin) with default cost (C=1)
+svm_model <- svm(Species~ ., data = trainset, 
+                 method = "C-classification", 
+                 kernel = "linear")
+svm_model
+```
+
+The output from the SVM model show that there are 24 support vectors. If desired, these can be examined using the SV variable in the model – i.e via svm_model$SV.
+
+### Support Vectors
+
+```{r}
+# support vectors
+svm_model$SV
+```
+
+The test prediction accuracy indicates that the linear performs quite well on this dataset, confirming that it is indeed near linearly separable. To check performance by class, one can create a confusion matrix as described in my post on random forests. I’ll leave this as an exercise for you.  Another point is that  we have used a soft-margin classification scheme with a cost C=1. You can experiment with this by explicitly changing the value of C. Again, I’ll leave this for you an exercise.
+
+### Predictions on training model
+
+```{r}
+# training set predictions
+pred_train <- predict(svm_model, trainset)
+mean(pred_train == trainset$Species)
+# [1] 0.9826087
+```
+
+### Predictions on test model
+
+```{r}
+# test set predictions
+pred_test <-predict(svm_model, testset)
+mean(pred_test == testset$Species)
+# [1] 0.9142857
+```
+
+### Confusion matrix and Accuracy
+
+```{r}
+# confusion matrix
+cm <- table(pred_test, testset$Species)
+cm
+```
+
+```{r}
+# accuracy
+sum(diag(cm)) / sum(cm)
+```
+
+
+## SVM with Radial Basis Function kernel. Linear
+
+### Training and test sets
+
+```{r}
+#load required library (assuming e1071 is already loaded)
+library(mlbench)
+
+#load Sonar dataset
+data(Sonar)
+#set seed to ensure reproducible results
+set.seed(42)
+#split into training and test sets
+Sonar[, "train"] <- ifelse(runif(nrow(Sonar))<0.8,1,0)
+
+#separate training and test sets
+trainset <- Sonar[Sonar$train==1,]
+testset <- Sonar[Sonar$train==0,]
+
+#get column index of train flag
+trainColNum <- grep("train",names(trainset))
+#remove train flag column from train and test sets
+trainset <- trainset[,-trainColNum]
+testset <- testset[,-trainColNum]
+
+#get column index of predicted variable in dataset
+typeColNum <- grep("Class",names(Sonar))
+```
+
+### Predictions on Training model
+```{r}
+#build model – linear kernel and C-classification with default cost (C=1)
+svm_model <- svm(Class~ ., data=trainset, 
+                 method="C-classification", 
+                 kernel="linear")
+
+#training set predictions
+pred_train <-predict(svm_model,trainset)
+mean(pred_train==trainset$Class)
+```
+
+### Predictions on test model
+
+```{r}
+#test set predictions
+pred_test <-predict(svm_model,testset)
+mean(pred_test==testset$Class)
+```
+
+I’ll leave you to examine the contents of the model. The important point to note here is that the performance of the model with the test set is quite dismal compared to the previous case. This simply indicates that the linear kernel is not appropriate here.  Let’s take a look at what happens if we use the RBF kernel with default values for the parameters:
+
+## SVM with Radial Basis Function kernel. Non-linear
+
+### Predictions on training model
+
+```{r}
+#build model: radial kernel, default params
+svm_model <- svm(Class~ ., data=trainset, 
+                 method="C-classification", 
+                 kernel="radial")
+# print params
+svm_model$cost
+svm_model$gamma
+
+#training set predictions
+pred_train <-predict(svm_model,trainset)
+mean(pred_train==trainset$Class)
+```
+
+### Predictions on test model
+
+```{r}
+#test set predictions
+pred_test <-predict(svm_model,testset)
+mean(pred_test==testset$Class)
+```
+
+That’s a pretty decent improvement from the linear kernel. Let’s see if we can do better by doing some parameter tuning. To do this we first invoke tune.svm and use the parameters it gives us in the call to svm:
+
+### Tuning of parameters
+
+```{r}
+# find optimal parameters in a specified range
+tune_out <- tune.svm(x = trainset[,-typeColNum], 
+                     y = trainset[, typeColNum], 
+                     gamma = 10^(-3:3), 
+                     cost = c(0.01, 0.1, 1, 10, 100, 1000), 
+                     kernel = "radial")
+
+#print best values of cost and gamma
+tune_out$best.parameters$cost
+tune_out$best.parameters$gamma
+
+#build model
+svm_model <- svm(Class~ ., data = trainset, 
+                 method = "C-classification", 
+                 kernel = "radial", 
+                 cost = tune_out$best.parameters$cost, 
+                 gamma = tune_out$best.parameters$gamma)
+```
+
+### Prediction on training model with new parameters
+
+```{r}
+# training set predictions
+pred_train <-predict(svm_model,trainset)
+mean(pred_train==trainset$Class)
+```
+
+### Prediction on test model with new parameters
+
+```{r}
+# test set predictions
+pred_test <-predict(svm_model,testset)
+mean(pred_test==testset$Class)
+```
+
+Which is fairly decent improvement on the un-optimised case.
+
+## Wrapping up
+This bring us to the end of this introductory exploration of SVMs in R. To recap, the distinguishing feature of SVMs in contrast to most other techniques is that they attempt to construct optimal separation boundaries between different categories.
+
+SVMs  are quite versatile and have been applied to a wide variety of domains ranging from chemistry to pattern recognition. They are best used in binary classification scenarios. This brings up a question as to where SVMs are to be preferred to other binary classification techniques such as logistic regression. The honest response is, “it depends” – but here are some points to keep in mind when choosing between the two. A general point to keep in mind is that SVM  algorithms tend to be expensive both in terms of memory and computation, issues that can start to hurt as the size of the dataset increases.
+
+Given all the above caveats and considerations, the best way  to figure out whether an SVM approach will work for your problem may be to do what most machine learning practitioners do: try it out!

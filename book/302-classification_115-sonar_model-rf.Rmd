@@ -1,0 +1,100 @@
+# Detect mines vs rocks with Random Forest
+
+* Datasets: `Sonar`
+* Algorithms:
+    * Random Forest
+
+
+## Introduction
+
+* `mtry`: Number of variables randomly sampled as candidates at each split.
+* `ntree`: Number of trees to grow.
+
+## Load libraries
+
+```{r warning=FALSE, message=FALSE}
+# load packages
+library(caret)
+library(mlbench)
+library(randomForest)
+library(tictoc)
+
+# load dataset
+data(Sonar)
+set.seed(7)
+```
+
+## Explore data
+
+```{r}
+dplyr::glimpse(Sonar)
+```
+
+
+```{r}
+tibble::as_tibble(Sonar)
+```
+
+
+```{r split_dataset}
+# create 80%/20% for training and validation datasets
+validationIndex <- createDataPartition(Sonar$Class, p=0.80, list=FALSE)
+validation <- Sonar[-validationIndex,]
+training   <- Sonar[validationIndex,]
+```
+
+```{r train_model-takes_a_while}
+tic()
+# train a model and summarize model
+set.seed(7)
+trainControl <- trainControl(method="repeatedcv", number=10, repeats=3)
+fit.rf <- train(Class~., data=training, 
+                method = "rf", 
+                metric = "Accuracy", 
+                trControl = trainControl, 
+                ntree = 2000)
+toc()
+print(fit.rf)
+print(fit.rf$finalModel)
+```
+
+
+> Accuracy: 85.26% at mtry=2
+
+## Apply tuning parameters for final model
+
+```{r run-random_forest}
+# create standalone model using all training data
+set.seed(7)
+finalModel <- randomForest(Class~., training, mtry=2, ntree=2000)
+
+# make a predictions on "new data" using the final model
+finalPredictions <- predict(finalModel, validation[,1:60])
+confusionMatrix(finalPredictions, validation$Class)
+```
+
+> Accuracy: 82.93%
+
+## Save model
+
+```{r save-model}
+# save the model to disk
+saveRDS(finalModel, file.path(model_out_dir, "sonar-finalModel.rds"))
+```
+
+## Use the saved model
+
+```{r load-model}
+# load the model
+superModel <- readRDS(file.path(model_out_dir, "sonar-finalModel.rds"))
+print(superModel)
+```
+
+## Make prediction with new data
+
+```{r prediction-cm}
+# make a predictions on "new data" using the final model
+finalPredictions <- predict(superModel, validation[,1:60])
+confusionMatrix(finalPredictions, validation$Class)
+```
+

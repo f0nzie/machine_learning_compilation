@@ -1,0 +1,332 @@
+# Dealing with unbalanced data
+
+## Breast cancer dataset
+
+## Introduction
+
+Source: https://shiring.github.io/machine_learning/2017/04/02/unbalanced
+
+```{r libraries}
+library(caret)
+library(mice)
+library(ggplot2)
+```
+
+In my last post, where I shared the code that I used to produce an example analysis to go along with my webinar on building meaningful models for disease prediction, I mentioned that it is advised to consider over- or under-sampling when you have unbalanced data sets. Because my focus in this webinar was on evaluating model performance, I did not want to add an additional layer of complexity and therefore did not further discuss how to specifically deal with unbalanced data.
+
+But because I had gotten a few questions regarding this, I thought it would be worthwhile to explain over- and under-sampling techniques in more detail and show how you can very easily implement them with `caret`.
+
+## Read and process the data
+
+```{r read-data}
+bc_data <- read.table(file.path(data_raw_dir, "breast-cancer-wisconsin.data"), 
+                      header = FALSE, sep = ",")
+
+colnames(bc_data) <- c("sample_code_number", "clump_thickness", 
+                       "uniformity_of_cell_size", "uniformity_of_cell_shape",
+                       "marginal_adhesion", "single_epithelial_cell_size", 
+                       "bare_nuclei", "bland_chromatin", "normal_nucleoli", 
+                       "mitosis", "classes")
+
+bc_data$classes <- ifelse(bc_data$classes == "2", "benign",
+                          ifelse(bc_data$classes == "4", "malignant", NA))
+
+bc_data[bc_data == "?"] <- NA
+
+# how many NAs are in the data
+length(which(is.na(bc_data)))
+```
+
+
+```{r missing-data}
+# impute missing data
+
+# skip columns: sample_code_number and classes
+bc_data[,2:10] <- apply(bc_data[, 2:10], 2, function(x) as.numeric(as.character(x)))
+
+# impute but stay mute
+dataset_impute <- mice(bc_data[, 2:10],  print = FALSE)
+
+# bind "classes" with the rest. skip "sample_code_number"
+bc_data <- cbind(bc_data[, 11, drop = FALSE], 
+                 mice::complete(dataset_impute, action = 1))
+
+bc_data$classes <- as.factor(bc_data$classes)
+```
+
+### Unbalanced data
+In this context, unbalanced data refers to classification problems where we have unequal instances for different classes. Having unbalanced data is actually very common in general, but it is especially prevalent when working with disease data where we usually have more healthy control samples than disease cases. Even more extreme unbalance is seen with fraud detection, where e.g. most credit card uses are okay and only very few will be fraudulent. In the example I used for my webinar, a *breast cancer* dataset, we had about twice as many benign than malignant samples.
+
+```{r}
+# how many benign and malignant cases are there?
+summary(bc_data$classes)
+```
+
+#### Why is unbalanced data a problem in machine learning?
+Most machine learning classification algorithms are sensitive to unbalance in the predictor classes. Let’s consider an even more extreme example than our breast cancer dataset: assume we had 10 malignant vs 90 benign samples. A machine learning model that has been trained and tested on such a dataset could now predict “benign” for all samples and still gain a very high accuracy. An unbalanced dataset will bias the prediction model towards the more common class!
+
+
+
+#### How to balance data for modeling
+The basic theoretical concepts behind over- and under-sampling are very simple:
+
+With under-sampling, we randomly select a subset of samples from the class with more instances to match the number of samples coming from each class. In our example, we would randomly pick 241 out of the 458 benign cases. The main disadvantage of under-sampling is that we lose potentially relevant information from the left-out samples.
+
+With oversampling, we randomly duplicate samples from the class with fewer instances or we generate additional instances based on the data that we have, so as to match the number of samples in each class. While we avoid losing information with this approach, we also run the risk of overfitting our model as we are more likely to get the same samples in the training and in the test data, i.e. the test data is no longer independent from training data. This would lead to an overestimation of our model’s performance and generalizability.
+
+In reality though, we should not simply perform over- or under-sampling on our training data and then run the model. We need to account for cross-validation and perform over- or under-sampling on each fold independently to get an honest estimate of model performance!
+
+
+#### Modeling the original unbalanced data
+Here is the same model I used in my webinar example: I randomly divide the data into training and test sets (stratified by class) and perform Random Forest modeling with 10 x 10 repeated cross-validation. Final model performance is then measured on the test set.
+
+```{r train-test}
+set.seed(42)
+index <- createDataPartition(bc_data$classes, p = 0.7, list = FALSE)
+train_data <- bc_data[index, ]
+test_data  <- bc_data[-index, ]
+```
+
+
+```{r model-rf-run}
+set.seed(42)
+model_rf <- caret::train(classes ~ .,
+                         data = train_data,
+                         method = "rf",
+                         preProcess = c("scale", "center"),
+                         trControl = trainControl(method = "repeatedcv", 
+                                                  number = 10, 
+                                                  repeats = 10, 
+                                                  verboseIter = FALSE))
+```
+
+
+```{r predict-test}
+final <- data.frame(actual = test_data$classes,
+                    predict(model_rf, 
+                            newdata = test_data, 
+                            type = "prob"))
+
+final$predict <- ifelse(final$benign > 0.5, "benign", "malignant")
+```
+
+
+```{r}
+final_predict <- as.factor(final$predict)
+test_data_classes <- as.factor(test_data$classes)
+
+cm_original <- confusionMatrix(final_predict, test_data_classes)
+cm_original$byClass['Sensitivity']
+```
+
+## Under-sampling
+Luckily, `caret` makes it very easy to incorporate over- and under-sampling techniques with cross-validation resampling. We can simply add the sampling option to our `trainControl` and choose down for under- (also called `down`-) sampling. The rest stays the same as with our original model.
+
+```{r model-rf-undersampling}
+set.seed(42)
+ctrl <- trainControl(method = "repeatedcv", 
+                     number = 10, 
+                     repeats = 10, 
+                     verboseIter = FALSE,
+                     sampling = "down")
+
+
+model_rf_under <- caret::train(classes ~ .,
+                         data = train_data,
+                         method = "rf",
+                         preProcess = c("scale", "center"),
+                         trControl = ctrl)
+```
+
+
+```{r}
+final_under <- data.frame(actual = test_data$classes,
+                    predict(model_rf_under, 
+                            newdata = test_data, 
+                            type = "prob"))
+
+final_under$predict <- ifelse(final_under$benign > 0.5, "benign", "malignant")
+```
+
+
+```{r}
+final_under_predict <- as.factor(final_under$predict)
+test_data_classes <- test_data$classes
+
+cm_under <- confusionMatrix(final_under_predict, test_data_classes)
+cm_under$byClass['Sensitivity']
+```
+
+
+## Oversampling
+For over- (also called up-) sampling we simply specify sampling = "up".
+
+```{r model-rf-oversampling}
+set.seed(42)
+ctrl <- trainControl(method = "repeatedcv", 
+                     number = 10, 
+                     repeats = 10, 
+                     verboseIter = FALSE,
+                     sampling = "up")
+
+
+model_rf_over <- caret::train(classes ~ .,
+                         data = train_data,
+                         method = "rf",
+                         preProcess = c("scale", "center"),
+                         trControl = ctrl)
+```
+
+
+```{r}
+final_over <- data.frame(actual = test_data$classes,
+                          predict(model_rf_over, 
+                                  newdata = test_data, 
+                                  type = "prob"))
+
+final_over$predict <- ifelse(final_over$benign > 0.5, "benign", "malignant")
+```
+
+```{r}
+final_over_predict <- as.factor(final_over$predict)
+test_data_classes <- test_data$classes
+
+cm_over <- confusionMatrix(final_over_predict, test_data_classes)
+cm_over$byClass['Sensitivity']
+```
+
+
+### ROSE
+Besides over- and under-sampling, there are hybrid methods that combine under-sampling with the generation of additional data. Two of the most popular are ROSE and SMOTE.
+
+> From Nicola Lunardon, Giovanna Menardi and Nicola Torelli’s “ROSE: A Package for Binary Imbalanced Learning” (R Journal, 2014, Vol. 6 Issue 1, p. 79): “The ROSE package provides functions to deal with binary classification problems in the presence of imbalanced classes. Artificial balanced samples are generated according to a smoothed bootstrap approach and allow for aiding both the phases of estimation and accuracy evaluation of a binary classifier in the presence of a rare class. Functions that implement more traditional remedies for the class imbalance and different metrics to evaluate accuracy are also provided. These are estimated by holdout, bootstrap, or cross-validation methods.”
+
+You implement them the same way as before, this time choosing sampling = "rose"…
+
+```{r model-rf-rose}
+set.seed(42)
+ctrl <- trainControl(method = "repeatedcv", 
+                     number = 10, 
+                     repeats = 10, 
+                     verboseIter = FALSE,
+                     sampling = "rose")
+
+model_rf_rose <- caret::train(classes ~ .,
+                              data = train_data,
+                              method = "rf",
+                              preProcess = c("scale", "center"),
+                              trControl = ctrl)
+```
+
+
+```{r}
+final_rose <- data.frame(actual = test_data$classes,
+                         predict(model_rf_rose, 
+                                 newdata = test_data, 
+                                 type = "prob"))
+
+final_rose$predict <- ifelse(final_rose$benign > 0.5, "benign", "malignant")
+```
+
+```{r}
+cm_rose <- confusionMatrix(as.factor(final_rose$predict), 
+                           as.factor(test_data$classes))
+cm_rose$byClass['Sensitivity']
+```
+
+
+### SMOTE
+… or by choosing sampling = "smote" in the `trainControl` settings.
+
+> From Nitesh V. Chawla, Kevin W. Bowyer, Lawrence O. Hall and W. Philip Kegelmeyer’s “SMOTE: Synthetic Minority Over-sampling Technique” (Journal of Artificial Intelligence Research, 2002, Vol. 16, pp. 321–357): “This paper shows that a combination of our method of over-sampling the minority (abnormal) class and under-sampling the majority (normal) class can achieve better classifier performance (in ROC space) than only under-sampling the majority class. This paper also shows that a combination of our method of over-sampling the minority class and under-sampling the majority class can achieve better classifier performance (in ROC space) than varying the loss ratios in Ripper or class priors in Naive Bayes. Our method of over-sampling the minority class involves creating synthetic minority class examples.”
+
+```{r model-rf-smote-takes_a_while}
+set.seed(42)
+ctrl <- trainControl(method = "repeatedcv", 
+                     number = 10, 
+                     repeats = 10, 
+                     verboseIter = FALSE,
+                     sampling = "smote")
+
+model_rf_smote <- caret::train(classes ~ .,
+                              data = train_data,
+                              method = "rf",
+                              preProcess = c("scale", "center"),
+                              trControl = ctrl)
+```
+
+```{r}
+final_smote <- data.frame(actual = test_data$classes,
+                         predict(model_rf_smote, 
+                                 newdata = test_data, 
+                                 type = "prob"))
+
+final_smote$predict <- ifelse(final_smote$benign > 0.5, "benign", "malignant")
+```
+
+
+```{r}
+cm_smote <- confusionMatrix(as.factor(final_smote$predict), 
+                            as.factor(test_data$classes))
+cm_smote$byClass['Sensitivity']
+```
+
+## Predictions
+Now let’s compare the predictions of all these models:
+
+```{r plot-resampling}
+models <- list(
+                original = model_rf,
+                under = model_rf_under,
+                over = model_rf_over,
+                smote = model_rf_smote,
+                rose = model_rf_rose)
+
+resampling <- resamples(models)
+bwplot(resampling)
+```
+
+
+```{r comparison-df}
+library(dplyr)
+comparison <- data.frame(model = names(models),
+                         Sensitivity = rep(NA, length(models)),
+                         Specificity = rep(NA, length(models)),
+                         Precision   = rep(NA, length(models)),
+                         Recall      = rep(NA, length(models)),
+                         F1          = rep(NA, length(models)))
+
+for (name in names(models)) {
+    cm_model <- get(paste0("cm_", name))
+    comparison[comparison$model==name, ] <- filter(comparison, model==name) %>%
+    mutate(Sensitivity = cm_model$byClass["Sensitivity"],
+           Specificity = cm_model$byClass["Specificity"],
+           Precision   = cm_model$byClass["Precision"],
+           Recall      = cm_model$byClass["Recall"],
+           F1          = cm_model$byClass["F1"]
+  )
+}    
+
+print(comparison)
+
+```
+
+
+```{r comparison-plot}
+library(tidyr)
+comparison %>%
+  gather(x, y, Sensitivity:F1) %>%
+  ggplot(aes(x = x, y = y, color = model)) +
+    geom_jitter(width = 0.2, alpha = 0.5, size = 3)
+```
+
+With this small dataset, we can already see how the different techniques can influence model performance. **Sensitivity** (or **recall**) describes the proportion of benign cases that have been predicted correctly, while **specificity** describes the proportion of malignant cases that have been predicted correctly. **Precision describes** the true positives, i.e. the proportion of benign predictions that were actual from benign samples. **F1** is the weighted average of precision and sensitivity/ recall.
+
+## Final notes
+
+Here, all four methods improved specificity and precision compared to the original model. Under-sampling, over-sampling and ROSE additionally improved precision and the F1 score.
+
+This post shows a simple example of how to correct for unbalance in datasets for machine learning. For more advanced instructions and potential caveats with these techniques, check out the excellent `caret` documentation.
+
+If you are interested in more machine learning posts, check out the category listing for machine_learning on my blog.
+

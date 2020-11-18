@@ -1,0 +1,299 @@
+# Evaluation of three linear regression models
+
+* Dataset: `iris.csv`
+* Algorithms: 
+  * Simple Linear Regression
+  * Multiple Regression
+  * Neural Networks
+
+```{r echo=FALSE}
+# load(file.path(rprojroot::find_rstudio_root_file(), "workspace.RData"))
+#source(file.path(rprojroot::find_rstudio_root_file(), 'R', 'set_folders.R'))
+#.libPaths(c(normalizePath(sbox_path), normalizePath(lib_path), .libPaths()))
+```
+
+## Introduction
+
+https://www.matthewrenze.com/workshops/practical-machine-learning-with-r/lab-3a-regression.html
+
+
+## Explore the Data
+1. Load Iris data
+2. Plot scatterplot
+3. Plot correlogram
+
+
+```{r}
+data(iris)
+```
+
+```{r}
+write.csv(iris, file.path(data_raw_dir, "iris.csv"))
+```
+
+
+Create scatterplot matrix
+
+```{r}
+plot(iris[1:4])
+```
+
+
+```{r}
+library(corrgram)
+corrgram(iris[1:4])
+```
+
+
+```{r}
+cor(iris[1:4])
+
+```
+
+
+```{r}
+cor(
+  x = iris$Petal.Length, 
+  y = iris$Petal.Width)
+```
+
+
+```{r}
+plot(
+  x = iris$Petal.Length, 
+  y = iris$Petal.Width,
+  xlim = c(0.25, 7),
+  ylim = c(0.25, 2.5))
+```
+
+## Create Training and Test Sets
+
+```{r}
+set.seed(42)
+```
+
+
+```{r}
+indexes <- sample(
+  x = 1:150, 
+  size = 100)
+```
+
+
+```{r}
+train <- iris[indexes, ]
+test <- iris[-indexes, ]
+```
+
+
+## Predict with Simple Linear Regression
+
+```{r}
+simpleModel <- lm(
+  formula = Petal.Width ~ Petal.Length,
+  data = train)
+```
+
+
+```{r}
+plot(
+  x = iris$Petal.Length, 
+  y = iris$Petal.Width,
+  xlim = c(0.25, 7),
+  ylim = c(0.25, 2.5))
+  
+lines(
+  x = train$Petal.Length,
+  y = simpleModel$fitted, 
+  col = "red",
+  lwd = 3)
+```
+
+
+```{r}
+summary(simpleModel)
+```
+
+
+```{r}
+simplePredictions <- predict(
+  object = simpleModel,
+  newdata = test)
+```
+
+
+```{r}
+plot(
+  x = iris$Petal.Length, 
+  y = iris$Petal.Width,
+  xlim = c(0.25, 7),
+  ylim = c(0.25, 2.5))
+  
+points(
+  x = test$Petal.Length,
+  y = simplePredictions,
+  col = "blue",
+  pch = 4,
+  lwd = 2)
+
+points(
+  x = test$Petal.Length,
+  y = test$Petal.Width,
+  col = "red",
+  pch = 16)
+```
+
+
+
+```{r}
+simpleRMSE <- sqrt(mean((test$Petal.Width - simplePredictions)^2))
+print(simpleRMSE)
+```
+
+## Predict with Multiple Regression
+
+```{r}
+multipleModel <- lm(
+  formula = Petal.Width ~ .,
+  data = train)
+```
+
+```{r}
+summary(multipleModel)
+```
+
+```{r}
+multiplePredictions <- predict(
+  object = multipleModel,
+  newdata = test)
+```
+
+```{r}
+plot(
+  x = iris$Petal.Length, 
+  y = iris$Petal.Width,
+  xlim = c(0.25, 7),
+  ylim = c(0.25, 2.5))
+  
+points(
+  x = test$Petal.Length,
+  y = multiplePredictions,
+  col = "blue",
+  pch = 4,
+  lwd = 2)
+
+points(
+  x = test$Petal.Length,
+  y = test$Petal.Width,
+  col = "red",
+  pch = 16)
+```
+
+
+```{r}
+multipleRMSE <- sqrt(mean((test$Petal.Width - multiplePredictions)^2))
+print(multipleRMSE)
+```
+
+
+## 5. Predict with Neural Network Regression
+
+```{r}
+normalize <- function(x) {
+  (x - min(x)) / (max(x) - min(x)) - 0.5
+}
+```
+
+```{r}
+denormalize <- function(x, y) {
+  ((x + 0.5) * (max(y) - min(y))) + min(y)
+}
+```
+
+
+```{r}
+scaledIris <- data.frame(
+  Sepal.Length = normalize(iris$Sepal.Length),
+  Sepal.Width = normalize(iris$Sepal.Width),
+  Petal.Length = normalize(iris$Petal.Length),
+  Petal.Width = normalize(iris$Petal.Width),
+  Species = iris$Species)
+```
+
+
+```{r}
+scaledTrain <- scaledIris[indexes, ]
+scaledTest <- scaledIris[-indexes, ]
+```
+
+```{r run-nnet}
+library(nnet)
+
+neuralRegressor <- nnet(
+  formula = Petal.Width ~ .,
+  data = scaledTrain,
+  linout = TRUE,
+  skip = TRUE,
+  size = 4,
+  decay = 0.0001,
+  maxit = 500)
+```
+
+
+```{r}
+library(NeuralNetTools)
+
+plotnet(neuralRegressor)
+```
+
+
+```{r}
+scaledPredictions <- predict(
+  object = neuralRegressor, 
+  newdata = scaledTest)
+```
+
+
+```{r}
+neuralPredictions <- denormalize(
+  x = scaledPredictions, 
+  y = iris$Petal.Width)
+```
+
+
+```{r}
+plot(
+  x = iris$Petal.Length, 
+  y = iris$Petal.Width,
+  xlim = c(0.25, 7),
+  ylim = c(0.25, 2.5))
+  
+points(
+  x = test$Petal.Length,
+  y = neuralPredictions,
+  col = "blue",
+  pch = 4,
+  lwd = 2)
+
+points(
+  x = test$Petal.Length,
+  y = test$Petal.Width,
+  col = "red",
+  pch = 16)
+```
+
+```{r}
+neuralRMSE <- sqrt(mean((test$Petal.Width - neuralPredictions)^2))
+print(neuralRMSE)
+```
+
+## 6. Evaluate all the regression Models
+
+```{r}
+print(simpleRMSE)
+print(multipleRMSE)
+print(neuralRMSE)
+```
+
+
+

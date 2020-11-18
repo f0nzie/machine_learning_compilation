@@ -1,0 +1,98 @@
+# Predicting the type of glass
+
+* Datasets: `Glass`
+* Algorithms:
+    * SVM
+    * Partitioning Tree
+
+https://cran.r-project.org/web/packages/e1071/vignettes/svmdoc.pdf
+
+In this example, we use the glass data from the UCI Repository of Machine
+Learning Databases for classification. The task is to predict the type of a glass
+on basis of its chemical analysis. We start by splitting the data into a train and
+test set:
+
+```{r}
+library(caret)
+library(e1071)
+library(rpart)
+
+data(Glass, package="mlbench")
+str(Glass)
+```
+
+```{r}
+## split data into a train and test set
+index <- 1:nrow(Glass)
+testindex <- sample(index, trunc(length(index)/3))
+testset  <- Glass[testindex,]
+trainset <- Glass[-testindex,]
+```
+
+Both for the SVM and the partitioning tree (via `rpart()`), we fit the model and
+try to predict the test set values:
+
+```{r}
+## svm
+svm.model <- svm(Type ~ ., data = trainset, cost = 100, gamma = 1)
+svm.pred  <- predict(svm.model, testset[,-10])
+```
+
+(The dependent variable, Type, has column number 10. cost is a general penalizing
+parameter for C-classification and `gamma` is the radial basis function-specific
+`kernel` parameter.)
+
+```{r}
+## rpart
+rpart.model <- rpart(Type ~ ., data = trainset)
+rpart.pred <- predict(rpart.model, testset[,-10], type = "class")
+```
+
+A cross-tabulation of the true versus the predicted values yields:
+
+```{r}
+## compute svm confusion matrix
+table(pred = svm.pred, true = testset[,10])
+```
+
+
+```{r}
+## compute rpart confusion matrix
+table(pred = rpart.pred, true = testset[,10])
+```
+
+### Comparison test sets
+
+```{r}
+confusionMatrix(svm.pred, testset$Type)
+```
+
+```{r}
+confusionMatrix(rpart.pred, testset$Type)
+```
+
+### Comparison with resamples
+Finally, we compare the performance of the two methods by computing the
+respective accuracy rates and the kappa indices (as computed by `classAgreement()`
+also contained in package `e1071`). In Table 1, we summarize the results
+of 10 replications—Support Vector Machines show better results.
+
+```{r}
+set.seed(1234567)
+
+# SVM
+fit.svm <- train(Type ~., data = trainset, 
+                 method = "svmRadial")
+
+# Random Forest
+fit.rpart <- train(Type ~., data = trainset, 
+                method="rpart")
+
+# collect resamples
+results <- resamples(list(svm = fit.svm, 
+                          rpart  = fit.rpart))
+
+summary(results)
+```
+
+

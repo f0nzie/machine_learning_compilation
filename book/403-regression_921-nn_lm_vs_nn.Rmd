@@ -1,0 +1,111 @@
+# Regression with a neural network
+
+* Dataset: `BostonHousing`
+* Algorithms: 
+  * Neural Network (`nnet`)
+  * Linear Regression
+
+```{r}
+###
+### prepare data
+###
+library(mlbench)
+data(BostonHousing)
+ 
+# inspect the range which is 1-50
+summary(BostonHousing$medv)
+ 
+ 
+##
+## model linear regression
+##
+ 
+lm.fit <- lm(medv ~ ., data=BostonHousing)
+ 
+lm.predict <- predict(lm.fit)
+ 
+# mean squared error: 21.89483
+mean((lm.predict - BostonHousing$medv)^2) 
+ 
+plot(BostonHousing$medv, lm.predict,
+    main="Linear regression predictions vs actual",
+    xlab="Actual")
+```
+
+```{r}
+##
+## model neural network
+##
+require(nnet)
+ 
+# scale inputs: divide by 50 to get 0-1 range
+nnet.fit <- nnet(medv/50 ~ ., data=BostonHousing, size=2) 
+ 
+# multiply 50 to restore original scale
+nnet.predict <- predict(nnet.fit)*50 
+ 
+# mean squared error: 16.40581
+mean((nnet.predict - BostonHousing$medv)^2) 
+ 
+plot(BostonHousing$medv, nnet.predict,
+    main="Neural network predictions vs actual",
+    xlab="Actual")
+```
+
+## Neural Network
+Now, let’s use the function train() from the package caret to optimize the neural network hyperparameters decay and size, Also, caret performs resampling to give a better estimate of the error. In this case we scale linear regression by the same value, so the error statistics are directly comparable.
+
+```{r}
+ library(mlbench)
+ data(BostonHousing)
+ 
+require(caret)
+ 
+mygrid <- expand.grid(.decay=c(0.5, 0.1), .size=c(4,5,6))
+nnetfit <- train(medv/50 ~ ., data=BostonHousing, method="nnet", maxit=1000, tuneGrid=mygrid, trace=F) 
+print(nnetfit)
+```
+
+    506 samples
+     13 predictors
+     
+    No pre-processing
+    Resampling: Bootstrap (25 reps) 
+     
+    Summary of sample sizes: 506, 506, 506, 506, 506, 506, ... 
+     
+    Resampling results across tuning parameters:
+     
+      size  decay  RMSE    Rsquared  RMSE SD  Rsquared SD
+      4     0.1    0.0852  0.785     0.00863  0.0406     
+      4     0.5    0.0923  0.753     0.00891  0.0436     
+      5     0.1    0.0836  0.792     0.00829  0.0396     
+      5     0.5    0.0899  0.765     0.00858  0.0399     
+      6     0.1    0.0835  0.793     0.00804  0.0318     
+      6     0.5    0.0895  0.768     0.00789  0.0344   
+
+
+
+## Linear Regression
+
+```{r}
+ lmfit <- train(medv/50 ~ ., data=BostonHousing, method="lm") 
+ print(lmfit)
+
+```
+
+    506 samples
+     13 predictors
+     
+    No pre-processing
+    Resampling: Bootstrap (25 reps) 
+     
+    Summary of sample sizes: 506, 506, 506, 506, 506, 506, ... 
+     
+    Resampling results
+     
+      RMSE    Rsquared  RMSE SD  Rsquared SD
+      0.0994  0.703     0.00741  0.0389    
+
+A tuned neural network has a RMSE of 0.0835 compared to linear regression’s RMSE of 0.0994.
+

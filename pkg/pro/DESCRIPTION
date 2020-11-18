@@ -1,0 +1,31 @@
+Package: ml.pro
+Type: Package
+Title: Machine Learning for Pros using h2o, NeuralNetTools
+Version: 0.1
+Date: 2019-05-13
+Author: datascience
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one line)
+License: What license is it under?
+Imports: 
+  coefplot,
+  corrr,
+  corrgram, 
+  DBI,
+  ggrepel,
+  ggthemes,
+  h2o,
+  janitor,
+  lime,
+  margins,
+  matrixStats,
+  neuralnet,
+  NeuralNetTools,
+  RSQLite,
+  rsparkling,
+  survey,
+  survival,
+  srvyr,
+  sparklyr,
+  tidyquant
+RoxygenNote: 6.1.1

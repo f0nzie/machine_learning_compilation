@@ -1,0 +1,291 @@
+# Naive Bayes for SMS spam
+
+* Datasets: `sms_spam.csv`
+* Algorithms: 
+  * Naive Bayes
+
+
+Dataset: https://github.com/stedy/Machine-Learning-with-R-datasets/blob/master/sms_spam.csv
+
+Instructions: Machine Learning with R. Page 104.
+
+```{r}
+library(tictoc)
+```
+
+
+```{r}
+sms_raw <- read.csv(file.path(data_raw_dir, "sms_spam.csv"), stringsAsFactors = FALSE)
+```
+
+
+```{r}
+str(sms_raw)
+```
+
+### convert type to a factor
+
+```{r}
+sms_raw$type <- factor(sms_raw$type)
+```
+
+
+```{r}
+str(sms_raw$type)
+```
+
+How many email of type ham or spam:
+
+```{r}
+table(sms_raw$type)
+```
+
+Create the corpus:
+
+```{r}
+library(tm)
+
+sms_corpus <- VCorpus(VectorSource(sms_raw$text))
+print(sms_corpus)
+```
+
+Let's see a couple of documents:
+
+```{r}
+inspect(sms_corpus[1:2])
+```
+
+
+```{r}
+# show some text
+as.character(sms_corpus[[1]])
+```
+
+```{r}
+# show three documents
+lapply(sms_corpus[1:3], as.character)
+```
+
+## Some conversion
+
+```{r}
+# convert to lowercase
+sms_corpus_clean <- tm_map(sms_corpus, content_transformer(tolower))
+```
+
+```{r}
+as.character(sms_corpus[[1]])
+```
+
+```{r}
+# converted to lowercase
+as.character(sms_corpus_clean[[1]])
+```
+
+```{r}
+# remove numbers
+sms_corpus_clean <- tm_map(sms_corpus_clean, removeNumbers)
+```
+
+What transformations are available
+
+```{r}
+# what transformations are available
+getTransformations()
+```
+
+```{r}
+# remove stop words
+sms_corpus_clean <- tm_map(sms_corpus_clean, removeWords, stopwords())
+```
+
+```{r}
+# remove punctuation
+sms_corpus_clean <- tm_map(sms_corpus_clean, removePunctuation)
+```
+
+Stemming:
+
+```{r}
+library(SnowballC)
+wordStem(c("learn", "learned", "learning", "learns"))
+```
+
+```{r}
+# stemming corpus
+sms_corpus_clean <- tm_map(sms_corpus_clean, stemDocument)
+```
+
+
+```{r}
+# remove white spaces
+sms_corpus_clean <- tm_map(sms_corpus_clean, stripWhitespace)
+```
+
+Show what we've got so far
+
+```{r}
+# show what we've got so far
+lapply(sms_corpus[1:3], as.character)
+
+lapply(sms_corpus_clean[1:3], as.character)
+```
+
+## Convert to Document Term Matrix (dtm
+)
+```{r}
+sms_dtm <- DocumentTermMatrix(sms_corpus_clean)
+sms_dtm
+```
+
+## split in training and test datasets
+```{r}
+sms_dtm_train <- sms_dtm[1:4169, ]
+sms_dtm_test  <- sms_dtm[4170:5559, ]
+```
+
+### separate the labels
+```{r}
+sms_train_labels <- sms_raw[1:4169, ]$type
+sms_test_labels  <- sms_raw[4170:5559, ]$type
+```
+
+```{r}
+prop.table(table(sms_train_labels))
+```
+
+```{r}
+prop.table(table(sms_test_labels))
+```
+
+```{r}
+# convert dtm to matrix
+sms_mat_train <- as.matrix(t(sms_dtm_train))
+dtm.rs <- sort(rowSums(sms_mat_train), decreasing=TRUE)
+
+# dataframe with word-frequency
+dtm.df <- data.frame(word = names(dtm.rs), freq = as.integer(dtm.rs),
+                     stringsAsFactors = FALSE)
+```
+
+
+## plot wordcloud
+
+```{r}
+library(wordcloud)
+wordcloud(sms_corpus_clean, min.freq = 50, random.order = FALSE)
+```
+
+```{r}
+spam <- subset(sms_raw, type == "spam")
+ham  <- subset(sms_raw, type == "ham")
+```
+
+Words related to **spam**
+
+```{r}
+wordcloud(spam$text, max.words = 40, scale = c(3, 0.5))
+```
+
+Words related to **ham**
+```{r}
+wordcloud(ham$text, max.words = 40, scale = c(3, 0.5))
+```
+
+## Limit Frequent words
+
+```{r}
+# words that appear at least in 5 messages
+sms_freq_words <- findFreqTerms(sms_dtm_train, 6)
+```
+
+```{r}
+str(sms_freq_words)
+```
+
+### get only frequent words
+```{r}
+sms_dtm_freq_train<- sms_dtm_train[ , sms_freq_words]
+sms_dtm_freq_test <- sms_dtm_test[ , sms_freq_words]
+```
+
+### function to change value to Yes/No
+```{r}
+convert_counts <- function(x) {
+    x <- ifelse(x > 0, "Yes", "No")
+  }
+```
+
+
+```{r}
+# change from number to Yes/No
+# also the result returns a matrix
+sms_train <- apply(sms_dtm_freq_train, MARGIN = 2,
+                                       convert_counts)
+sms_test  <- apply(sms_dtm_freq_test, MARGIN = 2,
+                                      convert_counts)
+```
+
+```{r}
+# matrix of
+# 4169 documents as rows
+# 1159 terms as columns
+dim(sms_train)
+length(sms_train_labels)
+```
+
+```{r}
+# this is how the matrix looks
+sms_train[1:10, 10:15]
+```
+
+```{r model_naiveBayes-run}
+library(e1071)
+sms_classifier <- naiveBayes(sms_train, sms_train_labels)
+```
+
+```{r model-naiveBayes-predict-takes_a_while}
+tic()
+sms_test_pred <- predict(sms_classifier, sms_test)
+toc()
+```
+
+
+```{r}
+library(gmodels)
+CrossTable(sms_test_pred, sms_test_labels,
+    prop.chisq = FALSE, prop.t = FALSE,
+    dnn = c('predicted', 'actual'))
+```
+
+> Misclassified: 
+20+9 (frequency = 5)
+25+7 (freq=4)
+23+7 (freq=3)
+25+8 (freq=2)
+21+7 (freq=6)
+
+> Decreasing the minimum word frequency doesn't make the model better.
+
+## Improve model performance
+
+```{r model-naiveBayes-fineTune}
+sms_classifier2 <- naiveBayes(sms_train, sms_train_labels, 
+                              laplace = 1)
+```
+
+```{r model-nB-fineTune-predict-may_take_a_while}
+tic()
+sms_test_pred2 <- predict(sms_classifier2, sms_test)
+toc()
+```
+
+
+```{r}
+CrossTable(sms_test_pred2, sms_test_labels,
+    prop.chisq = FALSE, prop.t = FALSE, prop.r = FALSE,
+    dnn = c('predicted', 'actual'))
+```
+
+> Misclassified: 28+7
+

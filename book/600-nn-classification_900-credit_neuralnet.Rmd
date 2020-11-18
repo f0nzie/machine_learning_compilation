@@ -1,0 +1,150 @@
+# (PART) Neural Networks {-}
+
+# Credit Scoring with `neuralnet`
+
+## Introduction
+
+Source: <https://www.r-bloggers.com/using-neural-networks-for-credit-scoring-a-simple-example/>
+
+## Motivation
+
+Credit scoring is the practice of analysing a persons background and credit application in order to assess the creditworthiness of the person. One can take numerous approaches on analysing this creditworthiness. In the end it basically comes down to first selecting the correct independent variables (e.g. income, age, gender) that lead to a given level of creditworthiness.
+
+In other words: `creditworthiness = f(income, age, gender, …)`.
+
+A creditscoring system can be represented by linear regression, logistic regression, machine learning or a combination of these. Neural networks are situated in the domain of machine learning. The following is an strongly simplified example. The actual procedure of building a credit scoring system is much more complex and the resulting model will most likely not consist of solely or even a neural network.
+
+If you're unsure on what a neural network exactly is, I find this a good place to start.
+
+For this example the R package `neuralnet` is used, for a more in-depth view on the exact workings of the package see neuralnet: `Training of Neural Networks` by F. Günther and S. Fritsch.
+
+## load the data
+
+Dataset downloaded: <https://gist.github.com/Bart6114/8675941#file-creditset-csv>
+
+```{r}
+set.seed(1234567890)
+
+library(neuralnet)
+
+dataset <- read.csv(file.path(data_raw_dir, "creditset.csv"))
+head(dataset)
+```
+
+```{r}
+names(dataset)
+```
+
+```{r}
+summary(dataset)
+```
+
+```{r}
+# distribution of defaults
+table(dataset$default10yr)
+min(dataset$LTI)
+plot(jitter(dataset$default10yr, 1) ~ jitter(dataset$LTI, 2))
+```
+
+```{r}
+# convert LTI continuous variable to categorical
+dataset$LTIrng <- cut(dataset$LTI, breaks = 10)
+unique(dataset$LTIrng)
+plot(dataset$LTIrng, dataset$default10yr)
+```
+
+```{r}
+# what age and LTI is more likely to default
+library(ggplot2)
+
+ggplot(dataset, aes(x = age, y = LTI, col = default10yr)) +
+    geom_point()
+```
+
+```{r}
+# what age and loan size is more likely to default
+library(ggplot2)
+
+ggplot(dataset, aes(x = age, y = loan, col = default10yr)) +
+    geom_point()
+```
+
+## Objective
+
+The dataset contains information on different clients who received a loan at least 10 years ago. The variables income (yearly), age, loan (size in euros) and LTI (the loan to yearly income ratio) are available. Our goal is to devise a model which predicts, based on the input variables LTI and age, whether or not a default will occur within 10 years.
+
+## Steps
+
+The dataset will be split up in a subset used for training the neural network and another set used for testing. As the ordering of the dataset is completely random, we do not have to extract random rows and can just take the first x rows.
+
+```{r}
+## extract a set to train the NN
+trainset <- dataset[1:800, ]
+
+## select the test set
+testset <- dataset[801:2000, ]
+```
+
+### Build the neural network
+
+Now we'll build a neural network with 4 hidden nodes (a neural network is comprised of an input, hidden and output nodes). The number of nodes is chosen here without a clear method, however there are some rules of thumb. The `lifesign` option refers to the verbosity. The `ouput` is not linear and we will use a `threshold` value of 10%. The `neuralnet` package uses resilient backpropagation with weight backtracking as its standard algorithm.
+
+```{r}
+## build the neural network (NN)
+creditnet <- neuralnet(default10yr ~ LTI + age, trainset, 
+                       hidden = 4, 
+                       lifesign = "minimal", 
+                       linear.output = FALSE, 
+                       threshold = 0.1)
+```
+
+The neuralnet package also has the possibility to visualize the generated model and show the found weights.
+
+```{r}
+## plot the NN
+plot(creditnet, rep = "best")
+```
+
+## Test the neural network
+
+Once we've trained the neural network we are ready to test it. We use the testset subset for this. The `compute` function is applied for computing the outputs based on the LTI and age inputs from the testset.
+
+```{r}
+## test the resulting output
+temp_test <- subset(testset, select = c("LTI", "age"))
+
+creditnet.results <- compute(creditnet, temp_test)
+```
+
+The temp dataset contains only the columns LTI and age of the train set. Only these variables are used for input. The set looks as follows:
+
+```{r}
+head(temp_test)
+```
+
+Let's have a look at what the neural network produced:
+
+```{r}
+results <- data.frame(actual = testset$default10yr, prediction = creditnet.results$net.result)
+results[100:115, ]
+```
+
+We can round to the nearest integer to improve readability:
+
+```{r}
+results$prediction <- round(results$prediction)
+results[100:115, ]
+```
+
+As you can see it is pretty close! As already stated, this is a strongly simplified example. But it might serve as a basis for you to play around with your first neural network.
+
+```{r}
+# how many predictions were wrong
+indices <- which(results$actual != results$prediction)
+indices
+```
+
+```{r}
+# what are the predictions that failed
+results[indices,]
+```
