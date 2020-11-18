@@ -1,10 +1,7 @@
 
 .Rproj.user/
 
-from-dummy-container/
-
 *.rds
-
 *.md
 
 book/_bookdown_files/

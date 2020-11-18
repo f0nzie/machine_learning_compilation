@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 8 Employee Attrition using Feature Importance | A Machine Learning Book</title>
+<meta name="author" content="Alfonso R. Reyes">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.5.3/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.5.3/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.2.9000/tabs.js"></script><script src="libs/bs3compat-0.2.2.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">A Machine Learning Book</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Prerequisites</a></li>
+<li class="book-part">The Basics of Machine Learning</li>
+<li><a class="" href="introduction-to-pca.html"><span class="header-section-number">1</span> Introduction to PCA</a></li>
+<li><a class="" href="comparison-of-two-pca-packages.html"><span class="header-section-number">2</span> Comparison of two PCA packages</a></li>
+<li><a class="" href="detailed-study-of-principal-component-analysis.html"><span class="header-section-number">3</span> Detailed study of Principal Component Analysis</a></li>
+<li><a class="" href="detection-of-diabetes-using-logistic-regression.html"><span class="header-section-number">4</span> Detection of diabetes using Logistic Regression</a></li>
+<li><a class="" href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">5</span> Sensitivity analysis for a neural network</a></li>
+<li><a class="" href="data-visualization-for-ml-models.html"><span class="header-section-number">6</span> Data Visualization for ML models</a></li>
+<li class="book-part">Feature Engineering</li>
+<li><a class="" href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">7</span> Ten methods to assess Variable Importance</a></li>
+<li><a class="active" href="employee-attrition-using-feature-importance.html"><span class="header-section-number">8</span> Employee Attrition using Feature Importance</a></li>
+<li><a class="" href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">9</span> Feature Selection to enhance cancer detection</a></li>
+<li><a class="" href="dealing-with-unbalanced-data.html"><span class="header-section-number">10</span> Dealing with unbalanced data</a></li>
+<li><a class="" href="imputting-missing-values-with-random-forest.html"><span class="header-section-number">11</span> Imputting missing values with Random Forest</a></li>
+<li class="book-part">Algorithms Comparison</li>
+<li><a class="" href="introduction-to-algorithms-for-classification.html"><span class="header-section-number">12</span> Introduction to algorithms for Classification</a></li>
+<li><a class="" href="comparing-classification-algorithms.html"><span class="header-section-number">13</span> Comparing Classification algorithms</a></li>
+<li><a class="" href="linear-and-non-linear-algorithms-for-classification.html"><span class="header-section-number">14</span> Linear and Non-Linear Algorithms for Classification</a></li>
+<li><a class="" href="predicting-flu-outcome-comparing-eight-classification-algorithms.html"><span class="header-section-number">15</span> Predicting Flu outcome comparing eight classification algorithms</a></li>
+<li><a class="" href="classification-on-bad-loans.html"><span class="header-section-number">16</span> Classification on bad loans</a></li>
+<li><a class="" href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">17</span> Comparison of six Linear Regression algorithms</a></li>
+<li class="book-part">Classification</li>
+<li><a class="" href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">18</span> A gentle introduction to Support Vector Machines</a></li>
+<li><a class="" href="broad-view-of-svm.html"><span class="header-section-number">19</span> Broad view of SVM</a></li>
+<li><a class="" href="tuning-of-support-vector-machine-prediction.html"><span class="header-section-number">20</span> Tuning of Support Vector Machine prediction</a></li>
+<li><a class="" href="who-buys-social-network-ads.html"><span class="header-section-number">21</span> Who buys Social Network ads</a></li>
+<li><a class="" href="predicting-ozone-levels.html"><span class="header-section-number">22</span> Predicting Ozone levels</a></li>
+<li><a class="" href="building-a-naive-bayes-classifier.html"><span class="header-section-number">23</span> Building a Naive Bayes Classifier</a></li>
+<li><a class="" href="detect-mines-vs-rocks-with-random-forest.html"><span class="header-section-number">24</span> Detect mines vs rocks with Random Forest</a></li>
+<li><a class="" href="predicting-the-type-of-glass.html"><span class="header-section-number">25</span> Predicting the type of glass</a></li>
+<li><a class="" href="naive-bayes-for-sms-spam.html"><span class="header-section-number">26</span> Naive Bayes for SMS spam</a></li>
+<li><a class="" href="vehicles-classiification-with-decision-trees.html"><span class="header-section-number">27</span> Vehicles classiification with Decision Trees</a></li>
+<li><a class="" href="applying-naive-bayes-on-the-titanic-case.html"><span class="header-section-number">28</span> Applying Naive-Bayes on the Titanic case</a></li>
+<li><a class="" href="a-detailed-study-of-bike-sharing-demand.html"><span class="header-section-number">29</span> A detailed study of bike sharing demand</a></li>
+<li class="book-part">Linear Regression</li>
+<li><a class="" href="linear-regression-with-islr.html"><span class="header-section-number">30</span> Linear Regression with ISLR</a></li>
+<li><a class="" href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">31</span> Evaluation of three linear regression models</a></li>
+<li><a class="" href="comparing-regression-models.html"><span class="header-section-number">32</span> Comparing regression models</a></li>
+<li><a class="" href="finding-the-factors-of-happiness.html"><span class="header-section-number">33</span> Finding the factors of happiness</a></li>
+<li><a class="" href="regression-with-a-neural-network.html"><span class="header-section-number">34</span> Regression with a neural network</a></li>
+<li><a class="" href="comparing-multiple-regression-vs-a-neural-network.html"><span class="header-section-number">35</span> Comparing Multiple Regression vs a Neural Network</a></li>
+<li><a class="" href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">36</span> Temperature modeling using nested dataframes</a></li>
+<li class="book-part">Neural Networks</li>
+<li><a class="" href="credit-scoring-with-neuralnet.html"><span class="header-section-number">37</span> Credit Scoring with neuralnet</a></li>
+<li><a class="" href="wine-classification-with-neuralnet.html"><span class="header-section-number">38</span> Wine classification with neuralnet</a></li>
+<li><a class="" href="predicting-the-rating-of-cereals.html"><span class="header-section-number">39</span> Predicting the rating of cereals</a></li>
+<li><a class="" href="fitting-a-linear-model-with-neural-networks.html"><span class="header-section-number">40</span> Fitting a linear model with neural networks</a></li>
+<li><a class="" href="visualization-of-neural-networks.html"><span class="header-section-number">41</span> Visualization of neural networks</a></li>
+<li><a class="" href="build-a-fully-connected-r-neural-network-from-scratch.html"><span class="header-section-number">42</span> Build a fully connected R neural network from scratch</a></li>
+<li><a class="" href="tuning-hyperparameters-in-a-neural-network.html"><span class="header-section-number">43</span> Tuning Hyperparameters in a Neural Network</a></li>
+<li><a class="" href="deep-learning-tips-for-classification-and-regression.html"><span class="header-section-number">44</span> Deep Learning tips for Classification and Regression</a></li>
+<li class="book-part">Appendix</li>
+<li><a class="" href="what-is-dot-hat-in-a-regression-output.html"><span class="header-section-number">A</span> What is dot hat in a regression output</a></li>
+<li><a class="" href="q-q-normal-to-compare-data-to-distributions.html"><span class="header-section-number">B</span> Q-Q normal to compare data to distributions</a></li>
+<li><a class="" href="qq-and-pp-plots.html"><span class="header-section-number">C</span> QQ and PP Plots</a></li>
+<li><a class="" href="visualizing-residuals.html"><span class="header-section-number">D</span> Visualizing residuals</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/hadley/r-pkgs">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="employee-attrition-using-feature-importance" class="section level1">
+<h1>
+<span class="header-section-number">8</span> Employee Attrition using Feature Importance<a class="anchor" aria-label="anchor" href="#employee-attrition-using-feature-importance"><i class="fas fa-link"></i></a>
+</h1>
+<ul>
+<li>Datasets: <code>WA_Fn-UseC_-HR-Employee-Attrition.xlsx</code>
+</li>
+<li>Algorithms:
+<ul>
+<li>AutoML (<code>h2o</code>)</li>
+</ul>
+</li>
+<li>ML Packages: <code>h2o</code>, <code>LIME</code>, <code>DALEX</code>
+</li>
+</ul>
+<p>Article: <a href="https://www.business-science.io/business/2017/09/18/hr_employee_attrition.html" class="uri">https://www.business-science.io/business/2017/09/18/hr_employee_attrition.html</a>
+Data: <a href="https://www.ibm.com/communities/analytics/watson-analytics-blog/hr-employee-attrition/" class="uri">https://www.ibm.com/communities/analytics/watson-analytics-blog/hr-employee-attrition/</a></p>
+<div id="introduction-3" class="section level2">
+<h2>
+<span class="header-section-number">8.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-3"><i class="fas fa-link"></i></a>
+</h2>
+<div id="employee-attrition-a-major-problem" class="section level3">
+<h3>
+<span class="header-section-number">8.1.1</span> Employee attrition: a major problem<a class="anchor" aria-label="anchor" href="#employee-attrition-a-major-problem"><i class="fas fa-link"></i></a>
+</h3>
+<p>Bill Gates was once quoted as saying,</p>
+<blockquote>
+<p>“You take away our top 20 employees and we [Microsoft] become a mediocre company”.</p>
+</blockquote>
+<p>His statement cuts to the core of a major problem: employee attrition. An organization is only as good as its employees, and these people are the true source of its competitive advantage.</p>
+<p>Organizations face huge costs resulting from employee turnover. Some costs are tangible such as training expenses and the time it takes from when an employee starts to when they become a productive member. However, the most important costs are intangible. Consider what’s lost when a productive employee quits: new product ideas, great project management, or customer relationships.</p>
+<p>With advances in machine learning and data science, its possible to not only predict employee attrition but to understand the key variables that influence turnover. We’ll take a look at two cutting edge techniques:</p>
+<ol style="list-style-type: decimal">
+<li><p>Machine Learning with <code><a href="https://rdrr.io/pkg/h2o/man/h2o.automl.html">h2o.automl()</a></code> from the h2o package: This function takes automated machine learning to the next level by testing a number of advanced algorithms such as random forests, ensemble methods, and deep learning along with more traditional algorithms such as logistic regression. The main takeaway is that we can now easily achieve predictive performance that is in the same ball park (and in some cases even better than) commercial algorithms and ML/AI software.</p></li>
+<li><p>Feature Importance with the <code>lime</code> package: The problem with advanced machine learning algorithms such as deep learning is that it’s near impossible to understand the algorithm because of its complexity. This has all changed with the lime package. The major advancement with lime is that, by recursively analyzing the models locally, it can extract feature importance that repeats globally. What this means to us is that lime has opened the door to understanding the ML models regardless of complexity. Now the best (and typically very complex) models can also be investigated and potentially understood as to what variables or features make the model tick.</p></li>
+</ol>
+</div>
+<div id="employee-attrition-machine-learning-analysis" class="section level3">
+<h3>
+<span class="header-section-number">8.1.2</span> Employee attrition: machine learning analysis<a class="anchor" aria-label="anchor" href="#employee-attrition-machine-learning-analysis"><i class="fas fa-link"></i></a>
+</h3>
+<p>With these new automated ML tools combined with tools to uncover critical variables, we now have capabilities for both extreme predictive accuracy and understandability, which was previously impossible! We’ll investigate an HR Analytic example of employee attrition that was evaluated by IBM Watson.</p>
+</div>
+<div id="where-we-got-the-data" class="section level3">
+<h3>
+<span class="header-section-number">8.1.3</span> Where we got the data<a class="anchor" aria-label="anchor" href="#where-we-got-the-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>The example comes from IBM Watson Analytics website. You can download the data and read the analysis here:</p>
+<p>Get data used in this post here.
+Read IBM Watson Analytics article here.
+To summarize, the article makes a usage case for IBM Watson as an automated ML platform. The article shows that using Watson, the analyst was able to detect features that led to increased probability of attrition.</p>
+</div>
+<div id="automated-machine-learning-what-we-did-with-the-data" class="section level3">
+<h3>
+<span class="header-section-number">8.1.4</span> Automated machine learning (what we did with the data)<a class="anchor" aria-label="anchor" href="#automated-machine-learning-what-we-did-with-the-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>In this example we’ll show how we can use the combination of H2O for developing a complex model with high predictive accuracy on unseen data and then how we can use LIME to understand important features related to employee attrition.</p>
+</div>
+<div id="load-packages" class="section level3">
+<h3>
+<span class="header-section-number">8.1.5</span> Load packages<a class="anchor" aria-label="anchor" href="#load-packages"><i class="fas fa-link"></i></a>
+</h3>
+<p>Load the following packages.</p>
+<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ModelOriented.github.io/DALEX/">DALEX</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/business-science/tidyquant">tidyquant</a></span><span class="op">)</span>  <span class="co"># Loads tidyverse and several other pkgs </span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span>     <span class="co"># Super simple excel reader</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/h2oai/h2o-3">h2o</a></span><span class="op">)</span>        <span class="co"># Professional grade ML pkg</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lime.data-imaginist.com">lime</a></span><span class="op">)</span>       <span class="co"># Explain complex black-box ML models</span></code></pre></div>
+</div>
+<div id="load-data" class="section level3">
+<h3>
+<span class="header-section-number">8.1.6</span> Load data<a class="anchor" aria-label="anchor" href="#load-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>Download the data here. You can load the data using read_excel(), pointing the path to your local file.</p>
+<div class="sourceCode" id="cb224"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Read excel data</span>
+<span class="va">hr_data_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">data_raw_dir</span>,
+                                           <span class="st">"WA_Fn-UseC_-HR-Employee-Attrition.xlsx"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Let’s check out the raw data. It’s 1470 rows (observations) by 35 columns (features). The “Attrition” column is our target. We’ll use all other columns as features to our model.</p>
+<div class="sourceCode" id="cb225"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># View first 10 rows</span>
+<span class="va">hr_data_raw</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span> <span class="op">%&gt;%</span>
+    <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"First 10 rows"</span><span class="op">)</span></code></pre></div>
+<div class="inline-table"><table class="table table-sm">
+<caption>
+<span id="tab:unnamed-chunk-1">Table 8.1: </span>First 10 rows</caption>
+<thead><tr class="header">
+<th align="right">Age</th>
+<th align="left">Attrition</th>
+<th align="left">BusinessTravel</th>
+<th align="right">DailyRate</th>
+<th align="left">Department</th>
+<th align="right">DistanceFromHome</th>
+<th align="right">Education</th>
+<th align="left">EducationField</th>
+<th align="right">EmployeeCount</th>
+<th align="right">EmployeeNumber</th>
+<th align="right">EnvironmentSatisfaction</th>
+<th align="left">Gender</th>
+<th align="right">HourlyRate</th>
+<th align="right">JobInvolvement</th>
+<th align="right">JobLevel</th>
+<th align="left">JobRole</th>
+<th align="right">JobSatisfaction</th>
+<th align="left">MaritalStatus</th>
+<th align="right">MonthlyIncome</th>
+<th align="right">MonthlyRate</th>
+<th align="right">NumCompaniesWorked</th>
+<th align="left">Over18</th>
+<th align="left">OverTime</th>
+<th align="right">PercentSalaryHike</th>
+<th align="right">PerformanceRating</th>
+<th align="right">RelationshipSatisfaction</th>
+<th align="right">StandardHours</th>
+<th align="right">StockOptionLevel</th>
+<th align="right">TotalWorkingYears</th>
+<th align="right">TrainingTimesLastYear</th>
+<th align="right">WorkLifeBalance</th>
+<th align="right">YearsAtCompany</th>
+<th align="right">YearsInCurrentRole</th>
+<th align="right">YearsSinceLastPromotion</th>
+<th align="right">YearsWithCurrManager</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">41</td>
+<td align="left">Yes</td>
+<td align="left">Travel_Rarely</td>
+<td align="right">1102</td>
+<td align="left">Sales</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">Life Sciences</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">Female</td>
+<td align="right">94</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="left">Sales Executive</td>
+<td align="right">4</td>
+<td align="left">Single</td>
+<td align="right">5993</td>
+<td align="right">19479</td>
+<td align="right">8</td>
+<td align="left">Y</td>
+<td align="left">Yes</td>
+<td align="right">11</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">80</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">49</td>
+<td align="left">No</td>
+<td align="left">Travel_Frequently</td>
+<td align="right">279</td>
+<td align="left">Research &amp; Development</td>
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="left">Life Sciences</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="left">Male</td>
+<td align="right">61</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="left">Research Scientist</td>
+<td align="right">2</td>
+<td align="left">Married</td>
+<td align="right">5130</td>
+<td align="right">24907</td>
+<td align="right">1</td>
+<td align="left">Y</td>
+<td align="left">No</td>
+<td align="right">23</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">80</td>
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">10</td>
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="right">37</td>
+<td align="left">Yes</td>
+<td align="left">Travel_Rarely</td>
+<td align="right">1373</td>
+<td align="left">Research &amp; Development</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="left">Other</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="left">Male</td>
+<td align="right">92</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="left">Laboratory Technician</td>
+<td align="right">3</td>
+<td align="left">Single</td>
+<td align="right">2090</td>
+<td align="right">2396</td>
+<td align="right">6</td>
+<td align="left">Y</td>
+<td align="left">Yes</td>
+<td align="right">15</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">80</td>
+<td align="right">0</td>
+<td align="right">7</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">33</td>
+<td align="left">No</td>
+<td align="left">Travel_Frequently</td>
+<td align="right">1392</td>
+<td align="left">Research &amp; Development</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="left">Life Sciences</td>
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="left">Female</td>
+<td align="right">56</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Research Scientist</td>
+<td align="right">3</td>
+<td align="left">Married</td>
+<td align="right">2909</td>
+<td align="right">23159</td>
+<td align="right">1</td>
+<td align="left">Y</td>
+<td align="left">Yes</td>
+<td align="right">11</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">80</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">27</td>
+<td align="left">No</td>
+<td align="left">Travel_Rarely</td>
+<td align="right">591</td>
+<td align="left">Research &amp; Development</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="left">Medical</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="left">Male</td>
+<td align="right">40</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Laboratory Technician</td>
+<td align="right">2</td>
+<td align="left">Married</td>
+<td align="right">3468</td>
+<td align="right">16632</td>
+<td align="right">9</td>
+<td align="left">Y</td>
+<td align="left">No</td>
+<td align="right">12</td>
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">80</td>
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">32</td>
+<td align="left">No</td>
+<td align="left">Travel_Frequently</td>
+<td align="right">1005</td>
+<td align="left">Research &amp; Development</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="left">Life Sciences</td>
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="left">Male</td>
+<td align="right">79</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Laboratory Technician</td>
+<td align="right">4</td>
+<td align="left">Single</td>
+<td align="right">3068</td>
+<td align="right">11864</td>
+<td align="right">0</td>
+<td align="left">Y</td>
+<td align="left">No</td>
+<td align="right">13</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">80</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">7</td>
+<td align="right">7</td>
+<td align="right">3</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="right">59</td>
+<td align="left">No</td>
+<td align="left">Travel_Rarely</td>
+<td align="right">1324</td>
+<td align="left">Research &amp; Development</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="left">Medical</td>
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="right">3</td>
+<td align="left">Female</td>
+<td align="right">81</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="left">Laboratory Technician</td>
+<td align="right">1</td>
+<td align="left">Married</td>
+<td align="right">2670</td>
+<td align="right">9964</td>
+<td align="right">4</td>
+<td align="left">Y</td>
+<td align="left">Yes</td>
+<td align="right">20</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">80</td>
+<td align="right">3</td>
+<td align="right">12</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">30</td>
+<td align="left">No</td>
+<td align="left">Travel_Rarely</td>
+<td align="right">1358</td>
+<td align="left">Research &amp; Development</td>
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="left">Life Sciences</td>
+<td align="right">1</td>
+<td align="right">11</td>
+<td align="right">4</td>
+<td align="left">Male</td>
+<td align="right">67</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Laboratory Technician</td>
+<td align="right">3</td>
+<td align="left">Divorced</td>
+<td align="right">2693</td>
+<td align="right">13335</td>
+<td align="right">1</td>
+<td align="left">Y</td>
+<td align="left">No</td>
+<td align="right">22</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">80</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">38</td>
+<td align="left">No</td>
+<td align="left">Travel_Frequently</td>
+<td align="right">216</td>
+<td align="left">Research &amp; Development</td>
+<td align="right">23</td>
+<td align="right">3</td>
+<td align="left">Life Sciences</td>
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">4</td>
+<td align="left">Male</td>
+<td align="right">44</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="left">Manufacturing Director</td>
+<td align="right">3</td>
+<td align="left">Single</td>
+<td align="right">9526</td>
+<td align="right">8787</td>
+<td align="right">0</td>
+<td align="left">Y</td>
+<td align="left">No</td>
+<td align="right">21</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">80</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">9</td>
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="right">36</td>
+<td align="left">No</td>
+<td align="left">Travel_Rarely</td>
+<td align="right">1299</td>
+<td align="left">Research &amp; Development</td>
+<td align="right">27</td>
+<td align="right">3</td>
+<td align="left">Medical</td>
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="right">3</td>
+<td align="left">Male</td>
+<td align="right">94</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="left">Healthcare Representative</td>
+<td align="right">3</td>
+<td align="left">Married</td>
+<td align="right">5237</td>
+<td align="right">16577</td>
+<td align="right">6</td>
+<td align="left">Y</td>
+<td align="left">No</td>
+<td align="right">13</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">80</td>
+<td align="right">2</td>
+<td align="right">17</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">7</td>
+<td align="right">7</td>
+<td align="right">7</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table></div>
+<p>The only pre-processing we’ll do in this example is change all character data types to factors. This is needed for H2O. We could make a number of other numeric data that is actually categorical factors, but this tends to increase modeling time and can have little improvement on model performance.</p>
+<div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">hr_data</span> <span class="op">&lt;-</span> <span class="va">hr_data_raw</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_if</a></span><span class="op">(</span><span class="va">is.character</span>, <span class="va">as.factor</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Attrition</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/select_helpers.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Let’s take a glimpse at the processed dataset. We can see all of the columns. Note our target (“Attrition”) is the first column.</p>
+<div class="sourceCode" id="cb227"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">hr_data</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 1,470</span>
+<span class="co">#&gt; Columns: 35</span>
+<span class="co">#&gt; $ Attrition                &lt;fct&gt; Yes, No, Yes, No, No, No, No, No, No, No, No…</span>
+<span class="co">#&gt; $ Age                      &lt;dbl&gt; 41, 49, 37, 33, 27, 32, 59, 30, 38, 36, 35, …</span>
+<span class="co">#&gt; $ BusinessTravel           &lt;fct&gt; Travel_Rarely, Travel_Frequently, Travel_Rar…</span>
+<span class="co">#&gt; $ DailyRate                &lt;dbl&gt; 1102, 279, 1373, 1392, 591, 1005, 1324, 1358…</span>
+<span class="co">#&gt; $ Department               &lt;fct&gt; Sales, Research &amp; Development, Research &amp; De…</span>
+<span class="co">#&gt; $ DistanceFromHome         &lt;dbl&gt; 1, 8, 2, 3, 2, 2, 3, 24, 23, 27, 16, 15, 26,…</span>
+<span class="co">#&gt; $ Education                &lt;dbl&gt; 2, 1, 2, 4, 1, 2, 3, 1, 3, 3, 3, 2, 1, 2, 3,…</span>
+<span class="co">#&gt; $ EducationField           &lt;fct&gt; Life Sciences, Life Sciences, Other, Life Sc…</span>
+<span class="co">#&gt; $ EmployeeCount            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
+<span class="co">#&gt; $ EmployeeNumber           &lt;dbl&gt; 1, 2, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16…</span>
+<span class="co">#&gt; $ EnvironmentSatisfaction  &lt;dbl&gt; 2, 3, 4, 4, 1, 4, 3, 4, 4, 3, 1, 4, 1, 2, 3,…</span>
+<span class="co">#&gt; $ Gender                   &lt;fct&gt; Female, Male, Male, Female, Male, Male, Fema…</span>
+<span class="co">#&gt; $ HourlyRate               &lt;dbl&gt; 94, 61, 92, 56, 40, 79, 81, 67, 44, 94, 84, …</span>
+<span class="co">#&gt; $ JobInvolvement           &lt;dbl&gt; 3, 2, 2, 3, 3, 3, 4, 3, 2, 3, 4, 2, 3, 3, 2,…</span>
+<span class="co">#&gt; $ JobLevel                 &lt;dbl&gt; 2, 2, 1, 1, 1, 1, 1, 1, 3, 2, 1, 2, 1, 1, 1,…</span>
+<span class="co">#&gt; $ JobRole                  &lt;fct&gt; Sales Executive, Research Scientist, Laborat…</span>
+<span class="co">#&gt; $ JobSatisfaction          &lt;dbl&gt; 4, 2, 3, 3, 2, 4, 1, 3, 3, 3, 2, 3, 3, 4, 3,…</span>
+<span class="co">#&gt; $ MaritalStatus            &lt;fct&gt; Single, Married, Single, Married, Married, S…</span>
+<span class="co">#&gt; $ MonthlyIncome            &lt;dbl&gt; 5993, 5130, 2090, 2909, 3468, 3068, 2670, 26…</span>
+<span class="co">#&gt; $ MonthlyRate              &lt;dbl&gt; 19479, 24907, 2396, 23159, 16632, 11864, 996…</span>
+<span class="co">#&gt; $ NumCompaniesWorked       &lt;dbl&gt; 8, 1, 6, 1, 9, 0, 4, 1, 0, 6, 0, 0, 1, 0, 5,…</span>
+<span class="co">#&gt; $ Over18                   &lt;fct&gt; Y, Y, Y, Y, Y, Y, Y, Y, Y, Y, Y, Y, Y, Y, Y,…</span>
+<span class="co">#&gt; $ OverTime                 &lt;fct&gt; Yes, No, Yes, Yes, No, No, Yes, No, No, No, …</span>
+<span class="co">#&gt; $ PercentSalaryHike        &lt;dbl&gt; 11, 23, 15, 11, 12, 13, 20, 22, 21, 13, 13, …</span>
+<span class="co">#&gt; $ PerformanceRating        &lt;dbl&gt; 3, 4, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 3,…</span>
+<span class="co">#&gt; $ RelationshipSatisfaction &lt;dbl&gt; 1, 4, 2, 3, 4, 3, 1, 2, 2, 2, 3, 4, 4, 3, 2,…</span>
+<span class="co">#&gt; $ StandardHours            &lt;dbl&gt; 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, …</span>
+<span class="co">#&gt; $ StockOptionLevel         &lt;dbl&gt; 0, 1, 0, 0, 1, 0, 3, 1, 0, 2, 1, 0, 1, 1, 0,…</span>
+<span class="co">#&gt; $ TotalWorkingYears        &lt;dbl&gt; 8, 10, 7, 8, 6, 8, 12, 1, 10, 17, 6, 10, 5, …</span>
+<span class="co">#&gt; $ TrainingTimesLastYear    &lt;dbl&gt; 0, 3, 3, 3, 3, 2, 3, 2, 2, 3, 5, 3, 1, 2, 4,…</span>
+<span class="co">#&gt; $ WorkLifeBalance          &lt;dbl&gt; 1, 3, 3, 3, 3, 2, 2, 3, 3, 2, 3, 3, 2, 3, 3,…</span>
+<span class="co">#&gt; $ YearsAtCompany           &lt;dbl&gt; 6, 10, 0, 8, 2, 7, 1, 1, 9, 7, 5, 9, 5, 2, 4…</span>
+<span class="co">#&gt; $ YearsInCurrentRole       &lt;dbl&gt; 4, 7, 0, 7, 2, 7, 0, 0, 7, 7, 4, 5, 2, 2, 2,…</span>
+<span class="co">#&gt; $ YearsSinceLastPromotion  &lt;dbl&gt; 0, 1, 0, 3, 2, 3, 0, 0, 1, 7, 0, 0, 4, 1, 0,…</span>
+<span class="co">#&gt; $ YearsWithCurrManager     &lt;dbl&gt; 5, 7, 0, 0, 2, 6, 0, 0, 8, 7, 3, 8, 3, 2, 3,…</span></code></pre></div>
+</div>
+</div>
+<div id="modeling-employee-attrition" class="section level2">
+<h2>
+<span class="header-section-number">8.2</span> Modeling Employee attrition<a class="anchor" aria-label="anchor" href="#modeling-employee-attrition"><i class="fas fa-link"></i></a>
+</h2>
+<p>We are going to use the <code><a href="https://rdrr.io/pkg/h2o/man/h2o.automl.html">h2o.automl()</a></code> function from the H2O platform to model employee attrition.</p>
+<div id="machine-learning-with-h2o" class="section level3">
+<h3>
+<span class="header-section-number">8.2.1</span> Machine Learning with <code>h2o</code><a class="anchor" aria-label="anchor" href="#machine-learning-with-h2o"><i class="fas fa-link"></i></a>
+</h3>
+<p>First, we need to initialize the <em>Java Virtual Machine (JVM)</em> that H2O uses locally.</p>
+<div class="sourceCode" id="cb228"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Initialize H2O JVM</span>
+<span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.init.html">h2o.init</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; H2O is not running yet, starting it now...</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Note:  In case of errors look at the following log files:</span>
+<span class="co">#&gt;     /tmp/RtmpFCydpM/filea83ca5b58e/h2o_UnknownUser_started_from_r.out</span>
+<span class="co">#&gt;     /tmp/RtmpFCydpM/filea83486b4231/h2o_UnknownUser_started_from_r.err</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Starting H2O JVM and connecting: .. Connection successful!</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; R is connected to the H2O cluster: </span>
+<span class="co">#&gt;     H2O cluster uptime:         1 seconds 509 milliseconds </span>
+<span class="co">#&gt;     H2O cluster timezone:       Etc/UTC </span>
+<span class="co">#&gt;     H2O data parsing timezone:  UTC </span>
+<span class="co">#&gt;     H2O cluster version:        3.30.0.1 </span>
+<span class="co">#&gt;     H2O cluster version age:    7 months and 14 days !!! </span>
+<span class="co">#&gt;     H2O cluster name:           H2O_started_from_R_root_mwl453 </span>
+<span class="co">#&gt;     H2O cluster total nodes:    1 </span>
+<span class="co">#&gt;     H2O cluster total memory:   7.82 GB </span>
+<span class="co">#&gt;     H2O cluster total cores:    8 </span>
+<span class="co">#&gt;     H2O cluster allowed cores:  8 </span>
+<span class="co">#&gt;     H2O cluster healthy:        TRUE </span>
+<span class="co">#&gt;     H2O Connection ip:          localhost </span>
+<span class="co">#&gt;     H2O Connection port:        54321 </span>
+<span class="co">#&gt;     H2O Connection proxy:       NA </span>
+<span class="co">#&gt;     H2O Internal Security:      FALSE </span>
+<span class="co">#&gt;     H2O API Extensions:         Amazon S3, XGBoost, Algos, AutoML, Core V3, TargetEncoder, Core V4 </span>
+<span class="co">#&gt;     R Version:                  R version 3.6.3 (2020-02-29)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.no_progress.html">h2o.no_progress</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Turn off output of progress bars</span></code></pre></div>
+<p>Next, we change our data to an h2o object that the package can interpret. We also split the data into training, validation, and test sets. Our preference is to use 70%, 15%, 15%, respectively.</p>
+<div class="sourceCode" id="cb229"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Split data into Train/Validation/Test Sets</span>
+<span class="va">hr_data_h2o</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/as.h2o.html">as.h2o</a></span><span class="op">(</span><span class="va">hr_data</span><span class="op">)</span>
+
+<span class="va">split_h2o</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.splitFrame.html">h2o.splitFrame</a></span><span class="op">(</span><span class="va">hr_data_h2o</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.15</span><span class="op">)</span>, seed <span class="op">=</span> <span class="fl">1234</span> <span class="op">)</span>
+<span class="va">train_h2o</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.assign.html">h2o.assign</a></span><span class="op">(</span><span class="va">split_h2o</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="st">"train"</span> <span class="op">)</span> <span class="co"># 70%</span>
+<span class="va">valid_h2o</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.assign.html">h2o.assign</a></span><span class="op">(</span><span class="va">split_h2o</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="st">"valid"</span> <span class="op">)</span> <span class="co"># 15%</span>
+<span class="va">test_h2o</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.assign.html">h2o.assign</a></span><span class="op">(</span><span class="va">split_h2o</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, <span class="st">"test"</span> <span class="op">)</span>  <span class="co"># 15%</span></code></pre></div>
+</div>
+</div>
+<div id="model" class="section level2">
+<h2>
+<span class="header-section-number">8.3</span> Model<a class="anchor" aria-label="anchor" href="#model"><i class="fas fa-link"></i></a>
+</h2>
+<p>Now we are ready to model. We’ll set the target and feature names. The target is what we aim to predict (in our case “Attrition”). The features (every other column) are what we will use to model the prediction.</p>
+<div class="sourceCode" id="cb230"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Set names for h2o</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="st">"Attrition"</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/setops.html">setdiff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">train_h2o</span><span class="op">)</span>, <span class="va">y</span><span class="op">)</span></code></pre></div>
+<p>Now the fun begins. We run the h2o.automl() setting the arguments it needs to run models against. For more information, see the h2o.automl documentation.</p>
+<ul>
+<li>
+<code>x = x</code>: The names of our feature columns.</li>
+<li>
+<code>y = y</code>: The name of our target column.</li>
+<li>
+<code>training_frame</code> = train_h2o: Our training set consisting of 70% of the data.</li>
+<li>
+<code>leaderboard_frame</code> = valid_h2o: Our validation set consisting of 15% of the data. H2O uses this to ensure the model does not overfit the data.</li>
+<li>
+<code>max_runtime_secs = 30</code>: We supply this to speed up H2O’s modeling. The algorithm has a large number of complex models so we want to keep things moving at the expense of some accuracy.</li>
+</ul>
+<div class="sourceCode" id="cb231"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Run the automated machine learning </span>
+<span class="va">automl_models_h2o</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.automl.html">h2o.automl</a></span><span class="op">(</span>
+    x <span class="op">=</span> <span class="va">x</span>, 
+    y <span class="op">=</span> <span class="va">y</span>,
+    training_frame    <span class="op">=</span> <span class="va">train_h2o</span>,
+    leaderboard_frame <span class="op">=</span> <span class="va">valid_h2o</span>,
+    max_runtime_secs  <span class="op">=</span> <span class="fl">30</span>
+    <span class="op">)</span></code></pre></div>
+<p>All of the models are stored the <code>automl_models_h2o</code> object. However, we are only concerned with the leader, which is the best model in terms of accuracy on the validation set. We’ll extract it from the models object.</p>
+<div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Extract leader model</span>
+<span class="va">automl_leader</span> <span class="op">&lt;-</span> <span class="va">automl_models_h2o</span><span class="op">@</span><span class="va">leader</span></code></pre></div>
+</div>
+<div id="predict" class="section level2">
+<h2>
+<span class="header-section-number">8.4</span> Predict<a class="anchor" aria-label="anchor" href="#predict"><i class="fas fa-link"></i></a>
+</h2>
+<p>Now we are ready to predict on our test set, which is unseen from during our modeling process. This is the true test of performance. We use the <code><a href="https://rdrr.io/pkg/h2o/man/h2o.predict.html">h2o.predict()</a></code> function to make predictions.<br></p>
+<div class="sourceCode" id="cb233"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Predict on hold-out set, test_h2o</span>
+<span class="va">pred_h2o</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.predict.html">h2o.predict</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">automl_leader</span>, newdata <span class="op">=</span> <span class="va">test_h2o</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="performance" class="section level2">
+<h2>
+<span class="header-section-number">8.5</span> Performance<a class="anchor" aria-label="anchor" href="#performance"><i class="fas fa-link"></i></a>
+</h2>
+<p>Now we can evaluate our leader model. We’ll reformat the test set an add the predictions as column so we have the actual and prediction columns side-by-side.<br></p>
+<div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Prep for performance assessment</span>
+<span class="va">test_performance</span> <span class="op">&lt;-</span> <span class="va">test_h2o</span> <span class="op">%&gt;%</span>
+    <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Attrition</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://tibble.tidyverse.org/reference/add_column.html">add_column</a></span><span class="op">(</span>pred <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">pred_h2o</span><span class="op">$</span><span class="va">predict</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_if</a></span><span class="op">(</span><span class="va">is.character</span>, <span class="va">as.factor</span><span class="op">)</span>
+<span class="va">test_performance</span>
+<span class="co">#&gt; # A tibble: 211 x 2</span>
+<span class="co">#&gt;   Attrition pred </span>
+<span class="co">#&gt;   &lt;fct&gt;     &lt;fct&gt;</span>
+<span class="co">#&gt; 1 No        No   </span>
+<span class="co">#&gt; 2 No        No   </span>
+<span class="co">#&gt; 3 Yes       Yes  </span>
+<span class="co">#&gt; 4 No        No   </span>
+<span class="co">#&gt; 5 No        No   </span>
+<span class="co">#&gt; 6 No        No   </span>
+<span class="co">#&gt; # … with 205 more rows</span></code></pre></div>
+<p>We can use the table() function to quickly get a confusion table of the results. We see that the leader model wasn’t perfect, but it did a decent job identifying employees that are likely to quit. For perspective, a logistic regression would not perform nearly this well.<br></p>
+<div class="sourceCode" id="cb235"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Confusion table counts</span>
+<span class="va">confusion_matrix</span> <span class="op">&lt;-</span> <span class="va">test_performance</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="op">)</span> 
+<span class="va">confusion_matrix</span>
+<span class="co">#&gt;          pred</span>
+<span class="co">#&gt; Attrition  No Yes</span>
+<span class="co">#&gt;       No  164  18</span>
+<span class="co">#&gt;       Yes  11  18</span></code></pre></div>
+<p>We’ll run through a binary classification analysis to understand the model performance.</p>
+<div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Performance analysis</span>
+<span class="va">tn</span> <span class="op">&lt;-</span> <span class="va">confusion_matrix</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
+<span class="va">tp</span> <span class="op">&lt;-</span> <span class="va">confusion_matrix</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>
+<span class="va">fp</span> <span class="op">&lt;-</span> <span class="va">confusion_matrix</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>
+<span class="va">fn</span> <span class="op">&lt;-</span> <span class="va">confusion_matrix</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>
+
+<span class="va">accuracy</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">tp</span> <span class="op">+</span> <span class="va">tn</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">tp</span> <span class="op">+</span> <span class="va">tn</span> <span class="op">+</span> <span class="va">fp</span> <span class="op">+</span> <span class="va">fn</span><span class="op">)</span>
+<span class="va">misclassification_rate</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">accuracy</span>
+<span class="va">recall</span> <span class="op">&lt;-</span> <span class="va">tp</span> <span class="op">/</span> <span class="op">(</span><span class="va">tp</span> <span class="op">+</span> <span class="va">fn</span><span class="op">)</span>
+<span class="va">precision</span> <span class="op">&lt;-</span> <span class="va">tp</span> <span class="op">/</span> <span class="op">(</span><span class="va">tp</span> <span class="op">+</span> <span class="va">fp</span><span class="op">)</span>
+<span class="va">null_error_rate</span> <span class="op">&lt;-</span> <span class="va">tn</span> <span class="op">/</span> <span class="op">(</span><span class="va">tp</span> <span class="op">+</span> <span class="va">tn</span> <span class="op">+</span> <span class="va">fp</span> <span class="op">+</span> <span class="va">fn</span><span class="op">)</span>
+
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
+    <span class="va">accuracy</span>,
+    <span class="va">misclassification_rate</span>,
+    <span class="va">recall</span>,
+    <span class="va">precision</span>,
+    <span class="va">null_error_rate</span>
+<span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://purrr.tidyverse.org/reference/transpose.html">transpose</a></span><span class="op">(</span><span class="op">)</span> 
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [[1]]$accuracy</span>
+<span class="co">#&gt; [1] 0.863</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[1]]$misclassification_rate</span>
+<span class="co">#&gt; [1] 0.137</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[1]]$recall</span>
+<span class="co">#&gt; [1] 0.621</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[1]]$precision</span>
+<span class="co">#&gt; [1] 0.5</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[1]]$null_error_rate</span>
+<span class="co">#&gt; [1] 0.777</span></code></pre></div>
+<p>It is important to understand is that the accuracy can be misleading: 88% sounds pretty good especially for modeling HR data, but if we just pick <code>Attrition = NO</code> we would get an accuracy of about 79%. Doesn’t sound so great now.</p>
+<p>Before we make our final judgement, let’s dive a little deeper into precision and recall. Precision is when the model predicts yes, how often is it actually yes. Recall (also true positive rate or specificity) is when the actual value is yes how often is the model correct. Confused yet? Let’s explain in terms of what’s important to HR.</p>
+<p>Most HR groups would probably prefer to incorrectly classify folks not looking to quit as high potential of quiting rather than classify those that are likely to quit as not at risk. Because it’s important to not miss at risk employees, HR will really care about recall or when the actual value is <code>Attrition = YES</code> how often the model predicts YES.</p>
+<p>Recall for our model is 62%. In an HR context, this is 62% more employees that could potentially be targeted prior to quiting. From that standpoint, an organization that loses 100 people per year could possibly target 62 implementing measures to retain.</p>
+</div>
+<div id="the-lime-package" class="section level2">
+<h2>
+<span class="header-section-number">8.6</span> The <code>lime</code> package<a class="anchor" aria-label="anchor" href="#the-lime-package"><i class="fas fa-link"></i></a>
+</h2>
+<p>We have a very good model that is capable of making very accurate predictions on unseen data, but what can it tell us about what causes attrition? Let’s find out using LIME.</p>
+<div id="set-up" class="section level3">
+<h3>
+<span class="header-section-number">8.6.1</span> Set up<a class="anchor" aria-label="anchor" href="#set-up"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code>lime</code> package implements LIME in R. One thing to note is that it’s not setup out-of-the-box to work with <code>h2o</code>. The good news is with a few functions we can get everything working properly. We’ll need to make two custom functions:</p>
+<ul>
+<li><p><code>model_type</code>: Used to tell lime what type of model we are dealing with. It could be classification, regression, survival, etc.</p></li>
+<li><p><code>predict_model</code>: Used to allow lime to perform predictions that its algorithm can interpret.</p></li>
+</ul>
+<p>The first thing we need to do is identify the class of our model leader object. We do this with the <code><a href="https://rdrr.io/r/base/class.html">class()</a></code> function.</p>
+<div class="sourceCode" id="cb237"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">automl_leader</span><span class="op">)</span>
+<span class="co">#&gt; [1] "H2OBinomialModel"</span>
+<span class="co">#&gt; attr(,"package")</span>
+<span class="co">#&gt; [1] "h2o"</span></code></pre></div>
+<p>Next we create our <code>model_type</code> function. It’s only input is x the h2o model. The function simply returns “classification”, which tells LIME we are classifying.<br></p>
+<div class="sourceCode" id="cb238"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Setup lime::model_type() function for h2o</span>
+<span class="va">model_type.H2OBinomialModel</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+    <span class="co"># Function tells lime() what model type we are dealing with</span>
+    <span class="co"># 'classification', 'regression', 'survival', 'clustering', 'multilabel', etc</span>
+    <span class="co">#</span>
+    <span class="co"># x is our h2o model</span>
+    
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<p>Now we can create our <code>predict_model</code> function. The trick here is to realize that it’s inputs must be x a model, newdata a dataframe object (this is important), and type which is not used but can be use to switch the output type. The output is also a little tricky because it must be in the format of probabilities by classification (this is important; shown next). Internally we just call the <code><a href="https://rdrr.io/pkg/h2o/man/h2o.predict.html">h2o.predict()</a></code> function.</p>
+<div class="sourceCode" id="cb239"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Setup lime::predict_model() function for h2o</span>
+<span class="va">predict_model.H2OBinomialModel</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">newdata</span>, <span class="va">type</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+    <span class="co"># Function performs prediction and returns dataframe with Response</span>
+    <span class="co">#</span>
+    <span class="co"># x is h2o model</span>
+    <span class="co"># newdata is data frame</span>
+    <span class="co"># type is only setup for data frame</span>
+    
+    <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.predict.html">h2o.predict</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/as.h2o.html">as.h2o</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">)</span><span class="op">)</span>
+    
+    <span class="co"># return probs</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">pred</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+    
+<span class="op">}</span></code></pre></div>
+<p>Run this next script to show you what the output looks like and to test our <code>predict_model</code> function. See how it’s the probabilities by classification. It must be in this form for <code>model_type = “classification”</code>.</p>
+<div class="sourceCode" id="cb240"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Test our predict_model() function</span>
+<span class="fu"><a href="https://lime.data-imaginist.com/reference/model_support.html">predict_model</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">automl_leader</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">test_h2o</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'raw'</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 211 x 2</span>
+<span class="co">#&gt;      No    Yes</span>
+<span class="co">#&gt;   &lt;dbl&gt;  &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 0.842 0.158 </span>
+<span class="co">#&gt; 2 0.905 0.0953</span>
+<span class="co">#&gt; 3 0.448 0.552 </span>
+<span class="co">#&gt; 4 0.966 0.0345</span>
+<span class="co">#&gt; 5 0.806 0.194 </span>
+<span class="co">#&gt; 6 0.932 0.0679</span>
+<span class="co">#&gt; # … with 205 more rows</span></code></pre></div>
+<p>Now the fun part, we create an explainer using the <code><a href="https://lime.data-imaginist.com/reference/lime.html">lime()</a></code> function. Just pass the training data set without the “Attribution column”. The form must be a data frame, which is OK since our predict_model function will switch it to an h2o object. Set<code>model = automl_leader</code> our leader model, and <code>bin_continuous = FALSE</code>. We could tell the algorithm to bin continuous variables, but this may not make sense for categorical numeric data that we didn’t change to factors.<br></p>
+<div class="sourceCode" id="cb241"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Run lime() on training set</span>
+<span class="va">explainer</span> <span class="op">&lt;-</span> <span class="fu">lime</span><span class="fu">::</span><span class="fu"><a href="https://lime.data-imaginist.com/reference/lime.html">lime</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">train_h2o</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, 
+    model          <span class="op">=</span> <span class="va">automl_leader</span>, 
+    bin_continuous <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Data contains numeric columns with zero variance</span>
+<span class="co">#&gt; Warning: PerformanceRating does not contain enough variance to use quantile</span>
+<span class="co">#&gt; binning. Using standard binning instead.</span></code></pre></div>
+<p>Now we run the <code><a href="https://dplyr.tidyverse.org/reference/explain.html">explain()</a></code> function, which returns our explanation. This can take a minute to run so we limit it to just the first ten rows of the test data set. We set n_labels = 1 because we care about explaining a single class. Setting n_features = 4 returns the top four features that are critical to each case. Finally, setting kernel_width = 0.5 allows us to increase the “model_r2” value by shrinking the localized evaluation.<br></p>
+<div class="sourceCode" id="cb242"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Run explain() on explainer</span>
+<span class="va">explanation</span> <span class="op">&lt;-</span> <span class="fu">lime</span><span class="fu">::</span><span class="fu"><a href="https://lime.data-imaginist.com/reference/explain.html">explain</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">test_h2o</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, 
+    explainer    <span class="op">=</span> <span class="va">explainer</span>, 
+    n_labels     <span class="op">=</span> <span class="fl">1</span>, 
+    n_features   <span class="op">=</span> <span class="fl">4</span>,
+    kernel_width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+</div>
+</div>
+<div id="feature-importance-visualization" class="section level2">
+<h2>
+<span class="header-section-number">8.7</span> Feature Importance Visualization<a class="anchor" aria-label="anchor" href="#feature-importance-visualization"><i class="fas fa-link"></i></a>
+</h2>
+<p>The payoff for the work we put in using LIME is this feature importance plot. This allows us to visualize each of the ten cases (observations) from the test data. The top four features for each case are shown. Note that they are not the same for each case. The green bars mean that the feature supports the model conclusion, and the red bars contradict. We’ll focus in on Cases with <code>Label = Yes</code>, which are predicted to have attrition. We can see a common theme with Case 3 and Case 7: Training Time, Job Role, and Over Time are among the top factors influencing attrition. These are only two cases, but they can be used to potentially generalize to the larger population as we will see next.</p>
+<div class="sourceCode" id="cb243"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://lime.data-imaginist.com/reference/plot_features.html">plot_features</a></span><span class="op">(</span><span class="va">explanation</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"HR Predictive Analytics: LIME Feature Importance Visualization"</span>,
+         subtitle <span class="op">=</span> <span class="st">"Hold Out (Test) Set, First 10 Cases Shown"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="102-fe-class_342-employee_attrition_files/figure-html/plot-features-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div id="what-features-are-linked-to-employee-attrition" class="section level3">
+<h3>
+<span class="header-section-number">8.7.1</span> What features are linked to employee attrition<a class="anchor" aria-label="anchor" href="#what-features-are-linked-to-employee-attrition"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now we turn to our three critical features from the LIME Feature Importance Plot:</p>
+<ul>
+<li>Training Time</li>
+<li>Job Role</li>
+<li>Over Time</li>
+</ul>
+<p>We’ll subset this data and visualize to detect trends.</p>
+<div class="sourceCode" id="cb244"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Focus on critical features of attrition</span>
+<span class="va">attrition_critical_features</span> <span class="op">&lt;-</span> <span class="va">hr_data</span> <span class="op">%&gt;%</span>
+    <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Attrition</span>, <span class="va">TrainingTimesLastYear</span>, <span class="va">JobRole</span>, <span class="va">OverTime</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rowid_to_column</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"Case"</span><span class="op">)</span>
+<span class="va">attrition_critical_features</span>
+<span class="co">#&gt; # A tibble: 1,470 x 5</span>
+<span class="co">#&gt;    Case Attrition TrainingTimesLastYear JobRole               OverTime</span>
+<span class="co">#&gt;   &lt;int&gt; &lt;fct&gt;                     &lt;dbl&gt; &lt;fct&gt;                 &lt;fct&gt;   </span>
+<span class="co">#&gt; 1     1 Yes                           0 Sales Executive       Yes     </span>
+<span class="co">#&gt; 2     2 No                            3 Research Scientist    No      </span>
+<span class="co">#&gt; 3     3 Yes                           3 Laboratory Technician Yes     </span>
+<span class="co">#&gt; 4     4 No                            3 Research Scientist    Yes     </span>
+<span class="co">#&gt; 5     5 No                            3 Laboratory Technician No      </span>
+<span class="co">#&gt; 6     6 No                            2 Laboratory Technician No      </span>
+<span class="co">#&gt; # … with 1,464 more rows</span></code></pre></div>
+</div>
+<div id="training" class="section level3">
+<h3>
+<span class="header-section-number">8.7.2</span> Training<a class="anchor" aria-label="anchor" href="#training"><i class="fas fa-link"></i></a>
+</h3>
+<p>From the violin plot, the employees that stay tend to have a large peaks at two and three trainings per year whereas the employees that leave tend to have a large peak at two trainings per year. This suggests that employees with more trainings may be less likely to leave.<br></p>
+<div class="sourceCode" id="cb245"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">attrition_critical_features</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Attrition</span>, 
+                                        y <span class="op">=</span> <span class="va">TrainingTimesLastYear</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="102-fe-class_342-employee_attrition_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb246"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">attrition_critical_features</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">Attrition</span>, <span class="va">TrainingTimesLastYear</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyquant/man/palette_tq.html">palette_light</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyquant/man/palette_tq.html">palette_light</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/tidyquant/man/theme_tq.html">theme_tq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
+    title <span class="op">=</span> <span class="st">"Prevalance of Training is Lower in Attrition = Yes"</span>,
+    subtitle <span class="op">=</span> <span class="st">"Suggests that increased training is related to lower attrition"</span>
+    <span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="102-fe-class_342-employee_attrition_files/figure-html/plot-critical_training-1.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+<div id="overtime" class="section level3">
+<h3>
+<span class="header-section-number">8.7.3</span> Overtime<a class="anchor" aria-label="anchor" href="#overtime"><i class="fas fa-link"></i></a>
+</h3>
+<p>The plot below shows a very interesting relationship: a very high proportion of employees that turnover are working over time. The opposite is true for employees that stay.<br></p>
+<div class="sourceCode" id="cb247"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">attrition_critical_features</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>OverTime <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span>
+                        <span class="va">OverTime</span> <span class="op">==</span> <span class="st">"Yes"</span> <span class="op">~</span> <span class="fl">1</span>,
+                        <span class="va">OverTime</span> <span class="op">==</span> <span class="st">"No"</span>  <span class="op">~</span> <span class="fl">0</span> <span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">Attrition</span>, <span class="va">OverTime</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyquant/man/palette_tq.html">palette_light</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyquant/man/palette_tq.html">palette_light</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://rdrr.io/pkg/tidyquant/man/theme_tq.html">theme_tq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
+    title <span class="op">=</span> <span class="st">"Prevalance of Over Time is Higher in Attrition = Yes"</span>,
+    subtitle <span class="op">=</span> <span class="st">"Suggests that increased overtime is related to higher attrition"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="102-fe-class_342-employee_attrition_files/figure-html/plot-overtime-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb248"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">attrition_critical_features</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Attrition</span>, 
+                                        y <span class="op">=</span> <span class="va">OverTime</span>,
+                                        <span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="co"># geom_violin(aes(y = ..prop.., group = 1)) +</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+    </code></pre></div>
+<div class="inline-figure"><img src="102-fe-class_342-employee_attrition_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+<div id="job-role" class="section level3">
+<h3>
+<span class="header-section-number">8.7.4</span> Job Role<a class="anchor" aria-label="anchor" href="#job-role"><i class="fas fa-link"></i></a>
+</h3>
+<p>Several job roles are experiencing more turnover. Sales reps have the highest turnover at about 40% followed by Lab Technician, Human Resources, Sales Executive, and Research Scientist. It may be worthwhile to investigate what localized issues could be creating the high turnover among these groups within the organization.</p>
+<div class="sourceCode" id="cb249"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html">subset</a></span><span class="op">(</span><span class="va">attrition_critical_features</span>, <span class="va">Attrition</span> <span class="op">==</span> <span class="st">"Yes"</span><span class="op">)</span>,
+            mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">JobRole</span><span class="op">)</span><span class="op">)</span>
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">..prop..</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="co"># geom_bar(mapping = aes(y = ..prop.., group = 1)) </span></code></pre></div>
+<div class="inline-figure"><img src="102-fe-class_342-employee_attrition_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb250"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">attrition_critical_features</span>,
+            mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">JobRole</span><span class="op">)</span><span class="op">)</span>
+<span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">..prop..</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">Attrition</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="102-fe-class_342-employee_attrition_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb251"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">attrition_critical_features</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">JobRole</span>, <span class="va">Attrition</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 18 x 3</span>
+<span class="co">#&gt; # Groups:   JobRole [9]</span>
+<span class="co">#&gt;   JobRole                   Attrition total</span>
+<span class="co">#&gt;   &lt;fct&gt;                     &lt;fct&gt;     &lt;int&gt;</span>
+<span class="co">#&gt; 1 Healthcare Representative No          122</span>
+<span class="co">#&gt; 2 Healthcare Representative Yes           9</span>
+<span class="co">#&gt; 3 Human Resources           No           40</span>
+<span class="co">#&gt; 4 Human Resources           Yes          12</span>
+<span class="co">#&gt; 5 Laboratory Technician     No          197</span>
+<span class="co">#&gt; 6 Laboratory Technician     Yes          62</span>
+<span class="co">#&gt; # … with 12 more rows</span></code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">attrition_critical_features</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">JobRole</span>, <span class="va">Attrition</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html">spread</a></span><span class="op">(</span>key <span class="op">=</span> <span class="va">Attrition</span>, value <span class="op">=</span> <span class="va">total</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>pct_attrition <span class="op">=</span> <span class="va">Yes</span> <span class="op">/</span> <span class="op">(</span><span class="va">Yes</span> <span class="op">+</span> <span class="va">No</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 9 x 4</span>
+<span class="co">#&gt; # Groups:   JobRole [9]</span>
+<span class="co">#&gt;   JobRole                      No   Yes pct_attrition</span>
+<span class="co">#&gt;   &lt;fct&gt;                     &lt;int&gt; &lt;int&gt;         &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Healthcare Representative   122     9        0.0687</span>
+<span class="co">#&gt; 2 Human Resources              40    12        0.231 </span>
+<span class="co">#&gt; 3 Laboratory Technician       197    62        0.239 </span>
+<span class="co">#&gt; 4 Manager                      97     5        0.0490</span>
+<span class="co">#&gt; 5 Manufacturing Director      135    10        0.0690</span>
+<span class="co">#&gt; 6 Research Director            78     2        0.025 </span>
+<span class="co">#&gt; # … with 3 more rows</span></code></pre></div>
+<div class="sourceCode" id="cb253"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">attrition_critical_features</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">JobRole</span>, <span class="va">Attrition</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html">spread</a></span><span class="op">(</span>key <span class="op">=</span> <span class="va">Attrition</span>, value <span class="op">=</span> <span class="va">total</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>pct_attrition <span class="op">=</span> <span class="va">Yes</span> <span class="op">/</span> <span class="op">(</span><span class="va">Yes</span> <span class="op">+</span> <span class="va">No</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">JobRole</span>, <span class="va">pct_attrition</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">pct_attrition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">1</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyquant/man/palette_tq.html">palette_light</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expand_limits.html">expand_limits</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/tidyquant/man/theme_tq.html">theme_tq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
+        title <span class="op">=</span> <span class="st">"Attrition Varies By Job Role"</span>,
+        subtitle <span class="op">=</span> <span class="st">"Sales Rep, Lab Tech, HR, Sales Exec, and Research Scientist 
+        have much higher turnover"</span>,
+        y <span class="op">=</span> <span class="st">"Attrition Percentage (Yes / Total)"</span>,
+        x <span class="op">=</span> <span class="st">"JobRole"</span>
+    <span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="102-fe-class_342-employee_attrition_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;"></div>
+</div>
+</div>
+<div id="conclusions" class="section level2">
+<h2>
+<span class="header-section-number">8.8</span> Conclusions<a class="anchor" aria-label="anchor" href="#conclusions"><i class="fas fa-link"></i></a>
+</h2>
+<p>There’s a lot to take away from this article. We showed how you can use predictive analytics to develop sophisticated models that very accurately detect employees that are at risk of turnover. The autoML algorithm from H2O.ai worked well for classifying attrition with an accuracy around 87% on unseen / unmodeled data. We then used LIME to breakdown the complex ensemble model returned from H2O into critical features that are related to attrition. Overall, this is a really useful example where we can see how machine learning and data science can be used in business applications.</p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">7</span> Ten methods to assess Variable Importance</a></div>
+<div class="next"><a href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">9</span> Feature Selection to enhance cancer detection</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#employee-attrition-using-feature-importance"><span class="header-section-number">8</span> Employee Attrition using Feature Importance</a></li>
+<li>
+<a class="nav-link" href="#introduction-3"><span class="header-section-number">8.1</span> Introduction</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#employee-attrition-a-major-problem"><span class="header-section-number">8.1.1</span> Employee attrition: a major problem</a></li>
+<li><a class="nav-link" href="#employee-attrition-machine-learning-analysis"><span class="header-section-number">8.1.2</span> Employee attrition: machine learning analysis</a></li>
+<li><a class="nav-link" href="#where-we-got-the-data"><span class="header-section-number">8.1.3</span> Where we got the data</a></li>
+<li><a class="nav-link" href="#automated-machine-learning-what-we-did-with-the-data"><span class="header-section-number">8.1.4</span> Automated machine learning (what we did with the data)</a></li>
+<li><a class="nav-link" href="#load-packages"><span class="header-section-number">8.1.5</span> Load packages</a></li>
+<li><a class="nav-link" href="#load-data"><span class="header-section-number">8.1.6</span> Load data</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#modeling-employee-attrition"><span class="header-section-number">8.2</span> Modeling Employee attrition</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#machine-learning-with-h2o"><span class="header-section-number">8.2.1</span> Machine Learning with h2o</a></li></ul>
+</li>
+<li><a class="nav-link" href="#model"><span class="header-section-number">8.3</span> Model</a></li>
+<li><a class="nav-link" href="#predict"><span class="header-section-number">8.4</span> Predict</a></li>
+<li><a class="nav-link" href="#performance"><span class="header-section-number">8.5</span> Performance</a></li>
+<li>
+<a class="nav-link" href="#the-lime-package"><span class="header-section-number">8.6</span> The lime package</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#set-up"><span class="header-section-number">8.6.1</span> Set up</a></li></ul>
+</li>
+<li>
+<a class="nav-link" href="#feature-importance-visualization"><span class="header-section-number">8.7</span> Feature Importance Visualization</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#what-features-are-linked-to-employee-attrition"><span class="header-section-number">8.7.1</span> What features are linked to employee attrition</a></li>
+<li><a class="nav-link" href="#training"><span class="header-section-number">8.7.2</span> Training</a></li>
+<li><a class="nav-link" href="#overtime"><span class="header-section-number">8.7.3</span> Overtime</a></li>
+<li><a class="nav-link" href="#job-role"><span class="header-section-number">8.7.4</span> Job Role</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#conclusions"><span class="header-section-number">8.8</span> Conclusions</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/102-fe-class_342-employee_attrition.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/102-fe-class_342-employee_attrition.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>A Machine Learning Book</strong>" was written by Alfonso R. Reyes. It was last built on 2020-11-18.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>
