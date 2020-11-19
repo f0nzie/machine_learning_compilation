@@ -49,3 +49,8 @@ backup_dummy_copy:
 	# make a copy of dummy-container
 	# date the copy
 	# zip it
+
+# push main branch and github-pages
+git_push:
+	git push ;\
+	git subtree push --prefix from-dummy-container origin gh-pages
