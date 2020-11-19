@@ -4,8 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 35 Comparing Multiple Regression vs a Neural Network | A Machine Learning Book</title>
-<meta name="author" content="Alfonso R. Reyes">
+<title>Chapter 37 Comparing Multiple Regression vs a Neural Network | A Machine Learning Compilation</title>
+<meta name="author" content="Several authors. Compiled by Alfonso R. Reyes">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.5.3/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.5.3/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.2.9000/tabs.js"></script><script src="libs/bs3compat-0.2.2.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -19,7 +19,7 @@
 
     <div class="d-flex align-items-start justify-content-between">
       <h1>
-        <a href="index.html" title="">A Machine Learning Book</a>
+        <a href="index.html" title="">A Machine Learning Compilation</a>
       </h1>
       <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
@@ -31,57 +31,58 @@
 
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
-<li><a class="" href="index.html">Prerequisites</a></li>
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Preface</a></li>
 <li class="book-part">The Basics of Machine Learning</li>
-<li><a class="" href="introduction-to-pca.html"><span class="header-section-number">1</span> Introduction to PCA</a></li>
-<li><a class="" href="comparison-of-two-pca-packages.html"><span class="header-section-number">2</span> Comparison of two PCA packages</a></li>
-<li><a class="" href="detailed-study-of-principal-component-analysis.html"><span class="header-section-number">3</span> Detailed study of Principal Component Analysis</a></li>
-<li><a class="" href="detection-of-diabetes-using-logistic-regression.html"><span class="header-section-number">4</span> Detection of diabetes using Logistic Regression</a></li>
-<li><a class="" href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">5</span> Sensitivity analysis for a neural network</a></li>
-<li><a class="" href="data-visualization-for-ml-models.html"><span class="header-section-number">6</span> Data Visualization for ML models</a></li>
+<li><a class="" href="introduction-to-pca.html"><span class="header-section-number">2</span> Introduction to PCA</a></li>
+<li><a class="" href="comparison-of-two-pca-packages.html"><span class="header-section-number">3</span> Comparison of two PCA packages</a></li>
+<li><a class="" href="detailed-study-of-principal-component-analysis.html"><span class="header-section-number">4</span> Detailed study of Principal Component Analysis</a></li>
+<li><a class="" href="detection-of-diabetes-using-logistic-regression.html"><span class="header-section-number">5</span> Detection of diabetes using Logistic Regression</a></li>
+<li><a class="" href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">6</span> Sensitivity analysis for a neural network</a></li>
+<li><a class="" href="data-visualization-for-ml-models.html"><span class="header-section-number">7</span> Data Visualization for ML models</a></li>
 <li class="book-part">Feature Engineering</li>
-<li><a class="" href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">7</span> Ten methods to assess Variable Importance</a></li>
-<li><a class="" href="employee-attrition-using-feature-importance.html"><span class="header-section-number">8</span> Employee Attrition using Feature Importance</a></li>
-<li><a class="" href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">9</span> Feature Selection to enhance cancer detection</a></li>
-<li><a class="" href="dealing-with-unbalanced-data.html"><span class="header-section-number">10</span> Dealing with unbalanced data</a></li>
-<li><a class="" href="imputting-missing-values-with-random-forest.html"><span class="header-section-number">11</span> Imputting missing values with Random Forest</a></li>
-<li class="book-part">Algorithms Comparison</li>
-<li><a class="" href="introduction-to-algorithms-for-classification.html"><span class="header-section-number">12</span> Introduction to algorithms for Classification</a></li>
-<li><a class="" href="comparing-classification-algorithms.html"><span class="header-section-number">13</span> Comparing Classification algorithms</a></li>
-<li><a class="" href="linear-and-non-linear-algorithms-for-classification.html"><span class="header-section-number">14</span> Linear and Non-Linear Algorithms for Classification</a></li>
-<li><a class="" href="predicting-flu-outcome-comparing-eight-classification-algorithms.html"><span class="header-section-number">15</span> Predicting Flu outcome comparing eight classification algorithms</a></li>
-<li><a class="" href="classification-on-bad-loans.html"><span class="header-section-number">16</span> Classification on bad loans</a></li>
-<li><a class="" href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">17</span> Comparison of six Linear Regression algorithms</a></li>
+<li><a class="" href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">8</span> Ten methods to assess Variable Importance</a></li>
+<li><a class="" href="employee-attrition-using-feature-importance.html"><span class="header-section-number">9</span> Employee Attrition using Feature Importance</a></li>
 <li class="book-part">Classification</li>
-<li><a class="" href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">18</span> A gentle introduction to Support Vector Machines</a></li>
-<li><a class="" href="broad-view-of-svm.html"><span class="header-section-number">19</span> Broad view of SVM</a></li>
-<li><a class="" href="tuning-of-support-vector-machine-prediction.html"><span class="header-section-number">20</span> Tuning of Support Vector Machine prediction</a></li>
-<li><a class="" href="who-buys-social-network-ads.html"><span class="header-section-number">21</span> Who buys Social Network ads</a></li>
-<li><a class="" href="predicting-ozone-levels.html"><span class="header-section-number">22</span> Predicting Ozone levels</a></li>
-<li><a class="" href="building-a-naive-bayes-classifier.html"><span class="header-section-number">23</span> Building a Naive Bayes Classifier</a></li>
-<li><a class="" href="detect-mines-vs-rocks-with-random-forest.html"><span class="header-section-number">24</span> Detect mines vs rocks with Random Forest</a></li>
-<li><a class="" href="predicting-the-type-of-glass.html"><span class="header-section-number">25</span> Predicting the type of glass</a></li>
-<li><a class="" href="naive-bayes-for-sms-spam.html"><span class="header-section-number">26</span> Naive Bayes for SMS spam</a></li>
-<li><a class="" href="vehicles-classiification-with-decision-trees.html"><span class="header-section-number">27</span> Vehicles classiification with Decision Trees</a></li>
-<li><a class="" href="applying-naive-bayes-on-the-titanic-case.html"><span class="header-section-number">28</span> Applying Naive-Bayes on the Titanic case</a></li>
+<li><a class="" href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">10</span> A gentle introduction to Support Vector Machines</a></li>
+<li><a class="" href="broad-view-of-svm.html"><span class="header-section-number">11</span> Broad view of SVM</a></li>
+<li><a class="" href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">12</span> Feature Selection to enhance cancer detection</a></li>
+<li><a class="" href="dealing-with-unbalanced-data.html"><span class="header-section-number">13</span> Dealing with unbalanced data</a></li>
+<li><a class="" href="imputting-missing-values-with-random-forest.html"><span class="header-section-number">14</span> Imputting missing values with Random Forest</a></li>
+<li><a class="" href="tuning-of-support-vector-machine-prediction.html"><span class="header-section-number">15</span> Tuning of Support Vector Machine prediction</a></li>
+<li class="book-part">Classification</li>
+<li><a class="" href="introduction-to-algorithms-for-classification.html"><span class="header-section-number">16</span> Introduction to algorithms for Classification</a></li>
+<li><a class="" href="comparing-classification-algorithms.html"><span class="header-section-number">17</span> Comparing Classification algorithms</a></li>
+<li><a class="" href="who-buys-social-network-ads.html"><span class="header-section-number">18</span> Who buys Social Network ads</a></li>
+<li><a class="" href="predicting-ozone-levels.html"><span class="header-section-number">19</span> Predicting Ozone levels</a></li>
+<li><a class="" href="building-a-naive-bayes-classifier.html"><span class="header-section-number">20</span> Building a Naive Bayes Classifier</a></li>
+<li><a class="" href="linear-and-non-linear-algorithms-for-classification.html"><span class="header-section-number">21</span> Linear and Non-Linear Algorithms for Classification</a></li>
+<li><a class="" href="detect-mines-vs-rocks-with-random-forest.html"><span class="header-section-number">22</span> Detect mines vs rocks with Random Forest</a></li>
+<li><a class="" href="predicting-the-type-of-glass.html"><span class="header-section-number">23</span> Predicting the type of glass</a></li>
+<li><a class="" href="naive-bayes-for-sms-spam.html"><span class="header-section-number">24</span> Naive Bayes for SMS spam</a></li>
+<li><a class="" href="vehicles-classiification-with-decision-trees.html"><span class="header-section-number">25</span> Vehicles classiification with Decision Trees</a></li>
+<li><a class="" href="applying-naive-bayes-on-the-titanic-case.html"><span class="header-section-number">26</span> Applying Naive-Bayes on the Titanic case</a></li>
+<li><a class="" href="classification-on-bad-loans.html"><span class="header-section-number">27</span> Classification on bad loans</a></li>
+<li><a class="" href="predicting-flu-outcome-comparing-eight-classification-algorithms.html"><span class="header-section-number">28</span> Predicting Flu outcome comparing eight classification algorithms</a></li>
 <li><a class="" href="a-detailed-study-of-bike-sharing-demand.html"><span class="header-section-number">29</span> A detailed study of bike sharing demand</a></li>
+<li><a class="" href="prediction-of-arrhythmia-with-deep-neural-nets.html"><span class="header-section-number">30</span> Prediction of arrhythmia with deep neural nets</a></li>
 <li class="book-part">Linear Regression</li>
-<li><a class="" href="linear-regression-with-islr.html"><span class="header-section-number">30</span> Linear Regression with ISLR</a></li>
-<li><a class="" href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">31</span> Evaluation of three linear regression models</a></li>
-<li><a class="" href="comparing-regression-models.html"><span class="header-section-number">32</span> Comparing regression models</a></li>
-<li><a class="" href="finding-the-factors-of-happiness.html"><span class="header-section-number">33</span> Finding the factors of happiness</a></li>
-<li><a class="" href="regression-with-a-neural-network.html"><span class="header-section-number">34</span> Regression with a neural network</a></li>
-<li><a class="active" href="comparing-multiple-regression-vs-a-neural-network.html"><span class="header-section-number">35</span> Comparing Multiple Regression vs a Neural Network</a></li>
-<li><a class="" href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">36</span> Temperature modeling using nested dataframes</a></li>
+<li><a class="" href="linear-regression-with-islr.html"><span class="header-section-number">31</span> Linear Regression with ISLR</a></li>
+<li><a class="" href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">32</span> Evaluation of three linear regression models</a></li>
+<li><a class="" href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">33</span> Comparison of six Linear Regression algorithms</a></li>
+<li><a class="" href="comparing-regression-models.html"><span class="header-section-number">34</span> Comparing regression models</a></li>
+<li><a class="" href="finding-the-factors-of-happiness.html"><span class="header-section-number">35</span> Finding the factors of happiness</a></li>
+<li><a class="" href="regression-with-a-neural-network.html"><span class="header-section-number">36</span> Regression with a neural network</a></li>
+<li><a class="active" href="comparing-multiple-regression-vs-a-neural-network.html"><span class="header-section-number">37</span> Comparing Multiple Regression vs a Neural Network</a></li>
+<li><a class="" href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">38</span> Temperature modeling using nested dataframes</a></li>
 <li class="book-part">Neural Networks</li>
-<li><a class="" href="credit-scoring-with-neuralnet.html"><span class="header-section-number">37</span> Credit Scoring with neuralnet</a></li>
-<li><a class="" href="wine-classification-with-neuralnet.html"><span class="header-section-number">38</span> Wine classification with neuralnet</a></li>
-<li><a class="" href="predicting-the-rating-of-cereals.html"><span class="header-section-number">39</span> Predicting the rating of cereals</a></li>
-<li><a class="" href="fitting-a-linear-model-with-neural-networks.html"><span class="header-section-number">40</span> Fitting a linear model with neural networks</a></li>
-<li><a class="" href="visualization-of-neural-networks.html"><span class="header-section-number">41</span> Visualization of neural networks</a></li>
-<li><a class="" href="build-a-fully-connected-r-neural-network-from-scratch.html"><span class="header-section-number">42</span> Build a fully connected R neural network from scratch</a></li>
-<li><a class="" href="tuning-hyperparameters-in-a-neural-network.html"><span class="header-section-number">43</span> Tuning Hyperparameters in a Neural Network</a></li>
-<li><a class="" href="deep-learning-tips-for-classification-and-regression.html"><span class="header-section-number">44</span> Deep Learning tips for Classification and Regression</a></li>
+<li><a class="" href="credit-scoring-with-neuralnet.html"><span class="header-section-number">39</span> Credit Scoring with neuralnet</a></li>
+<li><a class="" href="wine-classification-with-neuralnet.html"><span class="header-section-number">40</span> Wine classification with neuralnet</a></li>
+<li><a class="" href="predicting-the-rating-of-cereals.html"><span class="header-section-number">41</span> Predicting the rating of cereals</a></li>
+<li><a class="" href="fitting-a-linear-model-with-neural-networks.html"><span class="header-section-number">42</span> Fitting a linear model with neural networks</a></li>
+<li><a class="" href="visualization-of-neural-networks.html"><span class="header-section-number">43</span> Visualization of neural networks</a></li>
+<li><a class="" href="build-a-fully-connected-r-neural-network-from-scratch.html"><span class="header-section-number">44</span> Build a fully connected R neural network from scratch</a></li>
+<li><a class="" href="tuning-hyperparameters-in-a-neural-network.html"><span class="header-section-number">45</span> Tuning Hyperparameters in a Neural Network</a></li>
+<li><a class="" href="deep-learning-tips-for-classification-and-regression.html"><span class="header-section-number">46</span> Deep Learning tips for Classification and Regression</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="what-is-dot-hat-in-a-regression-output.html"><span class="header-section-number">A</span> What is dot hat in a regression output</a></li>
 <li><a class="" href="q-q-normal-to-compare-data-to-distributions.html"><span class="header-section-number">B</span> Q-Q normal to compare data to distributions</a></li>
@@ -96,7 +97,7 @@
 </div>
   </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="comparing-multiple-regression-vs-a-neural-network" class="section level1">
 <h1>
-<span class="header-section-number">35</span> Comparing Multiple Regression vs a Neural Network<a class="anchor" aria-label="anchor" href="#comparing-multiple-regression-vs-a-neural-network"><i class="fas fa-link"></i></a>
+<span class="header-section-number">37</span> Comparing Multiple Regression vs a Neural Network<a class="anchor" aria-label="anchor" href="#comparing-multiple-regression-vs-a-neural-network"><i class="fas fa-link"></i></a>
 </h1>
 <ul>
 <li>Dataset: <code>diamonds</code>
@@ -108,13 +109,13 @@
 </ul>
 </li>
 </ul>
-<div id="introduction-18" class="section level2">
+<div id="introduction-19" class="section level2">
 <h2>
-<span class="header-section-number">35.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-18"><i class="fas fa-link"></i></a>
+<span class="header-section-number">37.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-19"><i class="fas fa-link"></i></a>
 </h2>
 <p>Source: <a href="http://beyondvalence.blogspot.com/2014/04/r-comparing-multiple-and-neural-network.html" class="uri">http://beyondvalence.blogspot.com/2014/04/r-comparing-multiple-and-neural-network.html</a></p>
 <p>Here we will compare and evaluate the results from multiple regression and a neural network on the diamonds data set from the <code>ggplot2</code> package in R. Consisting of 53,940 observations with 10 variables, diamonds contains data on the carat, cut, color, clarity, price, and diamond dimensions. These variables have a particular effect on price, and we would like to see if they can predict the price of various diamonds.</p>
-<div class="sourceCode" id="cb856"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb908"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cbergmeir/RSNNS">RSNNS</a></span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: Rcpp</span>
@@ -138,7 +139,7 @@
 <span class="co">#&gt; 4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63</span>
 <span class="co">#&gt; 5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75</span>
 <span class="co">#&gt; 6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48</span></code></pre></div>
-<div class="sourceCode" id="cb857"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb909"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">diamonds</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 53,940</span>
 <span class="co">#&gt; Columns: 10</span>
@@ -156,10 +157,10 @@
 </div>
 <div id="multiple-regression" class="section level2">
 <h2>
-<span class="header-section-number">35.2</span> Multiple Regression<a class="anchor" aria-label="anchor" href="#multiple-regression"><i class="fas fa-link"></i></a>
+<span class="header-section-number">37.2</span> Multiple Regression<a class="anchor" aria-label="anchor" href="#multiple-regression"><i class="fas fa-link"></i></a>
 </h2>
 <p>First we ready a Multiple Regression by sampling the rows to randomize the observations, and then create a sample index of 0’s and 1’s to separate the training and test sets. Note that the depth and table columns (5, 6) are removed because they are linear combinations of the dimensions, x, y, and z. See that the observations in the training and test sets approximate 70% and 30% of the total observations, from which we sampled and set the probabilities.</p>
-<div class="sourceCode" id="cb858"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb910"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234567</span><span class="op">)</span>
 <span class="va">diamonds</span> <span class="op">&lt;-</span> <span class="va">diamonds</span><span class="op">[</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">diamonds</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">diamonds</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span>
 <span class="va">d.index</span> <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">diamonds</span><span class="op">)</span>, prob<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span>, rep <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -170,7 +171,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">d.test</span><span class="op">)</span>
 <span class="co">#&gt; [1] 16438     8</span></code></pre></div>
 <p>Now we move into the next stage with multiple regression via the <code><a href="https://rdrr.io/pkg/RSNNS/man/train.html">train()</a></code> function from the <code>caret</code> library, instead of the regular <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> function. We specify the predictors, the response variable (<code>price</code>), the “lm” method, and the cross validation resampling method.</p>
-<div class="sourceCode" id="cb859"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb911"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">d.train</span><span class="op">[</span>,<span class="op">-</span><span class="fl">5</span><span class="op">]</span>
 <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/as.numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">d.train</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span><span class="op">$</span><span class="va">price</span><span class="op">)</span>
 
@@ -270,7 +271,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Tuning parameter 'intercept' was held constant at a value of TRUE</span></code></pre></div>
 <p>When we call the train(ed) object, we can see the attributes of the training set, resampling, sample sizes, and the results. Note the root mean square error value of 1150. Will that be low enough to take down heavy weight TEAM: Neural Network? Below we visualize the training diamond prices and the predicted prices with <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code>.</p>
-<div class="sourceCode" id="cb860"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb912"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'dplyr'</span>
@@ -292,7 +293,7 @@
 <div class="inline-figure"><img src="404-regression_950-diamonds_nn_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;"></div>
 <p>We see from the axis, the predicted prices have some high values compared to the actual prices. Also, there are predicted prices below 0, which cannot be possible in the observed, which will set TEAM: Multiple Regression back a few points.</p>
 <p>Next we use <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> again to visualize the predicted and observed diamond prices from the test data, which did not train the linear regression model.</p>
-<div class="sourceCode" id="cb861"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb913"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># predict on test set</span>
 <span class="va">ds.lm.p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ds.lm</span>, <span class="va">d.test</span><span class="op">[</span>,<span class="op">-</span><span class="fl">5</span><span class="op">]</span>, type<span class="op">=</span><span class="st">"raw"</span><span class="op">)</span>
 
@@ -305,13 +306,13 @@
 <div class="inline-figure"><img src="404-regression_950-diamonds_nn_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;"></div>
 <p>Similar to the training prices plot, we see here in the test prices that the model over predicts larger values and also predicted negative price values. In order for the Multiple Regression to win, the Neural Network has to have more wild prediction values.</p>
 <p>Lastly, we calculate the root mean square error, by taking the mean of the squared difference between the predicted and observed diamond prices. The resulting RMSE is 1110.843, similar to the RMSE of the training set.</p>
-<div class="sourceCode" id="cb862"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb914"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ds.lm.mse</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">d.test</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">ds.lm.p</span> <span class="op">-</span> <span class="va">d.test</span><span class="op">[</span>,<span class="fl">5</span><span class="op">]</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
 <span class="va">lm.rmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">ds.lm.mse</span><span class="op">)</span>
 <span class="va">lm.rmse</span>
 <span class="co">#&gt; [1] 1168</span></code></pre></div>
 <p>Below is a detailed output of the model summary, with the coefficients and residuals. Observe how carat is the best predictor, with the highest t value at 191.7, with every increase in 1 carat holding all other variables equal, results in a 10,873 dollar increase in value. As we look at the factor variables, we do not see a reliable increase in coefficients with increases in level value.</p>
-<div class="sourceCode" id="cb863"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb915"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ds.lm</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
@@ -355,10 +356,10 @@
 </div>
 <div id="neural-network-1" class="section level2">
 <h2>
-<span class="header-section-number">35.3</span> Neural Network<a class="anchor" aria-label="anchor" href="#neural-network-1"><i class="fas fa-link"></i></a>
+<span class="header-section-number">37.3</span> Neural Network<a class="anchor" aria-label="anchor" href="#neural-network-1"><i class="fas fa-link"></i></a>
 </h2>
 <p>Because neural networks operate in terms of 0 to 1, or -1 to 1, we must first normalize the price variable to 0 to 1, making the lowest value 0 and the highest value 1. We accomplished this using the <code><a href="https://rdrr.io/pkg/RSNNS/man/normalizeData.html">normalizeData()</a></code> function. Save the price output in order to revert the normalization after training the data. Also, we take the factor variables and turn them into numeric labels using toNumericClassLabels(). Below we see the normalized prices before they are split into a training and test set with <code><a href="https://rdrr.io/pkg/RSNNS/man/splitForTrainingAndTest.html">splitForTrainingAndTest()</a></code> function.</p>
-<div class="sourceCode" id="cb864"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb916"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">diamonds</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/toNumericClassLabels.html">toNumericClassLabels</a></span><span class="op">(</span><span class="va">diamonds</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">$</span><span class="va">color</span><span class="op">)</span>
 <span class="va">diamonds</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/toNumericClassLabels.html">toNumericClassLabels</a></span><span class="op">(</span><span class="va">diamonds</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span><span class="op">$</span><span class="va">clarity</span><span class="op">)</span>
 <span class="va">prices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/normalizeData.html">normalizeData</a></span><span class="op">(</span><span class="va">diamonds</span><span class="op">[</span>,<span class="fl">7</span><span class="op">]</span>, type<span class="op">=</span><span class="st">"0_1"</span><span class="op">)</span>
@@ -370,10 +371,10 @@
 <span class="co">#&gt; [4,] 0.3247</span>
 <span class="co">#&gt; [5,] 0.0280</span>
 <span class="co">#&gt; [6,] 0.0252</span></code></pre></div>
-<div class="sourceCode" id="cb865"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb917"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dsplit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/splitForTrainingAndTest.html">splitForTrainingAndTest</a></span><span class="op">(</span><span class="va">diamonds</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>,<span class="op">-</span><span class="fl">5</span>,<span class="op">-</span><span class="fl">6</span>,<span class="op">-</span><span class="fl">7</span>,<span class="op">-</span><span class="fl">9</span>,<span class="op">-</span><span class="fl">10</span><span class="op">)</span><span class="op">]</span>, <span class="va">prices</span>, ratio<span class="op">=</span><span class="fl">0.3</span><span class="op">)</span></code></pre></div>
 <p>Now the Neural Network are ready for the multi-layer perceptron (MLP) regression. We define the training inputs (predictor variables) and targets (prices), the size of the layer (5), the incremented learning parameter (0.1), the max iterations (100 epochs), and also the test input/targets.</p>
-<div class="sourceCode" id="cb866"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb918"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># mlp model</span>
 <span class="va">d.nn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/mlp.html">mlp</a></span><span class="op">(</span><span class="va">dsplit</span><span class="op">$</span><span class="va">inputsTrain</span>,
             <span class="va">dsplit</span><span class="op">$</span><span class="va">targetsTrain</span>,
@@ -384,23 +385,23 @@
             linout <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>If you spectators have dealt with <code><a href="https://rdrr.io/pkg/RSNNS/man/mlp.html">mlp()</a></code> before, you know the summary output can be quite lenghty, so it is omitted (we dislike commercials too). We move to the visual description of the MLP model with the iterative sum of square error for the training and test sets. Additionally, we plot the regression error (predicted vs observed) for the training and test prices.</p>
 <p>Time for the Neural Network so show off its statistical muscles! First up, we have the iterative sum of square error for each epoch, noting that we specified a maximum of 100 in the MLP model. We see an immediate drop in the SSE with the first few iterations, with the SSE leveling out around 50. The test SSE, in red, fluctuations just above 50 as well. Since the SSE began to plateau, the model fit well but not too well, since we want to avoid over fitting the model. So 100 iterations was a good choice.</p>
-<div class="sourceCode" id="cb867"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb919"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># SSE error</span>
 <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/plotIterativeError.html">plotIterativeError</a></span><span class="op">(</span><span class="va">d.nn</span>, main <span class="op">=</span> <span class="st">"Diamonds RSNNS-SSE"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="404-regression_950-diamonds_nn_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;"></div>
 <p>Second, we observe the regression plot with the fitted (predicted) and target (observed) prices from the training set. The prices fit reasonably well, and we see the red model regression line close to the black (y=x) optimal line. Note that some middle prices were over predicted by the model, and there were no negative prices, unlike the linear regression model.</p>
-<div class="sourceCode" id="cb868"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb920"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># regression  errors</span>
 <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/plotRegressionError.html">plotRegressionError</a></span><span class="op">(</span><span class="va">dsplit</span><span class="op">$</span><span class="va">targetsTrain</span>, <span class="va">d.nn</span><span class="op">$</span><span class="va">fitted.values</span>,
                     main <span class="op">=</span> <span class="st">"Diamonds Training Fit"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="404-regression_950-diamonds_nn_files/figure-html/unnamed-chunk-15-1.png" width="70%" style="display: block; margin: auto;"></div>
 <p>Third, we look at the predicted and observed prices from the test set. Again the red regression line approximates the optimal black line, and more price values were over predicted by the model. Again, there are no negative predicted prices, a good sign.</p>
-<div class="sourceCode" id="cb869"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb921"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/plotRegressionError.html">plotRegressionError</a></span><span class="op">(</span><span class="va">dsplit</span><span class="op">$</span><span class="va">targetsTest</span>, <span class="va">d.nn</span><span class="op">$</span><span class="va">fittedTestValues</span>,
                     main <span class="op">=</span> <span class="st">"Diamonds Test Fit"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="404-regression_950-diamonds_nn_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;"></div>
 <p>Now we calculate the RMSE for the training set, which we get 692.5155. This looks promising for the Neural Network!</p>
-<div class="sourceCode" id="cb870"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb922"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># train set</span>
 <span class="va">train.pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/denormalizeData.html">denormalizeData</a></span><span class="op">(</span><span class="va">d.nn</span><span class="op">$</span><span class="va">fitted.values</span>,
                               <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/getNormParameters.html">getNormParameters</a></span><span class="op">(</span><span class="va">prices</span><span class="op">)</span><span class="op">)</span>
@@ -414,7 +415,7 @@
 <span class="va">rsnns.train.rmse</span>
 <span class="co">#&gt; [1] 739</span></code></pre></div>
 <p>Naturally we want to calculate the RMSE for the test set, but note that in the real world, we would not have the luxury of knowing the real test values. We arrive at 679.5265.</p>
-<div class="sourceCode" id="cb871"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb923"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># test set</span>
 <span class="va">test.pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/denormalizeData.html">denormalizeData</a></span><span class="op">(</span><span class="va">d.nn</span><span class="op">$</span><span class="va">fittedTestValues</span>,
                              <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/getNormParameters.html">getNormParameters</a></span><span class="op">(</span><span class="va">prices</span><span class="op">)</span><span class="op">)</span>
@@ -430,14 +431,14 @@
 <p>Which model was better in predicting the diamond price? The linear regression model with 10 fold cross validation, or the multi-layer perceptron model with 5 nodes run to 100 iterations? Who won the rumble?</p>
 <p>RUMBLE RESULTS</p>
 <p>From calculating the two RMSE’s from the training and test sets for the two TEAMS, we wrap them in a list. We named the TEAM: Multiple Regression as linear, and the TEAM: Neural Network regression as neural.</p>
-<div class="sourceCode" id="cb872"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb924"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># aggregate all rmse</span>
 <span class="va">d.rmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>linear.train <span class="op">=</span> <span class="va">ds.lm</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">RMSE</span>,
                linear.test <span class="op">=</span> <span class="va">lm.rmse</span>,
                neural.train <span class="op">=</span> <span class="va">rsnns.train.rmse</span>,
                neural.test <span class="op">=</span> <span class="va">rsnns.test.rmse</span><span class="op">)</span></code></pre></div>
 <p>Below we can evaluate the models from their RMSE values.</p>
-<div class="sourceCode" id="cb873"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb925"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d.rmse</span>
 <span class="co">#&gt; $linear.train</span>
 <span class="co">#&gt; [1] 1140</span>
@@ -457,15 +458,15 @@
 </div>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="regression-with-a-neural-network.html"><span class="header-section-number">34</span> Regression with a neural network</a></div>
-<div class="next"><a href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">36</span> Temperature modeling using nested dataframes</a></div>
+<div class="prev"><a href="regression-with-a-neural-network.html"><span class="header-section-number">36</span> Regression with a neural network</a></div>
+<div class="next"><a href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">38</span> Temperature modeling using nested dataframes</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#comparing-multiple-regression-vs-a-neural-network"><span class="header-section-number">35</span> Comparing Multiple Regression vs a Neural Network</a></li>
-<li><a class="nav-link" href="#introduction-18"><span class="header-section-number">35.1</span> Introduction</a></li>
-<li><a class="nav-link" href="#multiple-regression"><span class="header-section-number">35.2</span> Multiple Regression</a></li>
-<li><a class="nav-link" href="#neural-network-1"><span class="header-section-number">35.3</span> Neural Network</a></li>
+<li><a class="nav-link" href="#comparing-multiple-regression-vs-a-neural-network"><span class="header-section-number">37</span> Comparing Multiple Regression vs a Neural Network</a></li>
+<li><a class="nav-link" href="#introduction-19"><span class="header-section-number">37.1</span> Introduction</a></li>
+<li><a class="nav-link" href="#multiple-regression"><span class="header-section-number">37.2</span> Multiple Regression</a></li>
+<li><a class="nav-link" href="#neural-network-1"><span class="header-section-number">37.3</span> Neural Network</a></li>
 </ul>
 
       <div class="book-extra">
@@ -483,7 +484,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>A Machine Learning Book</strong>" was written by Alfonso R. Reyes. It was last built on 2020-11-18.</p>
+    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-19.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
