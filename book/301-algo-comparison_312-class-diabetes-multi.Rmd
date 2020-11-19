@@ -1,3 +1,5 @@
+# (PART) Classification {-}
+
 # Introduction to algorithms for Classification
 
 * Datasets: `PimaIndiansDiabetes`

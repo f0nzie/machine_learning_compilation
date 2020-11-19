@@ -4,8 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 17 Comparison of six Linear Regression algorithms | A Machine Learning Book</title>
-<meta name="author" content="Alfonso R. Reyes">
+<title>Chapter 33 Comparison of six Linear Regression algorithms | A Machine Learning Compilation</title>
+<meta name="author" content="Several authors. Compiled by Alfonso R. Reyes">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.5.3/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.5.3/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.2.9000/tabs.js"></script><script src="libs/bs3compat-0.2.2.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -19,7 +19,7 @@
 
     <div class="d-flex align-items-start justify-content-between">
       <h1>
-        <a href="index.html" title="">A Machine Learning Book</a>
+        <a href="index.html" title="">A Machine Learning Compilation</a>
       </h1>
       <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
@@ -31,57 +31,58 @@
 
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
-<li><a class="" href="index.html">Prerequisites</a></li>
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Preface</a></li>
 <li class="book-part">The Basics of Machine Learning</li>
-<li><a class="" href="introduction-to-pca.html"><span class="header-section-number">1</span> Introduction to PCA</a></li>
-<li><a class="" href="comparison-of-two-pca-packages.html"><span class="header-section-number">2</span> Comparison of two PCA packages</a></li>
-<li><a class="" href="detailed-study-of-principal-component-analysis.html"><span class="header-section-number">3</span> Detailed study of Principal Component Analysis</a></li>
-<li><a class="" href="detection-of-diabetes-using-logistic-regression.html"><span class="header-section-number">4</span> Detection of diabetes using Logistic Regression</a></li>
-<li><a class="" href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">5</span> Sensitivity analysis for a neural network</a></li>
-<li><a class="" href="data-visualization-for-ml-models.html"><span class="header-section-number">6</span> Data Visualization for ML models</a></li>
+<li><a class="" href="introduction-to-pca.html"><span class="header-section-number">2</span> Introduction to PCA</a></li>
+<li><a class="" href="comparison-of-two-pca-packages.html"><span class="header-section-number">3</span> Comparison of two PCA packages</a></li>
+<li><a class="" href="detailed-study-of-principal-component-analysis.html"><span class="header-section-number">4</span> Detailed study of Principal Component Analysis</a></li>
+<li><a class="" href="detection-of-diabetes-using-logistic-regression.html"><span class="header-section-number">5</span> Detection of diabetes using Logistic Regression</a></li>
+<li><a class="" href="sensitivity-analysis-for-a-neural-network.html"><span class="header-section-number">6</span> Sensitivity analysis for a neural network</a></li>
+<li><a class="" href="data-visualization-for-ml-models.html"><span class="header-section-number">7</span> Data Visualization for ML models</a></li>
 <li class="book-part">Feature Engineering</li>
-<li><a class="" href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">7</span> Ten methods to assess Variable Importance</a></li>
-<li><a class="" href="employee-attrition-using-feature-importance.html"><span class="header-section-number">8</span> Employee Attrition using Feature Importance</a></li>
-<li><a class="" href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">9</span> Feature Selection to enhance cancer detection</a></li>
-<li><a class="" href="dealing-with-unbalanced-data.html"><span class="header-section-number">10</span> Dealing with unbalanced data</a></li>
-<li><a class="" href="imputting-missing-values-with-random-forest.html"><span class="header-section-number">11</span> Imputting missing values with Random Forest</a></li>
-<li class="book-part">Algorithms Comparison</li>
-<li><a class="" href="introduction-to-algorithms-for-classification.html"><span class="header-section-number">12</span> Introduction to algorithms for Classification</a></li>
-<li><a class="" href="comparing-classification-algorithms.html"><span class="header-section-number">13</span> Comparing Classification algorithms</a></li>
-<li><a class="" href="linear-and-non-linear-algorithms-for-classification.html"><span class="header-section-number">14</span> Linear and Non-Linear Algorithms for Classification</a></li>
-<li><a class="" href="predicting-flu-outcome-comparing-eight-classification-algorithms.html"><span class="header-section-number">15</span> Predicting Flu outcome comparing eight classification algorithms</a></li>
-<li><a class="" href="classification-on-bad-loans.html"><span class="header-section-number">16</span> Classification on bad loans</a></li>
-<li><a class="active" href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">17</span> Comparison of six Linear Regression algorithms</a></li>
+<li><a class="" href="ten-methods-to-assess-variable-importance.html"><span class="header-section-number">8</span> Ten methods to assess Variable Importance</a></li>
+<li><a class="" href="employee-attrition-using-feature-importance.html"><span class="header-section-number">9</span> Employee Attrition using Feature Importance</a></li>
 <li class="book-part">Classification</li>
-<li><a class="" href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">18</span> A gentle introduction to Support Vector Machines</a></li>
-<li><a class="" href="broad-view-of-svm.html"><span class="header-section-number">19</span> Broad view of SVM</a></li>
-<li><a class="" href="tuning-of-support-vector-machine-prediction.html"><span class="header-section-number">20</span> Tuning of Support Vector Machine prediction</a></li>
-<li><a class="" href="who-buys-social-network-ads.html"><span class="header-section-number">21</span> Who buys Social Network ads</a></li>
-<li><a class="" href="predicting-ozone-levels.html"><span class="header-section-number">22</span> Predicting Ozone levels</a></li>
-<li><a class="" href="building-a-naive-bayes-classifier.html"><span class="header-section-number">23</span> Building a Naive Bayes Classifier</a></li>
-<li><a class="" href="detect-mines-vs-rocks-with-random-forest.html"><span class="header-section-number">24</span> Detect mines vs rocks with Random Forest</a></li>
-<li><a class="" href="predicting-the-type-of-glass.html"><span class="header-section-number">25</span> Predicting the type of glass</a></li>
-<li><a class="" href="naive-bayes-for-sms-spam.html"><span class="header-section-number">26</span> Naive Bayes for SMS spam</a></li>
-<li><a class="" href="vehicles-classiification-with-decision-trees.html"><span class="header-section-number">27</span> Vehicles classiification with Decision Trees</a></li>
-<li><a class="" href="applying-naive-bayes-on-the-titanic-case.html"><span class="header-section-number">28</span> Applying Naive-Bayes on the Titanic case</a></li>
+<li><a class="" href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">10</span> A gentle introduction to Support Vector Machines</a></li>
+<li><a class="" href="broad-view-of-svm.html"><span class="header-section-number">11</span> Broad view of SVM</a></li>
+<li><a class="" href="feature-selection-to-enhance-cancer-detection.html"><span class="header-section-number">12</span> Feature Selection to enhance cancer detection</a></li>
+<li><a class="" href="dealing-with-unbalanced-data.html"><span class="header-section-number">13</span> Dealing with unbalanced data</a></li>
+<li><a class="" href="imputting-missing-values-with-random-forest.html"><span class="header-section-number">14</span> Imputting missing values with Random Forest</a></li>
+<li><a class="" href="tuning-of-support-vector-machine-prediction.html"><span class="header-section-number">15</span> Tuning of Support Vector Machine prediction</a></li>
+<li class="book-part">Classification</li>
+<li><a class="" href="introduction-to-algorithms-for-classification.html"><span class="header-section-number">16</span> Introduction to algorithms for Classification</a></li>
+<li><a class="" href="comparing-classification-algorithms.html"><span class="header-section-number">17</span> Comparing Classification algorithms</a></li>
+<li><a class="" href="who-buys-social-network-ads.html"><span class="header-section-number">18</span> Who buys Social Network ads</a></li>
+<li><a class="" href="predicting-ozone-levels.html"><span class="header-section-number">19</span> Predicting Ozone levels</a></li>
+<li><a class="" href="building-a-naive-bayes-classifier.html"><span class="header-section-number">20</span> Building a Naive Bayes Classifier</a></li>
+<li><a class="" href="linear-and-non-linear-algorithms-for-classification.html"><span class="header-section-number">21</span> Linear and Non-Linear Algorithms for Classification</a></li>
+<li><a class="" href="detect-mines-vs-rocks-with-random-forest.html"><span class="header-section-number">22</span> Detect mines vs rocks with Random Forest</a></li>
+<li><a class="" href="predicting-the-type-of-glass.html"><span class="header-section-number">23</span> Predicting the type of glass</a></li>
+<li><a class="" href="naive-bayes-for-sms-spam.html"><span class="header-section-number">24</span> Naive Bayes for SMS spam</a></li>
+<li><a class="" href="vehicles-classiification-with-decision-trees.html"><span class="header-section-number">25</span> Vehicles classiification with Decision Trees</a></li>
+<li><a class="" href="applying-naive-bayes-on-the-titanic-case.html"><span class="header-section-number">26</span> Applying Naive-Bayes on the Titanic case</a></li>
+<li><a class="" href="classification-on-bad-loans.html"><span class="header-section-number">27</span> Classification on bad loans</a></li>
+<li><a class="" href="predicting-flu-outcome-comparing-eight-classification-algorithms.html"><span class="header-section-number">28</span> Predicting Flu outcome comparing eight classification algorithms</a></li>
 <li><a class="" href="a-detailed-study-of-bike-sharing-demand.html"><span class="header-section-number">29</span> A detailed study of bike sharing demand</a></li>
+<li><a class="" href="prediction-of-arrhythmia-with-deep-neural-nets.html"><span class="header-section-number">30</span> Prediction of arrhythmia with deep neural nets</a></li>
 <li class="book-part">Linear Regression</li>
-<li><a class="" href="linear-regression-with-islr.html"><span class="header-section-number">30</span> Linear Regression with ISLR</a></li>
-<li><a class="" href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">31</span> Evaluation of three linear regression models</a></li>
-<li><a class="" href="comparing-regression-models.html"><span class="header-section-number">32</span> Comparing regression models</a></li>
-<li><a class="" href="finding-the-factors-of-happiness.html"><span class="header-section-number">33</span> Finding the factors of happiness</a></li>
-<li><a class="" href="regression-with-a-neural-network.html"><span class="header-section-number">34</span> Regression with a neural network</a></li>
-<li><a class="" href="comparing-multiple-regression-vs-a-neural-network.html"><span class="header-section-number">35</span> Comparing Multiple Regression vs a Neural Network</a></li>
-<li><a class="" href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">36</span> Temperature modeling using nested dataframes</a></li>
+<li><a class="" href="linear-regression-with-islr.html"><span class="header-section-number">31</span> Linear Regression with ISLR</a></li>
+<li><a class="" href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">32</span> Evaluation of three linear regression models</a></li>
+<li><a class="active" href="comparison-of-six-linear-regression-algorithms.html"><span class="header-section-number">33</span> Comparison of six Linear Regression algorithms</a></li>
+<li><a class="" href="comparing-regression-models.html"><span class="header-section-number">34</span> Comparing regression models</a></li>
+<li><a class="" href="finding-the-factors-of-happiness.html"><span class="header-section-number">35</span> Finding the factors of happiness</a></li>
+<li><a class="" href="regression-with-a-neural-network.html"><span class="header-section-number">36</span> Regression with a neural network</a></li>
+<li><a class="" href="comparing-multiple-regression-vs-a-neural-network.html"><span class="header-section-number">37</span> Comparing Multiple Regression vs a Neural Network</a></li>
+<li><a class="" href="temperature-modeling-using-nested-dataframes.html"><span class="header-section-number">38</span> Temperature modeling using nested dataframes</a></li>
 <li class="book-part">Neural Networks</li>
-<li><a class="" href="credit-scoring-with-neuralnet.html"><span class="header-section-number">37</span> Credit Scoring with neuralnet</a></li>
-<li><a class="" href="wine-classification-with-neuralnet.html"><span class="header-section-number">38</span> Wine classification with neuralnet</a></li>
-<li><a class="" href="predicting-the-rating-of-cereals.html"><span class="header-section-number">39</span> Predicting the rating of cereals</a></li>
-<li><a class="" href="fitting-a-linear-model-with-neural-networks.html"><span class="header-section-number">40</span> Fitting a linear model with neural networks</a></li>
-<li><a class="" href="visualization-of-neural-networks.html"><span class="header-section-number">41</span> Visualization of neural networks</a></li>
-<li><a class="" href="build-a-fully-connected-r-neural-network-from-scratch.html"><span class="header-section-number">42</span> Build a fully connected R neural network from scratch</a></li>
-<li><a class="" href="tuning-hyperparameters-in-a-neural-network.html"><span class="header-section-number">43</span> Tuning Hyperparameters in a Neural Network</a></li>
-<li><a class="" href="deep-learning-tips-for-classification-and-regression.html"><span class="header-section-number">44</span> Deep Learning tips for Classification and Regression</a></li>
+<li><a class="" href="credit-scoring-with-neuralnet.html"><span class="header-section-number">39</span> Credit Scoring with neuralnet</a></li>
+<li><a class="" href="wine-classification-with-neuralnet.html"><span class="header-section-number">40</span> Wine classification with neuralnet</a></li>
+<li><a class="" href="predicting-the-rating-of-cereals.html"><span class="header-section-number">41</span> Predicting the rating of cereals</a></li>
+<li><a class="" href="fitting-a-linear-model-with-neural-networks.html"><span class="header-section-number">42</span> Fitting a linear model with neural networks</a></li>
+<li><a class="" href="visualization-of-neural-networks.html"><span class="header-section-number">43</span> Visualization of neural networks</a></li>
+<li><a class="" href="build-a-fully-connected-r-neural-network-from-scratch.html"><span class="header-section-number">44</span> Build a fully connected R neural network from scratch</a></li>
+<li><a class="" href="tuning-hyperparameters-in-a-neural-network.html"><span class="header-section-number">45</span> Tuning Hyperparameters in a Neural Network</a></li>
+<li><a class="" href="deep-learning-tips-for-classification-and-regression.html"><span class="header-section-number">46</span> Deep Learning tips for Classification and Regression</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="what-is-dot-hat-in-a-regression-output.html"><span class="header-section-number">A</span> What is dot hat in a regression output</a></li>
 <li><a class="" href="q-q-normal-to-compare-data-to-distributions.html"><span class="header-section-number">B</span> Q-Q normal to compare data to distributions</a></li>
@@ -96,7 +97,7 @@
 </div>
   </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="comparison-of-six-linear-regression-algorithms" class="section level1">
 <h1>
-<span class="header-section-number">17</span> Comparison of six Linear Regression algorithms<a class="anchor" aria-label="anchor" href="#comparison-of-six-linear-regression-algorithms"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33</span> Comparison of six Linear Regression algorithms<a class="anchor" aria-label="anchor" href="#comparison-of-six-linear-regression-algorithms"><i class="fas fa-link"></i></a>
 </h1>
 <ul>
 <li>Datasets: <code>Boston</code>
@@ -108,9 +109,9 @@
 </li>
 <li>Objective: Comparison of various algorithms</li>
 </ul>
-<div id="introduction-10" class="section level2">
+<div id="introduction-16" class="section level2">
 <h2>
-<span class="header-section-number">17.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-10"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-16"><i class="fas fa-link"></i></a>
 </h2>
 <p>These are the algorithms used:</p>
 <ol style="list-style-type: decimal">
@@ -121,7 +122,7 @@
 <li>CART</li>
 <li>KNN</li>
 </ol>
-<div class="sourceCode" id="cb491"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb824"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># load packages</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mlbench</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/topepo/caret/">caret</a></span><span class="op">)</span>
@@ -132,7 +133,7 @@
 
 <span class="co"># attach the BostonHousing dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">BostonHousing</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb492"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb825"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">BostonHousing</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 506</span>
 <span class="co">#&gt; Columns: 14</span>
@@ -150,7 +151,7 @@
 <span class="co">#&gt; $ b       &lt;dbl&gt; 397, 397, 393, 395, 397, 394, 396, 397, 387, 387, 393, 397, 3…</span>
 <span class="co">#&gt; $ lstat   &lt;dbl&gt; 4.98, 9.14, 4.03, 2.94, 5.33, 5.21, 12.43, 19.15, 29.93, 17.1…</span>
 <span class="co">#&gt; $ medv    &lt;dbl&gt; 24.0, 21.6, 34.7, 33.4, 36.2, 28.7, 22.9, 27.1, 16.5, 18.9, 1…</span></code></pre></div>
-<div class="sourceCode" id="cb493"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb826"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">BostonHousing</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 506 x 14</span>
 <span class="co">#&gt;      crim    zn indus chas    nox    rm   age   dis   rad   tax ptratio     b</span>
@@ -165,7 +166,7 @@
 </div>
 <div id="workflow-4" class="section level2">
 <h2>
-<span class="header-section-number">17.2</span> Workflow<a class="anchor" aria-label="anchor" href="#workflow-4"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.2</span> Workflow<a class="anchor" aria-label="anchor" href="#workflow-4"><i class="fas fa-link"></i></a>
 </h2>
 <ol style="list-style-type: decimal">
 <li>Load dataset</li>
@@ -340,9 +341,9 @@
 </div>
 <div id="preparing-the-data" class="section level2">
 <h2>
-<span class="header-section-number">17.3</span> Preparing the data<a class="anchor" aria-label="anchor" href="#preparing-the-data"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.3</span> Preparing the data<a class="anchor" aria-label="anchor" href="#preparing-the-data"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb494"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb827"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Split out validation dataset</span>
 <span class="co"># create a list of 80% of the rows in the original dataset we can use for training</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>
@@ -354,20 +355,20 @@
 
 <span class="co"># use the remaining 80% of data to training and testing the models</span>
 <span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">BostonHousing</span><span class="op">[</span><span class="va">validationIndex</span>,<span class="op">]</span></code></pre></div>
-<div class="sourceCode" id="cb495"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb828"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># dimensions of dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">validation</span><span class="op">)</span>
 <span class="co">#&gt; [1] 99 14</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span>
 <span class="co">#&gt; [1] 407  14</span></code></pre></div>
-<div class="sourceCode" id="cb496"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb829"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># list types for each attribute</span>
 <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">dataset</span>, <span class="va">class</span><span class="op">)</span>
 <span class="co">#&gt;      crim        zn     indus      chas       nox        rm       age       dis </span>
 <span class="co">#&gt; "numeric" "numeric" "numeric"  "factor" "numeric" "numeric" "numeric" "numeric" </span>
 <span class="co">#&gt;       rad       tax   ptratio         b     lstat      medv </span>
 <span class="co">#&gt; "numeric" "numeric" "numeric" "numeric" "numeric" "numeric"</span></code></pre></div>
-<div class="sourceCode" id="cb497"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb830"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># take a peek at the first 20 rows of the data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dataset</span>, n<span class="op">=</span><span class="fl">20</span><span class="op">)</span>
 <span class="co">#&gt;       crim   zn indus chas   nox   rm   age  dis rad tax ptratio   b lstat medv</span>
@@ -391,7 +392,7 @@
 <span class="co">#&gt; 23 1.23247  0.0  8.14    0 0.538 6.14  91.7 3.98   4 307    21.0 397 18.72 15.2</span>
 <span class="co">#&gt; 24 0.98843  0.0  8.14    0 0.538 5.81 100.0 4.10   4 307    21.0 395 19.88 14.5</span>
 <span class="co">#&gt; 25 0.75026  0.0  8.14    0 0.538 5.92  94.1 4.40   4 307    21.0 394 16.30 15.6</span></code></pre></div>
-<div class="sourceCode" id="cb498"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb831"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/skimr">skimr</a></span><span class="op">)</span>
 <span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim_with.html">skim_with</a></span><span class="op">(</span>numeric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>hist <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Creating new skimming functions for the following classes: hist.</span>
@@ -449,8 +450,8 @@
 <span class="co">#&gt;       skimmers_used = get_skimmers_used(unique_skimmers)</span>
 <span class="co">#&gt;     )</span>
 <span class="co">#&gt;   }</span>
-<span class="co">#&gt; &lt;bytecode: 0x55afae1548e0&gt;</span>
-<span class="co">#&gt; &lt;environment: 0x55afae0de480&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x55902f7558e0&gt;</span>
+<span class="co">#&gt; &lt;environment: 0x55902f6df480&gt;</span>
 <span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html">skim</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ── Data Summary ────────────────────────</span>
 <span class="co">#&gt;                            Values </span>
@@ -497,9 +498,9 @@
 <span class="co">#&gt; 11 391.    396.    397.    ▁▁▁▁▇</span>
 <span class="co">#&gt; 12  11.3    16.5    38.0   ▇▇▃▂▁</span>
 <span class="co">#&gt; 13  21.2    25      50     ▂▇▃▁▁</span></code></pre></div>
-<div class="sourceCode" id="cb499"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb832"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dataset</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/as.numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">[</span>,<span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb500"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb833"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html">skim</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ── Data Summary ────────────────────────</span>
 <span class="co">#&gt;                            Values </span>
@@ -548,9 +549,9 @@
 </blockquote>
 <div id="variables-correlation" class="section level3">
 <h3>
-<span class="header-section-number">17.3.1</span> Variables correlation<a class="anchor" aria-label="anchor" href="#variables-correlation"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.3.1</span> Variables correlation<a class="anchor" aria-label="anchor" href="#variables-correlation"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb501"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb834"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># find correlation between variables</span>
 <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.cor.html">cor</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt;            crim      zn   indus     chas     nox     rm     age    dis      rad</span>
@@ -581,7 +582,7 @@
 <span class="co">#&gt; ptratio  0.4691   1.000 -0.1700  0.4093</span>
 <span class="co">#&gt; b       -0.4303  -0.170  1.0000 -0.3509</span>
 <span class="co">#&gt; lstat    0.5538   0.409 -0.3509  1.0000</span></code></pre></div>
-<div class="sourceCode" id="cb502"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb835"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'dplyr'</span>
@@ -594,7 +595,7 @@
 
 <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.cor.html">cor</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">0</span></code></pre></div>
-<div class="sourceCode" id="cb503"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb836"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># select variables with correlation 0.7 and above</span>
 <span class="va">threshold</span> <span class="op">&lt;-</span> <span class="fl">0.7</span>
 <span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">threshold</span>, <span class="fl">1</span>, <span class="va">any</span><span class="op">)</span>
@@ -606,13 +607,13 @@
 <span class="co">#&gt; dis   -0.711 -0.769 -0.749  0.000 -0.504 -0.526</span>
 <span class="co">#&gt; rad    0.620  0.628  0.469 -0.504  0.000  0.920</span>
 <span class="co">#&gt; tax    0.719  0.676  0.506 -0.526  0.920  0.000</span></code></pre></div>
-<div class="sourceCode" id="cb504"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb837"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># values of correlation &gt;= 0.7</span>
 <span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">13</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">m</span><span class="op">[</span>, <span class="va">x</span><span class="op">]</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.7</span><span class="op">)</span>
 <span class="va">m</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span>
 <span class="co">#&gt;  [1]  0.773 -0.711  0.719  0.773  0.734 -0.769  0.734 -0.749 -0.711 -0.769</span>
 <span class="co">#&gt; [11] -0.749  0.920  0.719  0.920</span></code></pre></div>
-<div class="sourceCode" id="cb505"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb838"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># defining a index for selecting if the condition is met</span>
 <span class="va">cind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/apply.html">apply</a></span><span class="op">(</span><span class="va">m</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/any.html">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span>
 <span class="va">cm</span> <span class="op">&lt;-</span> <span class="va">m</span><span class="op">[</span>, <span class="va">cind</span><span class="op">]</span> <span class="co"># since col6 only has values less than 0.5 it is not taken</span>
@@ -631,7 +632,7 @@
 <span class="co">#&gt; ptratio  0.3782  0.1888  0.2709 -0.228  0.47971  0.4691</span>
 <span class="co">#&gt; b       -0.3644 -0.3684 -0.2742  0.284 -0.42314 -0.4303</span>
 <span class="co">#&gt; lstat    0.6136  0.5839  0.6066 -0.501  0.50251  0.5538</span></code></pre></div>
-<div class="sourceCode" id="cb506"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb839"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/apply.html">apply</a></span><span class="op">(</span><span class="va">cm</span>, <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/any.html">any</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span>  
 <span class="va">rm</span> <span class="op">&lt;-</span> <span class="va">cm</span><span class="op">[</span><span class="va">rind</span>, <span class="op">]</span>
 <span class="va">rm</span>
@@ -645,49 +646,49 @@
 </div>
 <div id="a-look-at-the-variables" class="section level3">
 <h3>
-<span class="header-section-number">17.3.2</span> A look at the variables<a class="anchor" aria-label="anchor" href="#a-look-at-the-variables"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.3.2</span> A look at the variables<a class="anchor" aria-label="anchor" href="#a-look-at-the-variables"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb507"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb840"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># histograms for each attribute</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/plot-histograms-1.png" width="70%" style="display: block; margin: auto;"></div>
-<div class="sourceCode" id="cb508"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/plot-histograms-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb841"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># density plot for each attribute</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">)</span> <span class="op">{</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/density.html">density</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span><span class="op">)</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/plot-density-1.png" width="70%" style="display: block; margin: auto;"></div>
-<div class="sourceCode" id="cb509"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/plot-density-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb842"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># boxplots for each attribute</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">)</span> <span class="op">{</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">[</span>,<span class="va">i</span><span class="op">]</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/plot-boxplots,%20-1.png" width="70%" style="display: block; margin: auto;"></div>
-<div class="sourceCode" id="cb510"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/plot-boxplots,%20-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb843"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># scatter plot matrix</span>
 <span class="fu"><a href="https://rdrr.io/pkg/ellipse/man/pairs.html">pairs</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/unnamed-chunk-17-1.png" width="70%" style="display: block; margin: auto;"></div>
-<div class="sourceCode" id="cb511"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/unnamed-chunk-17-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="sourceCode" id="cb844"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># correlation plot</span>
 <span class="va">correlations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/h2o/man/h2o.cor.html">cor</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/corrplot/man/corrplot.html">corrplot</a></span><span class="op">(</span><span class="va">correlations</span>, method<span class="op">=</span><span class="st">"circle"</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/plot-correlation-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/plot-correlation-1.png" width="70%" style="display: block; margin: auto;"></div>
 </div>
 </div>
 <div id="evaluation-of-algorithms" class="section level2">
 <h2>
-<span class="header-section-number">17.4</span> Evaluation of algorithms<a class="anchor" aria-label="anchor" href="#evaluation-of-algorithms"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.4</span> Evaluation of algorithms<a class="anchor" aria-label="anchor" href="#evaluation-of-algorithms"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb512"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb845"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Run algorithms using 10-fold cross-validation</span>
 <span class="va">trainControl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"repeatedcv"</span>, number<span class="op">=</span><span class="fl">10</span>, repeats<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
 <span class="va">metric</span> <span class="op">&lt;-</span> <span class="st">"RMSE"</span></code></pre></div>
-<div class="sourceCode" id="cb513"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb846"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># LM</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>
 <span class="va">fit.lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/train.html">train</a></span><span class="op">(</span><span class="va">medv</span><span class="op">~</span><span class="va">.</span>, data<span class="op">=</span><span class="va">dataset</span>, method<span class="op">=</span><span class="st">"lm"</span>, 
@@ -722,7 +723,7 @@
 <span class="va">fit.knn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/train.html">train</a></span><span class="op">(</span><span class="va">medv</span><span class="op">~</span><span class="va">.</span>, data<span class="op">=</span><span class="va">dataset</span>, method<span class="op">=</span><span class="st">"knn"</span>, 
                  metric<span class="op">=</span><span class="va">metric</span>, preProc<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"center"</span>, <span class="st">"scale"</span><span class="op">)</span>, 
                  trControl<span class="op">=</span><span class="va">trainControl</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb514"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb847"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Compare algorithms</span>
 <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/resamples.html">resamples</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>LM     <span class="op">=</span> <span class="va">fit.lm</span>, 
                           GLM    <span class="op">=</span> <span class="va">fit.glm</span>, 
@@ -764,14 +765,14 @@
 <span class="co">#&gt; SVM    0.519   0.762  0.845 0.810   0.896 0.970    0</span>
 <span class="co">#&gt; CART   0.514   0.737  0.816 0.778   0.842 0.899    0</span>
 <span class="co">#&gt; KNN    0.519   0.748  0.804 0.770   0.829 0.931    0</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/graphics-defunct.html">dotplot</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/unnamed-chunk-19-1.png" width="70%" style="display: block; margin: auto;"></div>
+<span class="fu"><a href="https://rdrr.io/pkg/lattice/man/xyplot.html">dotplot</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/unnamed-chunk-19-1.png" width="70%" style="display: block; margin: auto;"></div>
 </div>
 <div id="feature-selection-1" class="section level2">
 <h2>
-<span class="header-section-number">17.5</span> Feature selection<a class="anchor" aria-label="anchor" href="#feature-selection-1"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.5</span> Feature selection<a class="anchor" aria-label="anchor" href="#feature-selection-1"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb515"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb848"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remove correlated attributes</span>
 <span class="co"># find attributes that are highly correlated</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>
@@ -791,7 +792,7 @@
 <span class="va">datasetFeatures</span> <span class="op">&lt;-</span> <span class="va">dataset</span><span class="op">[</span>,<span class="op">-</span><span class="va">highlyCorrelated</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">datasetFeatures</span><span class="op">)</span>
 <span class="co">#&gt; [1] 407  10</span></code></pre></div>
-<div class="sourceCode" id="cb516"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb849"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Run algorithms using 10-fold cross-validation</span>
 <span class="va">trainControl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"repeatedcv"</span>, number<span class="op">=</span><span class="fl">10</span>, repeats<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
 <span class="va">metric</span> <span class="op">&lt;-</span> <span class="st">"RMSE"</span>
@@ -872,18 +873,18 @@
 <span class="co">#&gt; SVM    0.519   0.762  0.845 0.810   0.896 0.970    0</span>
 <span class="co">#&gt; CART   0.514   0.737  0.816 0.778   0.842 0.899    0</span>
 <span class="co">#&gt; KNN    0.519   0.748  0.804 0.770   0.829 0.931    0</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/graphics-defunct.html">dotplot</a></span><span class="op">(</span><span class="va">feature_results</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/models-second-run-removeFeatures-1.png" width="70%" style="display: block; margin: auto;"></div>
+<span class="fu"><a href="https://rdrr.io/pkg/lattice/man/xyplot.html">dotplot</a></span><span class="op">(</span><span class="va">feature_results</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/models-second-run-removeFeatures-1.png" width="70%" style="display: block; margin: auto;"></div>
 <p>Comparing the results, we can see that this has made the RMSE worse for the linear and the nonlinear algorithms. The correlated attributes we removed are contributing to the accuracy of the models.</p>
 </div>
 <div id="evaluate-algorithms-box-cox-transform" class="section level2">
 <h2>
-<span class="header-section-number">17.6</span> Evaluate Algorithms: Box-Cox Transform<a class="anchor" aria-label="anchor" href="#evaluate-algorithms-box-cox-transform"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.6</span> Evaluate Algorithms: Box-Cox Transform<a class="anchor" aria-label="anchor" href="#evaluate-algorithms-box-cox-transform"><i class="fas fa-link"></i></a>
 </h2>
 <p>We know that some of the attributes have a skew and others perhaps have an
 exponential distribution. One option would be to explore squaring and log
 transforms respectively (you could try this!). Another approach would be to use a power transform and let it figure out the amount to correct each attribute. One example is the <code>Box-Cox</code> power transform. Let’s try using this transform to rescale the original data and evaluate the effect on the same 6 algorithms. We will also leave in the centering and scaling for the benefit of the instance-based methods.</p>
-<div class="sourceCode" id="cb517"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb850"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Run algorithms using 10-fold cross-validation</span>
 <span class="va">trainControl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"repeatedcv"</span>, number<span class="op">=</span><span class="fl">10</span>, repeats<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
 <span class="va">metric</span> <span class="op">&lt;-</span> <span class="st">"RMSE"</span>
@@ -962,14 +963,14 @@ transforms respectively (you could try this!). Another approach would be to use 
 <span class="co">#&gt; SVM    0.524   0.778  0.854 0.827   0.907 0.979    0</span>
 <span class="co">#&gt; CART   0.514   0.727  0.816 0.774   0.843 0.899    0</span>
 <span class="co">#&gt; KNN    0.492   0.723  0.792 0.762   0.842 0.937    0</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/graphics-defunct.html">dotplot</a></span><span class="op">(</span><span class="va">transformResults</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/model-third-run-boxcox-1.png" width="70%" style="display: block; margin: auto;"></div>
+<span class="fu"><a href="https://rdrr.io/pkg/lattice/man/xyplot.html">dotplot</a></span><span class="op">(</span><span class="va">transformResults</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/model-third-run-boxcox-1.png" width="70%" style="display: block; margin: auto;"></div>
 </div>
 <div id="tune-svm" class="section level2">
 <h2>
-<span class="header-section-number">17.7</span> Tune SVM<a class="anchor" aria-label="anchor" href="#tune-svm"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.7</span> Tune SVM<a class="anchor" aria-label="anchor" href="#tune-svm"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb518"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb851"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="va">fit.svm</span><span class="op">)</span>
 <span class="co">#&gt; Support Vector Machines with Radial Basis Function Kernel </span>
 <span class="co">#&gt; </span>
@@ -990,7 +991,7 @@ transforms respectively (you could try this!). Another approach would be to use 
 <span class="co">#&gt; RMSE was used to select the optimal model using the smallest value.</span>
 <span class="co">#&gt; The final values used for the model were sigma = 0.116 and C = 1.</span></code></pre></div>
 <p>Let’s design a grid search around a C value of 1. We might see a small trend of decreasing RMSE with increasing C, so let’s try all integer C values between 1 and 10. Another parameter that caret let us tune is the sigma parameter. This is a smoothing parameter. Good sigma values often start around 0.1, so we will try numbers before and after.</p>
-<div class="sourceCode" id="cb519"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb852"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># tune SVM sigma and C parametres</span>
 <span class="va">trainControl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"repeatedcv"</span>, number<span class="op">=</span><span class="fl">10</span>, repeats<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
 <span class="va">metric</span> <span class="op">&lt;-</span> <span class="st">"RMSE"</span>
@@ -1058,11 +1059,11 @@ transforms respectively (you could try this!). Another approach would be to use 
 <span class="co">#&gt; RMSE was used to select the optimal model using the smallest value.</span>
 <span class="co">#&gt; The final values used for the model were sigma = 0.1 and C = 9.</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">fit.svm</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/model-svm-run-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/model-svm-run-1.png" width="70%" style="display: block; margin: auto;"></div>
 </div>
 <div id="ensembling" class="section level2">
 <h2>
-<span class="header-section-number">17.8</span> Ensembling<a class="anchor" aria-label="anchor" href="#ensembling"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.8</span> Ensembling<a class="anchor" aria-label="anchor" href="#ensembling"><i class="fas fa-link"></i></a>
 </h2>
 <p>We can try some ensemble methods on the problem and see if we can get a further decrease in our RMSE.</p>
 <ul>
@@ -1070,7 +1071,7 @@ transforms respectively (you could try this!). Another approach would be to use 
 <li>Gradient Boosting Machines (GBM).</li>
 <li>Cubist, boosting (CUBIST).</li>
 </ul>
-<div class="sourceCode" id="cb520"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb853"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># try ensembles</span>
 <span class="va">seed</span> <span class="op">&lt;-</span> <span class="fl">7</span>
 <span class="va">trainControl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"repeatedcv"</span>, number<span class="op">=</span><span class="fl">10</span>, repeats<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
@@ -1120,10 +1121,10 @@ transforms respectively (you could try this!). Another approach would be to use 
 <span class="co">#&gt; RF     0.597   0.852  0.900 0.869   0.919 0.972    0</span>
 <span class="co">#&gt; GBM    0.558   0.815  0.889 0.851   0.912 0.964    0</span>
 <span class="co">#&gt; CUBIST 0.681   0.818  0.909 0.875   0.932 0.970    0</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/graphics-defunct.html">dotplot</a></span><span class="op">(</span><span class="va">ensembleResults</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/models-ensembling-run-1.png" width="70%" style="display: block; margin: auto;"></div>
+<span class="fu"><a href="https://rdrr.io/pkg/lattice/man/xyplot.html">dotplot</a></span><span class="op">(</span><span class="va">ensembleResults</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/models-ensembling-run-1.png" width="70%" style="display: block; margin: auto;"></div>
 <p>Let’s dive deeper into Cubist and see if we can tune it further and get more skill out of it. Cubist has two parameters that are tunable with caret: committees which is the number of boosting operations and neighbors which is used during prediction and is the number of instances used to correct the rule-based prediction (although the documentation is perhaps a little ambiguous on this).</p>
-<div class="sourceCode" id="cb521"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb854"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># look at parameters used for Cubist</span>
 <span class="fu"><a href="https://docs.ropensci.org/skimr/reference/print.html">print</a></span><span class="op">(</span><span class="va">fit.cubist</span><span class="op">)</span>
 <span class="co">#&gt; Cubist </span>
@@ -1150,7 +1151,7 @@ transforms respectively (you could try this!). Another approach would be to use 
 <span class="co">#&gt; RMSE was used to select the optimal model using the smallest value.</span>
 <span class="co">#&gt; The final values used for the model were committees = 20 and neighbors = 5.</span></code></pre></div>
 <p>Let’s use a grid search to tune around those values. We’ll try all committees between 15 and 25 and spot-check a neighbors value above and below 5.</p>
-<div class="sourceCode" id="cb522"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb855"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://topepo.github.io/Cubist">Cubist</a></span><span class="op">)</span>
 <span class="co"># Tune the Cubist algorithm</span>
 <span class="va">trainControl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/trainControl.html">trainControl</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"repeatedcv"</span>, number<span class="op">=</span><span class="fl">10</span>, repeats<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
@@ -1211,7 +1212,7 @@ transforms respectively (you could try this!). Another approach would be to use 
 <span class="co">#&gt; RMSE was used to select the optimal model using the smallest value.</span>
 <span class="co">#&gt; The final values used for the model were committees = 25 and neighbors = 3.</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span><span class="op">(</span><span class="va">tune.cubist</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="203-algo-comparison_321-regression_boston-multi_files/figure-html/model-cubist-run-1.png" width="70%" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="402-algo-comparison_321-regression_boston-multi_files/figure-html/model-cubist-run-1.png" width="70%" style="display: block; margin: auto;"></div>
 <blockquote>
 <p>We can see that we have achieved a more accurate model again with an RMSE of 2.822 using committees = 18 and neighbors = 3.</p>
 </blockquote>
@@ -1219,9 +1220,9 @@ transforms respectively (you could try this!). Another approach would be to use 
 </div>
 <div id="finalize-the-model" class="section level2">
 <h2>
-<span class="header-section-number">17.9</span> Finalize the model<a class="anchor" aria-label="anchor" href="#finalize-the-model"><i class="fas fa-link"></i></a>
+<span class="header-section-number">33.9</span> Finalize the model<a class="anchor" aria-label="anchor" href="#finalize-the-model"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb523"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb856"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># prepare the data transform using training data</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">dataset</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span>
@@ -1239,7 +1240,7 @@ transforms respectively (you could try this!). Another approach would be to use 
 <span class="co">#&gt; cubist.default(x = transX, y = y, committees = 18)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Cubist [Release 2.07 GPL Edition]  Wed Nov 18 08:03:04 2020</span>
+<span class="co">#&gt; Cubist [Release 2.07 GPL Edition]  Thu Nov 19 16:55:14 2020</span>
 <span class="co">#&gt; ---------------------------------</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     Target attribute `outcome'</span>
@@ -2259,7 +2260,7 @@ transforms respectively (you could try this!). Another approach would be to use 
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Time: 0.1 secs</span></code></pre></div>
 <p>We can now use this model to evaluate our held-out validation dataset. Again, we must prepare the input data using the same Box-Cox transform.</p>
-<div class="sourceCode" id="cb524"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb857"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># transform the validation dataset</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>
 <span class="va">valX</span> <span class="op">&lt;-</span> <span class="va">validation</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">13</span><span class="op">]</span>
@@ -2280,36 +2281,33 @@ transforms respectively (you could try this!). Another approach would be to use 
 
 </div>
 </div>
-
-
-
   <div class="chapter-nav">
-<div class="prev"><a href="classification-on-bad-loans.html"><span class="header-section-number">16</span> Classification on bad loans</a></div>
-<div class="next"><a href="a-gentle-introduction-to-support-vector-machines.html"><span class="header-section-number">18</span> A gentle introduction to Support Vector Machines</a></div>
+<div class="prev"><a href="evaluation-of-three-linear-regression-models.html"><span class="header-section-number">32</span> Evaluation of three linear regression models</a></div>
+<div class="next"><a href="comparing-regression-models.html"><span class="header-section-number">34</span> Comparing regression models</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#comparison-of-six-linear-regression-algorithms"><span class="header-section-number">17</span> Comparison of six Linear Regression algorithms</a></li>
-<li><a class="nav-link" href="#introduction-10"><span class="header-section-number">17.1</span> Introduction</a></li>
-<li><a class="nav-link" href="#workflow-4"><span class="header-section-number">17.2</span> Workflow</a></li>
+<li><a class="nav-link" href="#comparison-of-six-linear-regression-algorithms"><span class="header-section-number">33</span> Comparison of six Linear Regression algorithms</a></li>
+<li><a class="nav-link" href="#introduction-16"><span class="header-section-number">33.1</span> Introduction</a></li>
+<li><a class="nav-link" href="#workflow-4"><span class="header-section-number">33.2</span> Workflow</a></li>
 <li>
-<a class="nav-link" href="#preparing-the-data"><span class="header-section-number">17.3</span> Preparing the data</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#variables-correlation"><span class="header-section-number">17.3.1</span> Variables correlation</a></li>
-<li><a class="nav-link" href="#a-look-at-the-variables"><span class="header-section-number">17.3.2</span> A look at the variables</a></li>
+<a class="nav-link" href="#preparing-the-data"><span class="header-section-number">33.3</span> Preparing the data</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#variables-correlation"><span class="header-section-number">33.3.1</span> Variables correlation</a></li>
+<li><a class="nav-link" href="#a-look-at-the-variables"><span class="header-section-number">33.3.2</span> A look at the variables</a></li>
 </ul>
 </li>
-<li><a class="nav-link" href="#evaluation-of-algorithms"><span class="header-section-number">17.4</span> Evaluation of algorithms</a></li>
-<li><a class="nav-link" href="#feature-selection-1"><span class="header-section-number">17.5</span> Feature selection</a></li>
-<li><a class="nav-link" href="#evaluate-algorithms-box-cox-transform"><span class="header-section-number">17.6</span> Evaluate Algorithms: Box-Cox Transform</a></li>
-<li><a class="nav-link" href="#tune-svm"><span class="header-section-number">17.7</span> Tune SVM</a></li>
-<li><a class="nav-link" href="#ensembling"><span class="header-section-number">17.8</span> Ensembling</a></li>
-<li><a class="nav-link" href="#finalize-the-model"><span class="header-section-number">17.9</span> Finalize the model</a></li>
+<li><a class="nav-link" href="#evaluation-of-algorithms"><span class="header-section-number">33.4</span> Evaluation of algorithms</a></li>
+<li><a class="nav-link" href="#feature-selection-1"><span class="header-section-number">33.5</span> Feature selection</a></li>
+<li><a class="nav-link" href="#evaluate-algorithms-box-cox-transform"><span class="header-section-number">33.6</span> Evaluate Algorithms: Box-Cox Transform</a></li>
+<li><a class="nav-link" href="#tune-svm"><span class="header-section-number">33.7</span> Tune SVM</a></li>
+<li><a class="nav-link" href="#ensembling"><span class="header-section-number">33.8</span> Ensembling</a></li>
+<li><a class="nav-link" href="#finalize-the-model"><span class="header-section-number">33.9</span> Finalize the model</a></li>
 </ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/203-algo-comparison_321-regression_boston-multi.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/203-algo-comparison_321-regression_boston-multi.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/402-algo-comparison_321-regression_boston-multi.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/402-algo-comparison_321-regression_boston-multi.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -2321,7 +2319,7 @@ transforms respectively (you could try this!). Another approach would be to use 
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>A Machine Learning Book</strong>" was written by Alfonso R. Reyes. It was last built on 2020-11-18.</p>
+    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-19.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
