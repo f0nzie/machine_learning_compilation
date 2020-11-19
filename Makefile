@@ -2,6 +2,19 @@ BOOK_IMAGE = book_all
 CONTAINER_DUMMY = dummy
 CONTAINER_BOOK_OUT_DIR = /home/rstudio/all/book/public
 CONTAINER_TO_HOST_DIR = ./from-dummy-container
+PUBLISH_DIR = ./from-dummy-container
+ifeq ($(OS), Windows_NT)
+    OSFLAG = WINDOWS
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S), Linux)
+        OSFLAG = LINUX
+    endif
+    ifeq ($(UNAME_S), Darwin)
+        OSFLAG = OSX
+    endif
+endif
+
 
 image:
 	docker build -t ${BOOK_IMAGE} .
