@@ -28,3 +28,24 @@ publish_copy:
 	docker cp dummy:${CONTAINER_BOOK_OUT_DIR} ${CONTAINER_TO_HOST_DIR}
 	docker rm -f ${CONTAINER_DUMMY}
 
+
+open_book:
+ifeq ($(OSFLAG), OSX)
+    @open -a firefox  $(PUBLISH_DIR)/index.html
+endif
+ifeq ($(OSFLAG), LINUX)
+	@firefox  $(PUBLISH_DIR)/index.html
+endif
+ifeq ($(OSFLAG), WINDOWS)
+	@"C:\Program Files\Mozilla Firefox\firefox" $(PUBLISH_DIR)/index.html
+endif
+
+
+phony: bs4_book
+bs4_book: image publish_copy open_book
+
+phony: backup_dummy_copy
+backup_dummy_copy:
+	# make a copy of dummy-container
+	# date the copy
+	# zip it
