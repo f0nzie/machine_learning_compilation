@@ -381,7 +381,7 @@ Forest (RRF) algorithm.</p>
 
 <span class="va">rrfImp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/caret/man/varImp.html">varImp</a></span><span class="op">(</span><span class="va">rrfMod</span>, scale<span class="op">=</span><span class="cn">F</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 372.797 sec elapsed</span>
+<span class="co">#&gt; 383.138 sec elapsed</span>
 <span class="va">rrfImp</span>
 <span class="co">#&gt; RRF variable importance</span>
 <span class="co">#&gt; </span>
@@ -683,7 +683,7 @@ the rightmost selected column.</p>
                  sizes <span class="op">=</span> <span class="va">subsets</span>,
                  rfeControl <span class="op">=</span> <span class="va">ctrl</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 92.495 sec elapsed</span>
+<span class="co">#&gt; 95.356 sec elapsed</span>
 <span class="va">lmProfile</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Recursive feature selection</span>
@@ -733,7 +733,7 @@ repeats in <code><a href="https://rdrr.io/pkg/caret/man/safsControl.html">gafsCo
                iters <span class="op">=</span> <span class="fl">3</span>,   <span class="co"># normally much higher (100+)</span>
                gafsControl <span class="op">=</span> <span class="va">ga_ctrl</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 654.344 sec elapsed</span>
+<span class="co">#&gt; 635.279 sec elapsed</span>
 <span class="va">ga_obj</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Genetic Algorithm Feature Selection</span>
@@ -810,7 +810,7 @@ until the values are reset to previous iteration.</p>
                y<span class="op">=</span><span class="va">trainData</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span>,
                safsControl <span class="op">=</span> <span class="va">sa_ctrl</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 113.053 sec elapsed</span>
+<span class="co">#&gt; 108.312 sec elapsed</span>
 <span class="va">sa_obj</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Simulated Annealing Feature Selection</span>
@@ -1091,7 +1091,7 @@ it below.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-19.</p>
+    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-20.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

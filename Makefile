@@ -1,4 +1,9 @@
 # document builds inside a Docker container
+# Requires Docker: yes
+# Requires Conda: no
+# Build bs4_book: yes
+# Copy container output to host: yes
+# 
 # bookdown
 BOOK_IMAGE = book_all
 PUBLISH_DIR = ./from-dummy-container

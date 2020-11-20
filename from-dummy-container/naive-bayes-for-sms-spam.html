@@ -379,7 +379,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">tic</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">sms_test_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">sms_classifier</span>, <span class="va">sms_test</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 22.756 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; 20.184 sec elapsed</span></code></pre></div>
 <div class="sourceCode" id="cb548"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gmodels</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/gmodels/man/CrossTable.html">CrossTable</a></span><span class="op">(</span><span class="va">sms_test_pred</span>, <span class="va">sms_test_labels</span>,
@@ -438,7 +438,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">tic</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">sms_test_pred2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">sms_classifier2</span>, <span class="va">sms_test</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 22.847 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; 20.305 sec elapsed</span></code></pre></div>
 <div class="sourceCode" id="cb551"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/gmodels/man/CrossTable.html">CrossTable</a></span><span class="op">(</span><span class="va">sms_test_pred2</span>, <span class="va">sms_test_labels</span>,
     prop.chisq <span class="op">=</span> <span class="cn">FALSE</span>, prop.t <span class="op">=</span> <span class="cn">FALSE</span>, prop.r <span class="op">=</span> <span class="cn">FALSE</span>,
@@ -514,7 +514,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-19.</p>
+    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-20.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

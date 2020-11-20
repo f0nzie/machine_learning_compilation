@@ -164,3 +164,4 @@ points(grid_set, pch = '.', col = ifelse(y_grid == 1, 'coral1', 'aquamarine'))
 points(set, pch = 21, bg = ifelse(set[, 3] == 1, 'green4', 'red3')) 
 
 ```
+

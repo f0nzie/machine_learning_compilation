@@ -165,7 +165,7 @@
 <span class="co">#&gt; final  value 1358854.803800 </span>
 <span class="co">#&gt; stopped after 100 iterations</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 0.168 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; 0.162 sec elapsed</span></code></pre></div>
 <div class="sourceCode" id="cb1020"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># nn &lt;- neuralnet(form.in,</span>
 <span class="co">#                 data = dat.sc,</span>
@@ -189,9 +189,9 @@
 <span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/neuralnet/man/neuralnet.html">neuralnet</a></span><span class="op">(</span><span class="va">form.in</span>, data <span class="op">=</span> <span class="va">dat.sc</span>, hidden <span class="op">=</span> <span class="fl">10</span>, lifesign <span class="op">=</span> <span class="st">"minimal"</span>,
                   linear.output <span class="op">=</span> <span class="cn">FALSE</span>,
                   act.fct <span class="op">=</span> <span class="st">"tanh"</span><span class="op">)</span>
-<span class="co">#&gt; hidden: 10    thresh: 0.01    rep: 1/1    steps:   26361 error: 160.06372    time: 33.04 secs</span>
+<span class="co">#&gt; hidden: 10    thresh: 0.01    rep: 1/1    steps:   26361 error: 160.06372    time: 26.03 secs</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 33.048 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; 26.043 sec elapsed</span></code></pre></div>
 <div class="sourceCode" id="cb1022"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># third model with RSNNS</span>
 <span class="co"># mlp function from RSNNS package</span>
@@ -201,7 +201,7 @@
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">tic</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">mod3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RSNNS/man/mlp.html">mlp</a></span><span class="op">(</span><span class="va">rand.vars</span>, <span class="va">resp</span>, size <span class="op">=</span> <span class="fl">10</span>, linOut <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 0.345 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; 0.305 sec elapsed</span></code></pre></div>
 <p>I’ve noticed some differences between the functions that could lead to some confusion. For simplicity, the above code represents my interpretation of the most direct way to create a neural network in each package. Be very aware that direct comparison of results is not advised given that the default arguments differ between the packages. A few key differences are as follows, although many others should be noted. First, the functions differ in the methods for passing the primary input variables.</p>
 <p>The <code>nnet</code> function can take separate (or combined) x and y inputs as data frames or as a formula, the <code>neuralnet</code> function can only use a formula as input, and the mlp function can only take a data frame as combined or separate variables as input. As far as I know, the neuralnet function is not capable of modelling multiple response variables, unless the response is a categorical variable that uses one node for each outcome. Additionally, the default output for the neuralnet function is linear, whereas the opposite is true for the other two functions.</p>
 <p>Specifics aside, here’s how to use the updated plot function. Note that the same syntax is used to plot each model</p>
@@ -290,7 +290,7 @@
           size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">9</span>,<span class="fl">11</span>,<span class="fl">8</span><span class="op">)</span>, 
           linOut <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 0.356 sec elapsed</span>
+<span class="co">#&gt; 0.461 sec elapsed</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>,family<span class="op">=</span><span class="st">'serif'</span><span class="op">)</span>
 <span class="fu">plot.nnet</span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
 <span class="co">#&gt; Warning in plot.nnet(mod): Bias layer not applicable for rsnns object</span></code></pre></div>
@@ -319,7 +319,7 @@
                  err.fct<span class="op">=</span><span class="st">"ce"</span>, 
                  linear.output<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 0.084 sec elapsed</span>
+<span class="co">#&gt; 0.075 sec elapsed</span>
 <span class="co">#plot ouput</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>,family<span class="op">=</span><span class="st">'serif'</span><span class="op">)</span>
 <span class="fu">plot.nnet</span><span class="op">(</span><span class="va">net</span><span class="op">)</span></code></pre></div>
@@ -429,7 +429,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-19.</p>
+    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-20.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -830,7 +830,7 @@ count:      number of total rentals (registered + casual)</code></pre>
 <span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">wind_0</span><span class="op">)</span>
 <span class="va">wind_0</span><span class="op">$</span><span class="va">windspeed</span> <span class="op">=</span> <span class="va">pred</span>       <span class="co"># fill with wind speed predictions</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 50.787 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; 44.717 sec elapsed</span></code></pre></div>
 <div class="sourceCode" id="cb716"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># recompose the whole dataset</span>
 <span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/mice/man/cbind.html">rbind</a></span><span class="op">(</span><span class="va">wind_0</span>, <span class="va">wind_1</span><span class="op">)</span></code></pre></div>
@@ -989,7 +989,7 @@ count:      number of total rentals (registered + casual)</code></pre>
 <span class="va">pred1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">test</span><span class="op">)</span>
 <span class="va">test</span><span class="op">$</span><span class="va">logreg</span> <span class="op">=</span> <span class="va">pred1</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 113.34 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; 98.575 sec elapsed</span></code></pre></div>
 <div class="sourceCode" id="cb727"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># casual users</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">415</span><span class="op">)</span>
@@ -1118,7 +1118,7 @@ count:      number of total rentals (registered + casual)</code></pre>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-19.</p>
+    <p>"<strong>A Machine Learning Compilation</strong>" was written by Several authors. Compiled by Alfonso R. Reyes. It was last built on 2020-11-20.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -1,5 +1,6 @@
 bookdown::bs4_book:
   theme:
+    highlight: kate
     primary: "#982a31"
     fg: "#2b2121"
     bg: "#ffffff"
