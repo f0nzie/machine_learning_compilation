@@ -3,6 +3,8 @@
 # Requires Conda: no
 # Build bs4_book: yes
 # Copy container output to host: yes
+# Container with R only: yes
+# Push to gh-pages: yes
 # 
 # bookdown
 BOOK_IMAGE = book_all
