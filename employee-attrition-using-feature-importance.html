@@ -91,7 +91,7 @@
 </ul>
 
         <div class="book-extra">
-          <p><a id="book-repo" href="https://github.com/hadley/r-pkgs">View book source <i class="fab fa-github"></i></a></p>
+          <p><a id="book-repo" href="https://github.com/f0nzie/machine_learning_compilation">View book source <i class="fab fa-github"></i></a></p>
         </div>
       </nav>
 </div>
@@ -661,18 +661,18 @@ To summarize, the article makes a usage case for IBM Watson as an automated ML p
 <span class="co">#&gt; H2O is not running yet, starting it now...</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Note:  In case of errors look at the following log files:</span>
-<span class="co">#&gt;     /tmp/Rtmp2B1EQw/filea8270ca7e70/h2o_UnknownUser_started_from_r.out</span>
-<span class="co">#&gt;     /tmp/Rtmp2B1EQw/filea82524b00f/h2o_UnknownUser_started_from_r.err</span>
+<span class="co">#&gt;     /tmp/RtmpWrrIzw/filea823b1a4d0b/h2o_UnknownUser_started_from_r.out</span>
+<span class="co">#&gt;     /tmp/RtmpWrrIzw/filea8270e53da8/h2o_UnknownUser_started_from_r.err</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Starting H2O JVM and connecting: . Connection successful!</span>
+<span class="co">#&gt; Starting H2O JVM and connecting: .. Connection successful!</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; R is connected to the H2O cluster: </span>
-<span class="co">#&gt;     H2O cluster uptime:         1 seconds 543 milliseconds </span>
+<span class="co">#&gt;     H2O cluster uptime:         1 seconds 710 milliseconds </span>
 <span class="co">#&gt;     H2O cluster timezone:       Etc/UTC </span>
 <span class="co">#&gt;     H2O data parsing timezone:  UTC </span>
 <span class="co">#&gt;     H2O cluster version:        3.30.0.1 </span>
-<span class="co">#&gt;     H2O cluster version age:    7 months and 15 days !!! </span>
+<span class="co">#&gt;     H2O cluster version age:    7 months and 16 days !!! </span>
 <span class="co">#&gt;     H2O cluster name:           H2O_started_from_R_root_mwl453 </span>
 <span class="co">#&gt;     H2O cluster total nodes:    1 </span>
 <span class="co">#&gt;     H2O cluster total memory:   7.82 GB </span>
@@ -773,8 +773,8 @@ To summarize, the article makes a usage case for IBM Watson as an automated ML p
 <span class="va">confusion_matrix</span>
 <span class="co">#&gt;          pred</span>
 <span class="co">#&gt; Attrition  No Yes</span>
-<span class="co">#&gt;       No  165  17</span>
-<span class="co">#&gt;       Yes   9  20</span></code></pre></div>
+<span class="co">#&gt;       No  160  22</span>
+<span class="co">#&gt;       Yes  11  18</span></code></pre></div>
 <p>We’ll run through a binary classification analysis to understand the model performance.</p>
 <div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Performance analysis</span>
@@ -799,19 +799,19 @@ To summarize, the article makes a usage case for IBM Watson as an automated ML p
     <span class="fu"><a href="https://purrr.tidyverse.org/reference/transpose.html">transpose</a></span><span class="op">(</span><span class="op">)</span> 
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; [[1]]$accuracy</span>
-<span class="co">#&gt; [1] 0.877</span>
+<span class="co">#&gt; [1] 0.844</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[1]]$misclassification_rate</span>
-<span class="co">#&gt; [1] 0.123</span>
+<span class="co">#&gt; [1] 0.156</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[1]]$recall</span>
-<span class="co">#&gt; [1] 0.69</span>
+<span class="co">#&gt; [1] 0.621</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[1]]$precision</span>
-<span class="co">#&gt; [1] 0.541</span>
+<span class="co">#&gt; [1] 0.45</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[1]]$null_error_rate</span>
-<span class="co">#&gt; [1] 0.782</span></code></pre></div>
+<span class="co">#&gt; [1] 0.758</span></code></pre></div>
 <p>It is important to understand is that the accuracy can be misleading: 88% sounds pretty good especially for modeling HR data, but if we just pick <code>Attrition = NO</code> we would get an accuracy of about 79%. Doesn’t sound so great now.</p>
 <p>Before we make our final judgement, let’s dive a little deeper into precision and recall. Precision is when the model predicts yes, how often is it actually yes. Recall (also true positive rate or specificity) is when the actual value is yes how often is the model correct. Confused yet? Let’s explain in terms of what’s important to HR.</p>
 <p>Most HR groups would probably prefer to incorrectly classify folks not looking to quit as high potential of quiting rather than classify those that are likely to quit as not at risk. Because it’s important to not miss at risk employees, HR will really care about recall or when the actual value is <code>Attrition = YES</code> how often the model predicts YES.</p>
@@ -870,14 +870,14 @@ To summarize, the article makes a usage case for IBM Watson as an automated ML p
 <span class="fu"><a href="https://lime.data-imaginist.com/reference/model_support.html">predict_model</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">automl_leader</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">test_h2o</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'raw'</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 211 x 2</span>
-<span class="co">#&gt;      No     Yes</span>
-<span class="co">#&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 0.812 0.188  </span>
-<span class="co">#&gt; 2 0.940 0.0604 </span>
-<span class="co">#&gt; 3 0.164 0.836  </span>
-<span class="co">#&gt; 4 0.985 0.0152 </span>
-<span class="co">#&gt; 5 0.808 0.192  </span>
-<span class="co">#&gt; 6 0.991 0.00903</span>
+<span class="co">#&gt;      No    Yes</span>
+<span class="co">#&gt;   &lt;dbl&gt;  &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 0.889 0.111 </span>
+<span class="co">#&gt; 2 0.936 0.0638</span>
+<span class="co">#&gt; 3 0.194 0.806 </span>
+<span class="co">#&gt; 4 0.970 0.0296</span>
+<span class="co">#&gt; 5 0.901 0.0991</span>
+<span class="co">#&gt; 6 0.989 0.0111</span>
 <span class="co">#&gt; # … with 205 more rows</span></code></pre></div>
 <p>Now the fun part, we create an explainer using the <code><a href="https://lime.data-imaginist.com/reference/lime.html">lime()</a></code> function. Just pass the training data set without the “Attribution column”. The form must be a data frame, which is OK since our predict_model function will switch it to an h2o object. Set<code>model = automl_leader</code> our leader model, and <code>bin_continuous = FALSE</code>. We could tell the algorithm to bin continuous variables, but this may not make sense for categorical numeric data that we didn’t change to factors.<br></p>
 <div class="sourceCode" id="cb241"><pre class="downlit sourceCode r">
@@ -1112,8 +1112,8 @@ To summarize, the article makes a usage case for IBM Watson as an automated ML p
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/102-fe-class_342-employee_attrition.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/102-fe-class_342-employee_attrition.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/f0nzie/machine_learning_compilation/blob/master/102-fe-class_342-employee_attrition.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/f0nzie/machine_learning_compilation/edit/master/102-fe-class_342-employee_attrition.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>

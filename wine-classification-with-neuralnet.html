@@ -91,7 +91,7 @@
 </ul>
 
         <div class="book-extra">
-          <p><a id="book-repo" href="https://github.com/hadley/r-pkgs">View book source <i class="fab fa-github"></i></a></p>
+          <p><a id="book-repo" href="https://github.com/f0nzie/machine_learning_compilation">View book source <i class="fab fa-github"></i></a></p>
         </div>
       </nav>
 </div>
@@ -605,7 +605,7 @@
                 act.fct <span class="op">=</span> <span class="st">"logistic"</span>,
                 linear.output <span class="op">=</span> <span class="cn">FALSE</span>,
                 lifesign <span class="op">=</span> <span class="st">"minimal"</span><span class="op">)</span>
-<span class="co">#&gt; hidden: 13, 10, 3    thresh: 0.01    rep: 1/1    steps:      88  error: 0.03039  time: 0.06 secs</span></code></pre></div>
+<span class="co">#&gt; hidden: 13, 10, 3    thresh: 0.01    rep: 1/1    steps:      88  error: 0.03039  time: 0.05 secs</span></code></pre></div>
 <p>Note that I set the argument linear.output to <code>FALSE</code> in order to tell the model that I want to apply the activation function act.fct and that I am not doing a regression task. Then I set the activation function to logistic (which by the way is the default option) in order to apply the logistic function. The other available option is <code>tanh</code> but the model seems to perform a little worse with it so I opted for the default option. As far as I know these two are the only two available options, there is no <code>relu</code> function available although it seems to be a common activation function in other packages.</p>
 <p>As far as the number of hidden neurons, I tried some combination and the one used seems to perform slightly better than the others (around 1% of accuracy difference in cross validation score).</p>
 <p>By using the in-built <code>plot</code> method you can get a visual take on what is actually happening inside the model, however the plot is not that helpful I think</p>
@@ -696,8 +696,8 @@
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/601-nn-classification_904-wine_selection_nn.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/601-nn-classification_904-wine_selection_nn.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/f0nzie/machine_learning_compilation/blob/master/601-nn-classification_904-wine_selection_nn.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/f0nzie/machine_learning_compilation/edit/master/601-nn-classification_904-wine_selection_nn.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>

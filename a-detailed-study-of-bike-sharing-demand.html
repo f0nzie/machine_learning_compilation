@@ -91,7 +91,7 @@
 </ul>
 
         <div class="book-extra">
-          <p><a id="book-repo" href="https://github.com/hadley/r-pkgs">View book source <i class="fab fa-github"></i></a></p>
+          <p><a id="book-repo" href="https://github.com/f0nzie/machine_learning_compilation">View book source <i class="fab fa-github"></i></a></p>
         </div>
       </nav>
 </div>
@@ -830,7 +830,7 @@ count:      number of total rentals (registered + casual)</code></pre>
 <span class="va">pred</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">wind_0</span><span class="op">)</span>
 <span class="va">wind_0</span><span class="op">$</span><span class="va">windspeed</span> <span class="op">=</span> <span class="va">pred</span>       <span class="co"># fill with wind speed predictions</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 45.705 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; 50.787 sec elapsed</span></code></pre></div>
 <div class="sourceCode" id="cb716"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># recompose the whole dataset</span>
 <span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/mice/man/cbind.html">rbind</a></span><span class="op">(</span><span class="va">wind_0</span>, <span class="va">wind_1</span><span class="op">)</span></code></pre></div>
@@ -989,7 +989,7 @@ count:      number of total rentals (registered + casual)</code></pre>
 <span class="va">pred1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">test</span><span class="op">)</span>
 <span class="va">test</span><span class="op">$</span><span class="va">logreg</span> <span class="op">=</span> <span class="va">pred1</span>
 <span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; 103.078 sec elapsed</span></code></pre></div>
+<span class="co">#&gt; 113.34 sec elapsed</span></code></pre></div>
 <div class="sourceCode" id="cb727"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># casual users</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">415</span><span class="op">)</span>
@@ -1105,8 +1105,8 @@ count:      number of total rentals (registered + casual)</code></pre>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/hadley/r-pkgs/blob/master/305-classification_227-bike_sharing_demand-rf.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/hadley/r-pkgs/edit/master/305-classification_227-bike_sharing_demand-rf.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/f0nzie/machine_learning_compilation/blob/master/305-classification_227-bike_sharing_demand-rf.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/f0nzie/machine_learning_compilation/edit/master/305-classification_227-bike_sharing_demand-rf.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
